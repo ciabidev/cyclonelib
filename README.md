@@ -1,2 +1,2 @@
 # cyclone
-repository for Cyclone Development
+repository for Cyclone Development Beta
