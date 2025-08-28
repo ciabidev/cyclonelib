@@ -1,0 +1,16 @@
+requests
+aiohttp
+python-dotenv
+motor
+redis
+types-redis
+uvicorn
+fastapi[standard]
+slowapi
+pydantic
+openai
+getstream
+sentry-sdk[fastapi]
+python-slugify
+random-word
+bcrypt
