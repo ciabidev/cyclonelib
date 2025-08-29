@@ -34,6 +34,14 @@ async def create_package(package: PackageCreate):
     package_dict = package.model_dump()
     package_dict["edit_code"] = hash_edit_code(package_dict["edit_code"])
 
+    existing_name = await db.packages.find_one({"name": package_dict["name"]})
+    if existing_name:
+        raise HTTPException(status_code=409, detail="Package name is already taken")
+    
+    existing_rhid = await db.packages.find_one({"rhid": package_dict["rhid"]})
+    if existing_rhid:
+        raise HTTPException(status_code=409, detail="Package RHID is already taken. If someone has uploaded your package here and you want it removed, please contact me by running Cyclone -> Support. Support is checked regularly")
+    
     created = await db.packages.insert_one(package_dict)
     result = await db.packages.find_one({"_id": created.inserted_id})
     return JSONResponse(status_code=201, content=serialize_doc(result))
