@@ -16,19 +16,7 @@
 			<b>For users:</b> developers use Cyclone to speed up development process and create complex shortcuts
 			in a short amount of time. you can ALWAYS check inside Cyclone's code, since its a normal shortcut.
 		</p>
-		<p>When you're ready, tap on <b>Done</b></p>
-		<h2>Cyclone uses:</h2>
-		<ul>
-			<li>RoutineHub (version management)</li>
-			<li>Github (simple hosting)</li>
-			<li>ScreenKit (for stylized screens like this)</li>
-			<li>Luox Updater by Luox</li>
-		</ul>
-		<p>If you are using a shortcut by @wheatwhole, my shortcuts use</p>
-		<ul>
-			<li>Notion (social networking)</li>
-		</ul>
-		<p><a href="https://discord.gg/2KVKyUeYxU">our official discord</a></p>
+		<p>When you're ready, tap on <b style="color: #007AFF;">Done</b></p>
 	</div>
 </div>
 
