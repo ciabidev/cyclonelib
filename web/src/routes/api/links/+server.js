@@ -4,7 +4,10 @@ export async function GET() {
   const links = {
     "discord": "https://discord.gg/UYgGdEwGsK",
     "docs": "https://cyclone.fibery.io/@public",
-    "suggestions": "https://tally.so/r/mVXylJ"
+    "suggestions": "https://tally.so/r/mVXylJ",
+    "source": "https://github.com/cyclonelib/cyclonelib",
+    "web": "https://cyclonelib.vercel.app",
+    "api": "https://cyclonelib.vercel.app/api/docs"
   };
 
   return json(links, {

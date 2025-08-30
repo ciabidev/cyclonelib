@@ -14,7 +14,7 @@ const swaggerSpec = {
   },
   servers: [
     {
-      url: 'https://your-vercel-app.vercel.app',
+      url: 'https://cyclonelib.vercel.app',
       description: 'Production server'
     },
     {
