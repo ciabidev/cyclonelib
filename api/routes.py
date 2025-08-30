@@ -40,7 +40,7 @@ async def create_package(package: PackageCreate):
     
     existing_rhid = await db.packages.find_one({"rhid": package_dict["rhid"]})
     if existing_rhid:
-        raise HTTPException(status_code=409, detail="Package RHID is already taken. If someone has uploaded your package here and you want it removed, please contact me by running Cyclone -> Support. Support is checked regularly")
+        raise HTTPException(status_code=409, detail="Package RHID is already taken. If someone has uploaded your package here and you want it removed, please [contact us](https://tally.so/r/mVXylJ). Support is checked regularly.")
     
     created = await db.packages.insert_one(package_dict)
     result = await db.packages.find_one({"_id": created.inserted_id})
@@ -54,28 +54,47 @@ async def edit_package(rhid: int, package: PackageEdit):
     """
     Edit an existing package. Only updates fields provided by the user.
     """
-    # Fetch package (handle int/string RHID)
-    pkg = await db.packages.find_one({"rhid": rhid}) or \
-          await db.packages.find_one({"rhid": str(rhid)})
-    if not pkg:
+    package_dict = package.model_dump()
+    existing_package = await db.packages.find_one({"rhid": rhid})
+    if not existing_package:
         raise HTTPException(status_code=404, detail="Package not found")
-
+    
     # Verify edit_code (trim whitespace)
-    if pkg["edit_code"] != hash_edit_code(package.edit_code.strip()):
+    if existing_package["edit_code"] != hash_edit_code(package.edit_code.strip()):
         raise HTTPException(status_code=403, detail="Edit code does not match")
-
-    # Build update dict with only provided fields
+    
+    # Build the fields to update only from provided (non-None) values
     update_fields = {}
-    for field in ["name", "description", "rhid"]:
-        value = getattr(package, field, None)
-        if value is not None:
-            update_fields[field] = value
 
-    if update_fields:
-        await db.packages.update_one({"_id": pkg["_id"]}, {"$set": update_fields})
+    # Name: only validate uniqueness if provided and different from current
+    if package_dict.get("name") is not None:
+        if package_dict["name"] != existing_package.get("name"):
+            existing_name = await db.packages.find_one({"name": package_dict["name"], "_id": {"$ne": existing_package["_id"]}})
+            if existing_name:
+                raise HTTPException(status_code=409, detail="Package name is already taken")
+        update_fields["name"] = package_dict["name"]
+
+    # Description
+    if package_dict.get("description") is not None:
+        update_fields["description"] = package_dict["description"]
+
+    # RHID: only validate uniqueness if provided and different from current
+    if package_dict.get("rhid") is not None:
+        if package_dict["rhid"] != existing_package.get("rhid"):
+            existing_rhid = await db.packages.find_one({"rhid": package_dict["rhid"], "_id": {"$ne": existing_package["_id"]}})
+            if existing_rhid:
+                raise HTTPException(status_code=409, detail="Package RHID is already taken. If someone has uploaded your package here and you want it removed, please [contact us](https://tally.so/r/mVXylJ). Support is checked regularly.")
+        update_fields["rhid"] = package_dict["rhid"]
+
+    # If nothing to update, return the existing package
+    if not update_fields:
+        return JSONResponse(status_code=200, content=serialize_doc(existing_package, exclude=["edit_code"]))
+
+    # Apply the update using the existing package _id
+    await db.packages.update_one({"_id": existing_package["_id"]}, {"$set": update_fields})
 
     # Fetch updated package
-    updated_pkg = await db.packages.find_one({"_id": pkg["_id"]})
+    updated_package = await db.packages.find_one({"_id": existing_package["_id"]})
 
     # Return serialized package without edit_code
-    return JSONResponse(status_code=200, content=serialize_doc(updated_pkg, exclude=["edit_code"]))
+    return JSONResponse(status_code=200, content=serialize_doc(updated_package, exclude=["edit_code"]))
