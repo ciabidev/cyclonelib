@@ -44,6 +44,7 @@ Join our [Discord](https://discord.com/invite/UYgGdEwGsK) to see what others are
 Leave a ❤️ on our [RoutineHub page](https://routinehub.co/shortcut/19577) or add this badge to your shortcut’s description:  
 
 ```
-[![This shortcut uses or supports Cyclone](https://i.imgur.com/6RCqPh6.jpeg)](https://routinehub.co/shortcut/19577)```
+[![This shortcut uses or supports Cyclone](https://i.imgur.com/6RCqPh6.jpeg)](https://routinehub.co/shortcut/19577)
+```
 
 [![This shortcut uses or supports Cyclone](https://i.imgur.com/6RCqPh6.jpeg)](https://routinehub.co/shortcut/19577)
