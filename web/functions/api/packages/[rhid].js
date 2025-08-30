@@ -1,47 +1,4 @@
-import { MongoClient, ObjectId } from 'mongodb';
-import crypto from 'crypto';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const MONGO_URI = process.env.MONGO_URI;
-const DB_NAME = 'cypi';
-
-let client;
-let db;
-
-async function connectDB() {
-  if (!client) {
-    client = new MongoClient(MONGO_URI);
-    await client.connect();
-    db = client.db(DB_NAME);
-  }
-  return db;
-}
-
-function serializeDoc(doc, exclude = []) {
-  if (!doc) return null;
-  const serialized = {};
-  for (const [key, value] of Object.entries(doc)) {
-    if (exclude.includes(key)) continue;
-    if (value instanceof ObjectId) {
-      serialized[key] = value.toString();
-    } else if (typeof value === 'object' && value !== null) {
-      if (Array.isArray(value)) {
-        serialized[key] = value.map(v => typeof v === 'object' ? serializeDoc(v, exclude) : v);
-      } else {
-        serialized[key] = serializeDoc(value, exclude);
-      }
-    } else {
-      serialized[key] = value;
-    }
-  }
-  return serialized;
-}
-
-function hashEditCode(editCode) {
-  return crypto.createHash('sha256').update(editCode).digest('hex');
-}
+import { connectDB, serializeDoc, hashEditCode } from '../_utils.js';
 
 export async function onRequestPut({ request, env, params }) {
   const rhid = parseInt(params.rhid);
