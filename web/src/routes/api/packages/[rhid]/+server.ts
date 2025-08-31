@@ -3,6 +3,62 @@ import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
 import type { RequestHandler } from './$types.js';
 
 /**
+ * GET /api/packages/[rhid]
+ * Retrieve a package
+ *
+ * @param {Object} options - Request options
+ * @param {Object} options.params - URL parameters
+ * @param {string} options.params.rhid - Package RHID
+ * @returns {Promise<Response>} JSON response with package data
+ *
+ * @example
+ * GET /api/packages/12345
+ *
+ * Response: {
+ *   "_id": "507f1f77bcf86cd799439011",
+ *   "name": "My Package",
+ *   "description": "A useful package",
+ *   "rhid": 12345
+ * }
+ *
+ * @throws {404} If package not found
+ * @throws {500} If database connection fails
+ */
+export const GET: RequestHandler = async ({ params }) => {
+  const mongoUri = process.env.MONGO_URI;
+  const { rhid } = params;
+
+  if (!mongoUri) {
+    throw error(500, {
+      message: 'Database configuration missing. MONGO_URI environment variable not set.'
+    });
+  }
+
+  try {
+    const db = await connectDB();
+    const packageDoc = await db.collection('packages').findOne({ rhid: parseInt(rhid) });
+
+    if (!packageDoc) {
+      throw error(404, { message: 'Package not found' });
+    }
+
+    return json(serializeDoc(packageDoc, ['edit_code']), {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, PATCH, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      }
+    });
+  } catch (err: any) {
+    if (err.status) throw err; // Re-throw SvelteKit errors
+    console.error('Database error in GET /api/packages/[rhid]:', err);
+    throw error(500, {
+      message: 'Failed to retrieve package'
+    });
+  }
+};
+
+/**
  * PATCH /api/packages/[rhid]
  * Update a package
  *

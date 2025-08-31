@@ -1,39 +1,36 @@
 <script>
-	let { url, urlshort, name, description, img = null, banner = null, tiny = null } = $props();
+	let { url, urlshort, name, description, img = null, banner = null, tiny = null, rhid = null } = $props();
 	// @ts-ignore
 	import LinkIcon from '~icons/tabler/external-link';
 	import URLButton from './inputs-and-buttons/URLButton.svelte';
+	import MainButton from './inputs-and-buttons/MainButton.svelte';
 </script>
 
+<div class="card-wrapper">
 <div class="card">
-	<!--<a class="project-button" target="_blank" {href}>
-    <img src={img} alt={projectName} class="project-icon icon" />
-    <div class="project-info">
-      <div class="project-name">{projectName}</div>
-      <span class="project-url sub-text" data-sveltekit-replacestate><LinkIcon style="min-width: 1rem; min-height: 1rem; flex-shrink: 0;" class="icon" />{url}</span>
-    </div>
-  </a>
-  <div class="sub-text description">
-    {description}
-  </div> -->
 	{#if banner}
 		<div class="banner-container" style="--banner-url: url({banner})"></div>
 	{/if}
-	<div class="card-main">
+	<div class="card-content">
 		<URLButton {url} {urlshort} {name} {img} />
-		<div class="contents">
-			<div class="project-header">
-				<h2 class="project-name">{name}</h2>
-				<div class="sub-text tiny">{tiny}</div>
-				<div class="sub-text description">{description}</div>
-			</div>
+		<div class="card-text">
+			<h2 class="project-name">{name}</h2>
+			<div class="sub-text tiny">{tiny}</div>
+			<div class="sub-text description">{description}</div>
 		</div>
 	</div>
 </div>
-
+{#if rhid}
+<MainButton content="View Package " href="/packages/{rhid}" />
+{/if}
+</div>
 <style>
 	/* i know all these random flex styles are a bandaid solution but for some reason items just wouldn't stay in the flexbox so i had to use this */
-
+	.card-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
 	.card {
 		border-radius: var(--border-radius);
 		display: flex;
@@ -50,15 +47,33 @@
 		filter: drop-shadow(0 0 8px var(--card-stroke)) drop-shadow(0 0 10px var(--card-stroke));
 	}
 
-	.card-main {
+	.card-content {
 		padding-left: 12px;
 		padding-right: 22px; /* the right side should match the TOTAL of the left side */
 		padding-top: 12px;
 		padding-bottom: 12px;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		flex: 1;
 	}
 
-	.contents {
+	.card-text {
 		padding-left: 10px; /* to align with the URL Button */
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		text-decoration: none;
+		position: relative;
+		gap: 0.5rem;
+	}
+
+	.view-button-container {
+		display: flex;
+		justify-content: flex-end;
+		padding-top: 8px;
+		border-top: 1px solid var(--border-color);
+		margin-top: 8px;
 	}
 
 
@@ -77,11 +92,7 @@
 	}
 
 	.project-header {
-		display: flex;
-		flex-direction: column;
-		text-decoration: none;
-		position: relative;
-		gap: 0.5rem;
+
 	}
 
 	.project-name {

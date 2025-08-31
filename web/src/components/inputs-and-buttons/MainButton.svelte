@@ -2,18 +2,16 @@
 	let { Icon = null, content, href = null, onclick = null, variant = "default" } = $props();
 </script>
 
-{#if variant}
-	{#if href}
-		<a class="button button--{variant}" {href}>
-			{#if Icon}<Icon class="icon" style="flex-shrink: 0; font-size: 20px" />{/if}
-			{content}
-		</a>
-	{:else}
-		<button class="button button--{variant}" {onclick}>
-			{#if Icon}<Icon class="icon" style="flex-shrink: 0; font-size: 20px" />{/if}
-			{content}
-		</button>
-	{/if}
+{#if href}
+	<a class="button button--{variant}" {href}>
+		{#if Icon}<Icon class="icon" style="flex-shrink: 0; font-size: 20px" />{/if}
+		{content}
+	</a>
+{:else}
+	<button class="button button--{variant}" {onclick}>
+		{#if Icon}<Icon class="icon" style="flex-shrink: 0; font-size: 20px" />{/if}
+		{content}
+	</button>
 {/if}
 
 <style>
@@ -24,7 +22,7 @@
 		gap: 5px;
 		justify-content: center;
 		padding: 8px 18px;
-		border-radius: var(--border-radius);
+		border-radius: var(--border-radius); 
 		border: none;
 		margin: 0;
 		width: auto;
@@ -41,15 +39,13 @@
 		box-shadow: var(--button-box-shadow);
 		background: var(--button);
 		width: fit-content;
-		transition: background 200ms ease-out;
-	}
-
-	.button:hover {
-		background: var(--button-hover);
 	}
 
 	a {text-decoration: none}
 
+	a.button:hover {
+		filter: none;
+	}
 
 	.button--primary {
 		background: var(--main-color);
@@ -57,6 +53,10 @@
 	}
 
 	@media not all and (hover: none) {
+		.button:hover {
+			background: var(--button-hover);
+		}
+
 		.button--primary:hover {
 			background: var(--dark-main-color);
 		}

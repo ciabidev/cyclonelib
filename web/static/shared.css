@@ -572,11 +572,15 @@ p {
 	font-size: 1rem;
 }
 
-a:not(class) {
+a {
 	text-decoration-thickness: 5px;
 	color: var(--main-color);
 	transition: all 0.2s ease-in-out;
 	text-decoration-skip-ink: none;
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-ms-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
 }
 
 a:hover {

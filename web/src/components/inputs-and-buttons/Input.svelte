@@ -1,6 +1,6 @@
 <script>
 	let isFocused = $state(false);
-	let { placeholder, value = $bindable(''), Icon = null, width = '100%', min_width='100%', id = null, type = 'text' } = $props();
+	let { placeholder, value = $bindable(''), Icon = null, width = '100%', min_width='100%', id = null, type = 'text', long = false } = $props();
 </script>
 
 <div class="input-wrapper" class:focused={isFocused} style="--width: {width}; --min-width: {min_width}">
@@ -9,16 +9,29 @@
 			<Icon />
 		</div>
 	{/if}
-	<input
-		bind:value
-		class="input"
-		oninput={() => (isFocused = true)}
-		onfocus={() => (isFocused = true)}
-		onblur={() => (isFocused = false)}
-		{placeholder}
-		{id}
-		{type}
-	/>
+	{#if long}
+		<textarea
+			bind:value
+			class="input"
+			oninput={() => (isFocused = true)}
+			onfocus={() => (isFocused = true)}
+			onblur={() => (isFocused = false)}
+			{placeholder}
+			{id}
+			rows="4"
+		></textarea>
+	{:else}
+		<input
+			bind:value
+			class="input"
+			oninput={() => (isFocused = true)}
+			onfocus={() => (isFocused = true)}
+			onblur={() => (isFocused = false)}
+			{placeholder}
+			{id}
+			{type}
+		/>
+	{/if}
 </div>
 
 <style>

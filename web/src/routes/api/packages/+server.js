@@ -57,6 +57,7 @@ export async function GET({ url }) {
  * @body {string} package.description - Package description
  * @body {number} package.rhid - Package RHID (must be unique)
  * @body {string} package.edit_code - Edit code for future modifications
+ * @body {Date} package.created_at - Creation timestamp (auto-generated)
  *
  * @example
  * POST /api/packages
@@ -106,7 +107,7 @@ export async function POST({ request }) {
       });
     }
 
-    const packageDict = { name, description, rhid, edit_code: hashEditCode(edit_code) };
+    const packageDict = { name, description, rhid, edit_code: hashEditCode(edit_code), created_at: new Date() };
     const result = await db.collection('packages').insertOne(packageDict);
     const created = await db.collection('packages').findOne({ _id: result.insertedId });
 

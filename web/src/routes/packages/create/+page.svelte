@@ -79,6 +79,7 @@
 			</div>
 			<div class="field">
 				<label for="edit_code">Edit Code</label>
+				<p style="color: var(--color-error);">This is a secret code that is required to manage your package. Don't forget it and don't share it!</p>
 				<Input id="edit_code" placeholder="Enter edit code for future modifications" bind:value={edit_code} />
 			</div>
 			<MainButton
