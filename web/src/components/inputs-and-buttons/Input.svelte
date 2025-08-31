@@ -1,12 +1,14 @@
 <script>
 	let isFocused = $state(false);
-	let { placeholder, value = $bindable(''), Icon } = $props();
+	let { placeholder, value = $bindable(''), Icon = null, width = '100%', min_width='100%', id = null, type = 'text' } = $props();
 </script>
 
-<div class="input-wrapper" class:focused={isFocused}>
-	<div class="icon">
-		<Icon />
-	</div>
+<div class="input-wrapper" class:focused={isFocused} style="--width: {width}; --min-width: {min_width}">
+	{#if Icon}
+		<div class="icon">
+			<Icon />
+		</div>
+	{/if}
 	<input
 		bind:value
 		class="input"
@@ -14,14 +16,18 @@
 		onfocus={() => (isFocused = true)}
 		onblur={() => (isFocused = false)}
 		{placeholder}
+		{id}
+		{type}
 	/>
 </div>
 
 <style>
 	.input-wrapper {
-		box-shadow: var(--input-shadow);
+		box-shadow: var(--input-box-shadow);
 		border-radius: var(--border-radius);
-		width: 100%;
+		width: var(--width);
+		min-width: var(--min-width);
+		max-height: fit-content;
 		display: flex;
 		flex-direction: row;
 		gap: 5px;
@@ -31,7 +37,7 @@
 	}
 
 	.input-wrapper.focused {
-		box-shadow: var(--input-focus);
+		box-shadow: #000 0 0 0 1.5px inset;
 	}
 
 	.input {

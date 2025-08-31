@@ -2,8 +2,8 @@
 	let { Icon, href } = $props();
 </script>
 
-<a class="contact" {href} target="_blank">
-	<Icon style=" flex-shrink: 0; font-size: 1.1rem" />
+<a class="contact" {href} target="_blank" >
+	<Icon style=" flex-shrink: 0; font-size: 1.1rem"/>
 </a>
 
 <style>
@@ -17,10 +17,10 @@
 		border-radius: var(--border-radius);
 		text-decoration: none;
 		color: var(--text-color);
-		box-shadow: var(--shadow-main-border);
-		user-select: none;
-		-webkit-user-select: none; /* Safari / iOS */
-		-ms-user-select: none; /* old IE */
+		box-shadow: var(--card-stroke) 0 0 0 1px;
+		 user-select: none;
+  -webkit-user-select: none;  /* Safari / iOS */
+  -ms-user-select: none; 
 	}
 
 	.contact:hover {

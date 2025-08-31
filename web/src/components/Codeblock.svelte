@@ -55,7 +55,7 @@
         -ms-border-radius: 0.5rem;
         -o-border-radius: 0.5rem;
         position: relative;
-        border: 1px inset solid var(--code-border);
+        border: 1px inset solid var(--code-stroke);
 
     }
 
@@ -75,7 +75,7 @@
         border-radius: 0.25rem;
         padding: 0.25rem 0.5rem;
         cursor: pointer;
-        border: 1px solid var(--code-border);
+        border: 1px solid var(--code-stroke);
         font-size: 0.9rem;
         transition: background-color 0.2s;
         display: flex;

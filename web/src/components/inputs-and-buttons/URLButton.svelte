@@ -4,7 +4,9 @@
 </script>
 
 <a class="url-button" target="_blank" href={url}>
-	<img src={img} alt={name} class="url-icon icon" />
+	{#if img}
+		<img src={img} alt={name} class="url-icon icon" />
+	{/if}
 	<div class="url-text">
 		<div class="url-name">{name}</div>
 		<span class="url-short sub-text" data-sveltekit-replacestate
@@ -20,7 +22,7 @@
 	.url-button {
 		 user-select: none;
   -webkit-user-select: none;  /* Safari / iOS */
-  -ms-user-select: none;      /* old IE */
+  -ms-user-select: none; 
 		flex-shrink: 0;
 		display: flex;
 		min-width: fit-content;
@@ -36,7 +38,7 @@
 	}
 
 	.url-button:hover {
-		background: var(--hover-bg);
+		background: var(--button-hover);
 		filter: brightness(1.1);
 	}
 
