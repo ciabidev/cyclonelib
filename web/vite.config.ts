@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => {
       sveltekit(),
       Icons({
         compiler: 'svelte',
+        autoInstall: true,
         iconCustomizer(collection, icon, props) {
           // customize
         }
