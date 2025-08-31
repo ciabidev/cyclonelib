@@ -22,7 +22,7 @@ export async function GET({ url }) {
 
     // Add timeout to prevent hanging
     const docs = await Promise.race([
-      db.collection('packages').find(query).limit(100).toArray(),
+      db.collection('packages').find(query).sort({ created_at: -1 }).limit(100).toArray(),
       new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Database query timeout')), 30000)
       )
