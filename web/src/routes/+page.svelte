@@ -5,8 +5,7 @@
 </script>
 
 <!--bottom navbar-->
-<!--acts as a "body" excluding the navbar -->
-<!-- Page metadata for discord embed. This is a guide to AO Challenger and a list of all commands. The title is About AO Challenger-->
+
 <svelte:head>
 	<title>Cyclone</title>
 	<meta name="title" content="Cyclone" />
