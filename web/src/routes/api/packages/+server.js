@@ -54,7 +54,8 @@ export async function GET({ url }) {
  *
  * @body {Object} package - Package data
  * @body {string} package.name - Package name (must be unique)
- * @body {string} package.description - Package description
+ * @body {string} package.short_description - Short description
+ * @body {string} package.long_description - Long description (supports markdown)
  * @body {number} package.rhid - Package RHID (must be unique)
  * @body {string} package.edit_code - Edit code for future modifications
  * @body {Date} package.created_at - Creation timestamp (auto-generated)
@@ -88,7 +89,7 @@ export async function POST({ request }) {
   }
 
   try {
-    const { edit_code, name, description, rhid } = await request.json();
+    const { edit_code, name, short_description, long_description, rhid } = await request.json();
     const { connectDB, serializeDoc, hashEditCode } = await import('$lib/server/db-utils.js');
 
     const db = await connectDB();
@@ -107,7 +108,14 @@ export async function POST({ request }) {
       });
     }
 
-    const packageDict = { name, description, rhid, edit_code: hashEditCode(edit_code), created_at: new Date() };
+    const packageDict = {
+      name,
+      short_description,
+      long_description,
+      rhid,
+      edit_code: hashEditCode(edit_code),
+      created_at: new Date()
+    };
     const result = await db.collection('packages').insertOne(packageDict);
     const created = await db.collection('packages').findOne({ _id: result.insertedId });
 

@@ -2,8 +2,9 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import MainButton from '$components/inputs-and-buttons/MainButton.svelte';
+	import Markdown from '$components/Markdown.svelte';
 
-	/** @type {{name: string, description: string, rhid: number} | null} */
+	/** @type {{name: string, short_description?: string, long_description?: string, rhid: number} | null} */
 	let packageData = $state(null);
 	let loading = $state(true);
 	let error = $state('');
@@ -33,13 +34,19 @@
 	{:else if packageData}
 		<div class="package-header">
 			<h1>{packageData.name}</h1>
-			<p class="rhid">RoutineHub ID: {packageData.rhid}</p>
 		</div>
 		<div class="package-content">
-			<div class="description">
-				<h2>Description</h2>
-				<p>{packageData.description}</p>
-			</div>
+			{#if packageData.short_description}
+				<div class="short-description">
+					<b>Short Description:</b> {packageData.short_description}
+				</div>
+			{/if}
+			{#if packageData.long_description}
+				<div class="long-description">
+					<h1>Detailed Description</h1>
+					<Markdown source={packageData.long_description} />
+				</div>
+			{/if}
 			<div class="actions">
 				<MainButton
 					content="View on RoutineHub"
@@ -92,15 +99,21 @@
 		gap: 20px;
 	}
 
-	.description h2 {
+	.short-description h2 {
 		margin: 0 0 10px 0;
 		font-size: 1.5rem;
 		font-weight: 500;
 	}
 
-	.description p {
+	.short-description p {
 		margin: 0;
 		line-height: 1.6;
+	}
+
+	.long-description h2 {
+		margin: 0 0 10px 0;
+		font-size: 1.5rem;
+		font-weight: 500;
 	}
 
 	.actions {

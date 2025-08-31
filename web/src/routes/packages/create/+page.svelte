@@ -4,7 +4,8 @@
 	import MainButton from '$components/inputs-and-buttons/MainButton.svelte';
 
 	let name = $state('');
-	let description = $state('');
+	let short_description = $state('');
+	let long_description = $state('');
 	let rhid = $state('');
 	let edit_code = $state('');
 	let loading = $state(false);
@@ -12,7 +13,7 @@
 	let success = $state('');
 
 	async function submit() {
-		if (!name || !description || !rhid || !edit_code) {
+		if (!name || !short_description || !long_description || !rhid || !edit_code) {
 			error = 'All fields are required';
 			return;
 		}
@@ -31,7 +32,8 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					name,
-					description,
+					short_description,
+					long_description,
 					rhid: parseInt(rhid),
 					edit_code
 				})
@@ -41,7 +43,8 @@
 				success = 'Package created successfully!';
 				// Clear form
 				name = '';
-				description = '';
+				short_description = '';
+				long_description = '';
 				rhid = '';
 				edit_code = '';
 				// Redirect
@@ -70,8 +73,12 @@
 				<Input id="name" placeholder="Enter package name" bind:value={name} />
 			</div>
 			<div class="field">
-				<label for="description">Description</label>
-				<Input id="description" placeholder="Enter package description" bind:value={description} />
+				<label for="short_description">Short Description</label>
+				<Input id="short_description" placeholder="Enter short description (brief summary)" bind:value={short_description} />
+			</div>
+			<div class="field">
+				<label for="long_description">Long Description</label>
+				<Input id="long_description" placeholder="Enter detailed description" bind:value={long_description} long={true} />
 			</div>
 			<div class="field">
 				<label for="rhid">RoutineHub ID</label>

@@ -71,7 +71,8 @@ export const GET: RequestHandler = async ({ params }) => {
  * @body {Object} data - Update data
  * @body {string} data.edit_code - Edit code for verification
  * @body {string} [data.name] - New package name
- * @body {string} [data.description] - New package description
+ * @body {string} [data.short_description] - New short description
+ * @body {string} [data.long_description] - New long description (supports markdown)
  * @body {number} [data.rhid] - New package RHID
  *
  * @example
@@ -104,7 +105,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
   }
 
   try {
-    const { edit_code, name, description, rhid: newRhid } = await request.json();
+    const { edit_code, name, short_description, long_description, rhid: newRhid } = await request.json();
 
     const db = await connectDB();
     const existingPackage = await db.collection('packages').findOne({ rhid: parseInt(rhid) });
@@ -125,7 +126,8 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
       }
       updateFields.name = name;
     }
-    if (description !== undefined) updateFields.description = description;
+    if (short_description !== undefined) updateFields.short_description = short_description;
+    if (long_description !== undefined) updateFields.long_description = long_description;
     if (newRhid !== undefined && newRhid !== existingPackage.rhid) {
       const existingRhidCheck = await db.collection('packages').findOne({ rhid: newRhid, _id: { $ne: existingPackage._id } });
       if (existingRhidCheck) {

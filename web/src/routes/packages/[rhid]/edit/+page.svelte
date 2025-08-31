@@ -5,11 +5,12 @@
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import MainButton from '$components/inputs-and-buttons/MainButton.svelte';
 
-	/** @type {{name: string, description: string, rhid: number} | null} */
+	/** @type {{name: string, short_description?: string, long_description?: string, rhid: number} | null} */
 	let packageData = $state(null);
 	let rhidParam = $page.params.rhid;
 	let name = $state('');
-	let description = $state('');
+	let short_description = $state('');
+	let long_description = $state('');
 	let rhid = $state('');
 	let edit_code = $state('');
 	let loading = $state(true);
@@ -25,7 +26,8 @@
 				packageData = await response.json();
 				if (packageData) {
 					name = packageData.name;
-					description = packageData.description;
+					short_description = packageData.short_description || '';
+					long_description = packageData.long_description || '';
 					rhid = packageData.rhid.toString();
 				}
 			} else {
@@ -40,7 +42,7 @@
 	});
 
 	async function updatePackage() {
-		if (!name || !description || !rhid || !edit_code) {
+		if (!name || !short_description || !long_description || !rhid || !edit_code) {
 			error = 'All fields are required';
 			return;
 		}
@@ -59,7 +61,8 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					name,
-					description,
+					short_description,
+					long_description,
 					rhid: parseInt(rhid),
 					edit_code
 				})
@@ -134,8 +137,12 @@
 					<Input id="name" placeholder="Enter package name" bind:value={name} />
 				</div>
 				<div class="field">
-					<label for="description">Description</label>
-					<Input id="description" placeholder="Enter package description" bind:value={description} />
+					<label for="short_description">Short Description</label>
+					<Input id="short_description" placeholder="Enter short description (brief summary)" bind:value={short_description} />
+				</div>
+				<div class="field">
+					<label for="long_description">Long Description</label>
+					<Input id="long_description" placeholder="Enter detailed description" bind:value={long_description} long={true} />
 				</div>
 				<div class="field">
 					<label for="rhid">RoutineHub ID</label>

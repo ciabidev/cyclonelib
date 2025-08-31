@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 // Load environment variables
 dotenv.config();
 
-const DB_NAME = 'cypi';
+const DB_NAME = 'cyclone';
 
 let client;
 let db;
