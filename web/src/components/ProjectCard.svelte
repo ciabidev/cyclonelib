@@ -39,9 +39,8 @@
 		position: relative;
 		align-items: flex-start;
 		min-height: 250px;
-		transition: 0.3s var(--actions-and-stuff-ahh-transition);
+		transition: all 0.3s var(--actions-and-stuff-ahh-transition);
 		max-width: 500px;
-		min-width: 500px;
 		overflow: hidden;
 		box-shadow: var(--card-box-shadow);
 		filter: drop-shadow(0 0 8px var(--card-stroke)) drop-shadow(0 0 10px var(--card-stroke));
@@ -89,10 +88,6 @@
 		background-repeat: no-repeat;
 		background-position: center center;
 		background-size: cover;
-	}
-
-	.project-header {
-
 	}
 
 	.project-name {
