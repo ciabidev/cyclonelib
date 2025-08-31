@@ -88,10 +88,6 @@
 		font-weight: 600;
 	}
 
-	.rhid {
-		color: var(--text-secondary);
-		font-size: 0.9rem;
-	}
 
 	.package-content {
 		display: flex;
