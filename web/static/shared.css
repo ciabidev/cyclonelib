@@ -136,6 +136,8 @@ button,
 textarea,
 select {
 	font: inherit;
+	-webkit-tap-highlight-color: transparent;
+	-ms-touch-action: manipulation;
 }
 
 /* 8. Avoid text overflows */
@@ -255,6 +257,12 @@ pre {
 /**
  * Remove the gray background on active links in IE 10.
  */
+
+a {
+	background-color: transparent;
+	-webkit-tap-highlight-color: transparent;
+	-ms-touch-action: manipulation;
+}
 
 /**
  * 1. Remove the bottom border in Chrome 57-
