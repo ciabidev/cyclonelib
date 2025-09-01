@@ -2,13 +2,13 @@
 	import { onMount } from 'svelte';
 	import ProjectCard from '$components/ProjectCard.svelte'; /* the Cyclone website is forked from Ciabi's website, and I run both the Ciabi and Cyclone website. Old names may still be used. */
 	import Input from '$components/inputs-and-buttons/Input.svelte';
+	import { createDialog, killDialog } from '$lib/state/dialogs';
 	// @ts-ignore
 	import SearchIcon from '~icons/streamline-flex/magnifying-glass-remix';
 	/** @type {Array<{name: string, short_description: string, long_description: string, rhid: number, created_at?: string}>} */
 	let packages = $state([]);
 	let searchQuery = $state('');
 	let loading = $state(true);
-	let error = $state('');
 
 	onMount(async () => {
 		try {
@@ -29,16 +29,46 @@
 					return bDate - aDate;
 				});
 			} else {
-				error = 'Failed to load packages. Please try again later.';
+				// Clear any existing dialogs first
+				killDialog();
+				createDialog({
+					id: 'load-packages-error',
+					type: 'small',
+					title: 'Error Loading Packages',
+					icon: 'warn-red',
+					bodyText: 'Failed to load packages. Please try again later.',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
 				console.error('Failed to fetch packages:', response.status);
 			}
 		} catch (err) {
+			// Clear any existing dialogs first
+			killDialog();
+			let errorMessage = 'An error occurred while loading packages.';
 			if (err instanceof Error && err.name === 'AbortError') {
-				error = 'Request timed out. Please check your connection.';
-			} else {
-				error = 'An error occurred while loading packages.';
-				console.error('Error fetching packages:', err);
+				errorMessage = 'Request timed out. Please check your connection.';
 			}
+			createDialog({
+				id: 'load-packages-error',
+				type: 'small',
+				title: 'Error Loading Packages',
+				icon: 'warn-red',
+				bodyText: errorMessage,
+				buttons: [
+					{
+						text: 'ok',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
+			console.error('Error fetching packages:', err);
 		} finally {
 			loading = false;
 		}
@@ -71,8 +101,6 @@
 	<div class="projects">
 		{#if loading}
 			<p>Loading packages...</p>
-		{:else if error}
-			<p class="error">{error}</p>
 		{:else}
 			{#each filteredPackages as pkg}
 				<ProjectCard
@@ -137,11 +165,6 @@
 		width: 100%;
 	}
 
-	.error {
-		color: red;
-		text-align: center;
-		font-weight: bold;
-	}
 
 	@media only screen and (max-height: 400px) {
 		.page-wrapper {

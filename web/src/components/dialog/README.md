@@ -32,7 +32,7 @@ createDialog({
   title: 'Hello World',
   bodyText: 'This is a dialog',
   buttons: [
-    { text: 'OK', main: true, action: () => console.log('OK clicked') }
+    { text: 'ok', main: true, action: () => console.log('ok clicked') }
   ]
 });
 
@@ -54,9 +54,9 @@ createDialog({
   bodyText: 'This is a basic dialog example.',
   buttons: [
     {
-      text: 'OK',
+      text: 'ok',
       main: true,
-      action: () => console.log('OK clicked')
+      action: () => console.log('ok clicked')
     }
   ]
 });

@@ -77,6 +77,18 @@ class DialogManager {
     }
 
     /**
+     * Closes a specific dialog with animation by triggering its close function
+     * This is used when we want to close a dialog programmatically with animation
+     */
+    closeDialogAnimated(dialogId: string) {
+        // Dispatch a custom event that the DialogContainer can listen for
+        const event = new CustomEvent('close-dialog-animated', {
+            detail: { dialogId }
+        });
+        window.dispatchEvent(event);
+    }
+
+    /**
      * Closes all currently active dialogs
      * Useful for cleanup or when navigating away from a page
      */
@@ -109,6 +121,14 @@ export function createDialog(dialog: DialogInfo) {
  */
 export function killDialog() {
     dialogManager.killDialog();
+}
+
+/**
+ * Closes a specific dialog with animation
+ * @param dialogId - The ID of the dialog to close
+ */
+export function closeDialogAnimated(dialogId: string) {
+    dialogManager.closeDialogAnimated(dialogId);
 }
 
 // Reactive exports for component usage

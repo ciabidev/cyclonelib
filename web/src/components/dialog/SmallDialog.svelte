@@ -87,7 +87,7 @@
             {/if}
         </div>
         {#if buttons}
-            <DialogButtons {buttons} closeFunc={close} />
+            <DialogButtons {buttons} closeFunc={close} dialogId={id} />
         {/if}
     </div>
 </DialogContainer>

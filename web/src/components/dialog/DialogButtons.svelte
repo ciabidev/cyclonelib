@@ -19,12 +19,12 @@
     import DialogButton from "$components/dialog/DialogButton.svelte";
 
     // Props
-    let { buttons, closeFunc }: { buttons: DialogButtonType[]; closeFunc: () => void } = $props();
+    let { buttons, closeFunc, dialogId }: { buttons: DialogButtonType[]; closeFunc: () => void; dialogId: string } = $props();
 </script>
 
 <div class="popup-buttons">
     {#each buttons as button}
-        <DialogButton {button} {closeFunc} />
+        <DialogButton {button} {closeFunc} {dialogId} />
     {/each}
 </div>
 

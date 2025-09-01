@@ -2,11 +2,11 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import Markdown from '$components/Markdown.svelte';
+	import { createDialog, killDialog } from '$lib/state/dialogs';
 
 	/** @type {{name: string, short_description?: string, long_description?: string, rhid: number} | null} */
 	let packageData = $state(null);
 	let loading = $state(true);
-	let error = $state('');
 
 	onMount(async () => {
 		try {
@@ -14,10 +14,40 @@
 			if (response.ok) {
 				packageData = await response.json();
 			} else {
-				error = 'Failed to load package details.';
+				// Clear any existing dialogs first
+				killDialog();
+				createDialog({
+					id: 'load-package-details-error',
+					type: 'small',
+					title: 'Error Loading Package',
+					icon: 'warn-red',
+					bodyText: 'Failed to load package details.',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
 			}
 		} catch (err) {
-			error = 'An error occurred while loading package details.';
+			// Clear any existing dialogs first
+			killDialog();
+			createDialog({
+				id: 'load-package-details-network-error',
+				type: 'small',
+				title: 'Error Loading Package',
+				icon: 'warn-red',
+				bodyText: 'An error occurred while loading package details.',
+				buttons: [
+					{
+						text: 'ok',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			console.error('Error fetching package:', err);
 		} finally {
 			loading = false;
@@ -28,9 +58,8 @@
 <div class="package-details-wrapper">
 	{#if loading}
 		<p>Loading package details...</p>
-	{:else if error}
-		<p class="error">{error}</p>
 	{:else if packageData}
+		<a class="button" href="/packages">Back to Packages</a>
 		<div class="package-header">
 			<h1>{packageData.name}</h1>
 		</div>
@@ -109,9 +138,4 @@
 		flex-wrap: wrap;
 	}
 
-	.error {
-		color: red;
-		text-align: center;
-		font-weight: bold;
-	}
 </style>

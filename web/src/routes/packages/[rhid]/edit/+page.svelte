@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
-	import { createDialog } from '$lib/state/dialogs';
+	import { createDialog, killDialog, closeDialogAnimated } from '$lib/state/dialogs';
 
 	/** @type {{name: string, short_description?: string, long_description?: string, rhid: number} | null} */
 	let packageData = $state(null);
@@ -16,8 +16,6 @@
 	let loading = $state(true);
 	let updating = $state(false);
 	let deleting = $state(false);
-	let error = $state('');
-	let success = $state('');
 
 	onMount(async () => {
 		try {
@@ -31,10 +29,40 @@
 					rhid = packageData.rhid.toString();
 				}
 			} else {
-				error = 'Failed to load package details.';
+				// Clear any existing dialogs first
+				killDialog();
+				createDialog({
+					id: 'load-package-error',
+					type: 'small',
+					title: 'Error Loading Package',
+					icon: 'warn-red',
+					bodyText: 'Failed to load package details.',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
 			}
 		} catch (err) {
-			error = 'An error occurred while loading package details.';
+			// Clear any existing dialogs first
+			killDialog();
+			createDialog({
+				id: 'load-package-network-error',
+				type: 'small',
+				title: 'Error Loading Package',
+				icon: 'warn-red',
+				bodyText: 'An error occurred while loading package details.',
+				buttons: [
+					{
+						text: 'ok',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			console.error('Error fetching package:', err);
 		} finally {
 			loading = false;
@@ -43,17 +71,51 @@
 
 	async function updatePackage() {
 		if (!name || !short_description || !long_description || !rhid || !edit_code) {
-			error = 'All fields are required';
+			// Clear any existing dialogs first
+			killDialog();
+			// Add a small delay before creating the error dialog to ensure proper dialog management
+			setTimeout(() => {
+				createDialog({
+					id: 'update-package-validation-error',
+					type: 'small',
+					title: 'Validation Error',
+					icon: 'warn-red',
+					bodyText: 'All fields are required',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
+			}, 200);
 			return;
 		}
 		if (isNaN(parseInt(rhid))) {
-			error = 'RoutineHub ID must be a valid number';
+			// Clear any existing dialogs first
+			killDialog();
+			// Add a small delay before creating the error dialog to ensure proper dialog management
+			setTimeout(() => {
+				createDialog({
+					id: 'update-package-validation-error',
+					type: 'small',
+					title: 'Validation Error',
+					icon: 'warn-red',
+					bodyText: 'RoutineHub ID must be a valid number',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
+			}, 200);
 			return;
 		}
 
 		updating = true;
-		error = '';
-		success = '';
 
 		try {
 			const response = await fetch(`/api/packages/${rhidParam}`, {
@@ -69,15 +131,68 @@
 			});
 
 			if (response.ok) {
-				success = 'Package updated successfully!';
-				// Redirect to package detail page
-				goto(`/packages/${rhidParam}`);
+				// Clear any existing dialogs first
+				killDialog();
+				createDialog({
+					id: 'update-package-success',
+					type: 'small',
+					title: 'Success',
+					bodyText: 'Package updated successfully!',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {
+								// Small delay to allow dialog to close properly before navigation
+								setTimeout(() => {
+									goto(`/packages/${rhidParam}`);
+								}, 200);
+							}
+						}
+					]
+				});
 			} else {
 				const data = await response.json();
-				error = data.message || 'Failed to update package';
+				// Clear any existing dialogs first
+				killDialog();
+				// Add a small delay before creating the error dialog to ensure proper dialog management
+				setTimeout(() => {
+					createDialog({
+						id: 'update-package-error',
+						type: 'small',
+						title: 'Error Updating Package',
+						icon: 'warn-red',
+						bodyText: data.message || 'Failed to update package',
+						buttons: [
+							{
+								text: 'ok',
+								main: true,
+								action: () => {}
+							}
+						]
+					});
+				}, 200);
 			}
 		} catch (err) {
-			error = 'Network error';
+			// Clear any existing dialogs first
+			killDialog();
+			// Add a small delay before creating the error dialog to ensure proper dialog management
+			setTimeout(() => {
+				createDialog({
+					id: 'update-package-network-error',
+					type: 'small',
+					title: 'Network Error',
+					icon: 'warn-red',
+					bodyText: 'Network error occurred while updating package',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
+			}, 200);
 		} finally {
 			updating = false;
 		}
@@ -85,8 +200,6 @@
 
 	async function performDelete() {
 		deleting = true;
-		error = '';
-		success = '';
 
 		try {
 			const response = await fetch(`/api/packages/${rhidParam}`, {
@@ -98,15 +211,68 @@
 			});
 
 			if (response.ok) {
-				success = 'Package deleted successfully!';
-				// Redirect to packages list
-				goto('/packages');
+				// Clear any existing dialogs first
+				killDialog();
+				createDialog({
+					id: 'delete-package-success',
+					type: 'small',
+					title: 'Success',
+					bodyText: 'Package deleted successfully!',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {
+								// Small delay to allow dialog to close properly before navigation
+								setTimeout(() => {
+									goto('/packages');
+								}, 200);
+							}
+						}
+					]
+				});
 			} else {
 				const data = await response.json();
-				error = data.message || 'Failed to delete package';
+				// Close the confirmation dialog with animation
+				closeDialogAnimated('delete-package-dialog');
+				// Add a small delay before creating the error dialog to ensure proper dialog management
+				setTimeout(() => {
+					createDialog({
+						id: 'delete-package-error',
+						type: 'small',
+						title: 'Error Deleting Package',
+						icon: 'warn-red',
+						bodyText: data.message || 'Failed to delete package',
+						buttons: [
+							{
+								text: 'OK',
+								main: true,
+								action: () => {}
+							}
+						]
+					});
+				}, 200);
 			}
 		} catch (err) {
-			error = 'Network error';
+			// Close the confirmation dialog with animation
+			closeDialogAnimated('delete-package-dialog');
+			// Add a small delay before creating the error dialog to ensure proper dialog management
+			setTimeout(() => {
+				createDialog({
+					id: 'delete-package-network-error',
+					type: 'small',
+					title: 'Network Error',
+					icon: 'warn-red',
+					bodyText: 'Network error occurred while deleting package',
+					buttons: [
+						{
+							text: 'OK',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
+			}, 200);
 		} finally {
 			deleting = false;
 		}
@@ -114,10 +280,30 @@
 
 	function showDeleteDialog() {
 		if (!edit_code) {
-			error = 'Edit code is required to delete';
+			// Clear any existing dialogs first
+			killDialog();
+			// Add a small delay before creating the error dialog to ensure proper dialog management
+			setTimeout(() => {
+				createDialog({
+					id: 'delete-package-edit-code-error',
+					type: 'small',
+					title: 'Edit Code Required',
+					icon: 'warn-red',
+					bodyText: 'Edit code is required to delete this package',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
+			}, 200);
 			return;
 		}
 
+		// Clear any existing dialogs first
+		killDialog();
 		createDialog({
 			id: 'delete-package-dialog',
 			type: 'small',
@@ -185,13 +371,6 @@
 		{:else}
 			<p>Package not found.</p>
 		{/if}
-
-		{#if error}
-			<p class="error">{error}</p>
-		{/if}
-		{#if success}
-			<p class="success">{success}</p>
-		{/if}
 	</div>
 </div>
 
@@ -238,13 +417,6 @@
 		flex-wrap: wrap;
 	}
 
-	.error {
-		color: var(--color-error);
-	}
-
-	.success {
-		color: var(--color-allgood);
-	}
 
 	@media only screen and (max-height: 25rem) {
 		.page-wrapper {

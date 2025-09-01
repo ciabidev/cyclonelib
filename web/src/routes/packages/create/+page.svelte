@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
+	import { createDialog, killDialog } from '$lib/state/dialogs';
 
 	let name = $state('');
 	let short_description = $state('');
@@ -8,22 +9,48 @@
 	let rhid = $state('');
 	let edit_code = $state('');
 	let loading = $state(false);
-	let error = $state('');
-	let success = $state('');
 
 	async function submit() {
 		if (!name || !short_description || !long_description || !rhid || !edit_code) {
-			error = 'All fields are required';
+			// Clear any existing dialogs first
+			killDialog();
+			createDialog({
+				id: 'create-package-validation-error',
+				type: 'small',
+				title: 'Validation Error',
+				icon: 'warn-red',
+				bodyText: 'All fields are required',
+				buttons: [
+					{
+						text: 'ok',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			return;
 		}
 		if (isNaN(parseInt(rhid))) {
-			error = 'RoutineHub ID must be a valid number';
+			// Clear any existing dialogs first
+			killDialog();
+			createDialog({
+				id: 'create-package-validation-error',
+				type: 'small',
+				title: 'Validation Error',
+				icon: 'warn-red',
+				bodyText: 'RoutineHub ID must be a valid number',
+				buttons: [
+					{
+						text: 'ok',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			return;
 		}
 
 		loading = true;
-		error = '';
-		success = '';
 
 		try {
 			const response = await fetch('/api/packages', {
@@ -39,21 +66,68 @@
 			});
 
 			if (response.ok) {
-				success = 'Package created successfully!';
-				// Clear form
-				name = '';
-				short_description = '';
-				long_description = '';
-				rhid = '';
-				edit_code = '';
-				// Redirect
-				goto('/packages');
+				// Clear any existing dialogs first
+				killDialog();
+			    createDialog({
+			        id: 'create-package-success',
+			        type: 'small',
+			        title: 'Success',
+			        bodyText: 'Package created successfully!',
+			        buttons: [
+			            {
+			                text: 'ok',
+			                main: true,
+			                action: () => {
+			                    // Clear form
+			                    name = '';
+			                    short_description = '';
+			                    long_description = '';
+			                    rhid = '';
+			                    edit_code = '';
+			                    // Small delay to allow dialog to close properly before navigation
+			                    setTimeout(() => {
+			                        goto('/packages');
+			                    }, 200);
+			                }
+			            }
+			        ]
+			    });
 			} else {
 				const data = await response.json();
-				error = data.message || 'Failed to create package';
+				// Clear any existing dialogs first
+				killDialog();
+				createDialog({
+					id: 'create-package-error',
+					type: 'small',
+					title: 'Error Creating Package',
+					icon: 'warn-red',
+					bodyText: data.message || 'Failed to create package',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
 			}
 		} catch (err) {
-			error = 'Network error';
+			// Clear any existing dialogs first
+			killDialog();
+			createDialog({
+				id: 'create-package-network-error',
+				type: 'small',
+				title: 'Network Error',
+				icon: 'warn-red',
+				bodyText: 'Network error occurred while creating package',
+				buttons: [
+					{
+						text: 'ok',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 		} finally {
 			loading = false;
 		}
@@ -90,13 +164,6 @@
 			</div>
 			<button class="button button--primary" onclick={submit}>{loading ? 'Creating...' : 'Create Package'}</button>
 		</div>
-
-		{#if error}
-			<p class="error">{error}</p>
-		{/if}
-		{#if success}
-			<p class="success">{success}</p>
-		{/if}
 	</div>
 </div>
 
@@ -136,13 +203,6 @@
 		font-weight: bold;
 	}
 
-	.error {
-		color: var(--color-error);
-	}
-
-	.success {
-		color: var(--color-allgood);
-	}
 
 	@media only screen and (max-height: 25rem) {
 		.page-wrapper {

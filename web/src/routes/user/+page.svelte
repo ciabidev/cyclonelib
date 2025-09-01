@@ -23,9 +23,9 @@
 			bodyText: 'This is a test dialog from the cobalt-main dialog system!',
 			buttons: [
 				{
-					text: 'OK',
+					text: 'ok',
 					main: true,
-					action: () => console.log('OK clicked')
+					action: () => console.log('ok clicked')
 				},
 				{
 					text: 'Cancel',
