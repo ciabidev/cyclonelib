@@ -381,8 +381,7 @@
 		flex-direction: row;
 		justify-content: center;
 		flex-wrap: wrap;
-		min-height: max-content;
-		height: 100%;
+		min-height: 100%;
 		overscroll-behavior: none;
 		padding: calc(var(--padding) + 0.9375rem);
 	}

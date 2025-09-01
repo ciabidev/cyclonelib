@@ -45,11 +45,8 @@
 
 	--button-active-hover: #2a2a2a;
 
-	--popup: #f1f1f1;
-	--popup-backdrop: rgba(255, 255, 255, 0.6);
-
 	/* Dialog styles */
-	--dialog-backdrop: rgba(0, 0, 0, 0.5);
+	--dialog-backdrop: rgba(255, 255, 255, 0.5);
 	--dialog-padding: 18px;
 	--popup-bg: var(--bg-color);
 	--popup-stroke: rgba(0, 0, 0, 0.1);
@@ -260,9 +257,6 @@ pre {
  * Remove the gray background on active links in IE 10.
  */
 
-a {
-	background-color: transparent;
-}
 
 /**
  * 1. Remove the bottom border in Chrome 57-
@@ -601,9 +595,7 @@ a:not(:has(img)) {
 	-o-transition: all 0.2s ease-in-out;
 }
 
-a:not(:has(img)):hover {
-	filter: brightness(1.25);
-}
+
 
 img {
 	user-select: none;
@@ -837,6 +829,11 @@ background-color: var(--button-elevated);
 a.active:focus-visible {
 color: var(--white) !important;
 background-color: var(--blue) !important;
+}
+
+a:not(:has(img)):not(.button):hover {
+	filter: brightness(1.25);
+	-webkit-filter: brightness(1.25);
 }
 
 @media (hover: hover) {

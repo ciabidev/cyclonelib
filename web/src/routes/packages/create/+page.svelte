@@ -175,7 +175,7 @@
 		justify-content: center;
 		flex-wrap: wrap;
 		min-height: 100%;
-		overscroll-behavior: none;
+		overscroll-behavior: none; 
 		padding: calc(var(--padding) + 0.9375rem);
 	}
 

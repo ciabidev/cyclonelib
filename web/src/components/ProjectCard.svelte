@@ -66,16 +66,6 @@
 		gap: 0.5rem;
 	}
 
-	.view-button-container {
-		display: flex;
-		justify-content: flex-end;
-		padding-top: 8px;
-		border-top: 1px solid var(--border-color);
-		margin-top: 8px;
-	}
-
-
-
 	.banner-container {
 		width: 100%;
 		height: 150px;

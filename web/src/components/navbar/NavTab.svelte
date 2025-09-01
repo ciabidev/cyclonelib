@@ -67,7 +67,7 @@
   }
 
   a[role="tab"] {
-    transition: all 250ms cubic-bezier(0.33, 1, 0.68, 1);
+    transition: transform 250ms cubic-bezier(0.33, 1, 0.68, 1);
     display: flex;
     flex-direction: column;
     justify-content: center;

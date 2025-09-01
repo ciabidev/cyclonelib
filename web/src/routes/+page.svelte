@@ -93,7 +93,7 @@
 			>
 		</p>
 
-	</div>
+		</div>
 </div>
 
 <style>
@@ -116,6 +116,7 @@
 		flex-direction: column;
 	}
 
+
 	@media only screen and (max-height: 25rem) {
 		.page-wrapper {
 			justify-content: center;
@@ -125,3 +126,4 @@
 		}
 	}
 </style>
+

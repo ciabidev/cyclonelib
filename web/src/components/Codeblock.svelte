@@ -38,7 +38,10 @@
 		}
 	}
 
-	onMount(highlightCode);
+	// Delay highlighting to avoid interfering with page loading animations
+	onMount(() => {
+		setTimeout(highlightCode, 500); // 500ms delay allows page animations to complete
+	});
 </script>
 
 <div class="block">

@@ -94,6 +94,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
+		min-height: 100%;
 	}
 
 	.package-header {
