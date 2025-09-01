@@ -3,7 +3,6 @@
 	// @ts-ignore
 	import LinkIcon from '~icons/tabler/external-link';
 	import URLButton from './inputs-and-buttons/URLButton.svelte';
-	import MainButton from './inputs-and-buttons/MainButton.svelte';
 </script>
 
 <div class="card-wrapper">
@@ -21,7 +20,7 @@
 	</div>
 </div>
 {#if rhid}
-<MainButton content="View Package " href="/packages/{rhid}" />
+<a class="button" href="/packages/{rhid}">View Package </a>
 {/if}
 </div>
 <style>

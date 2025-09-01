@@ -1,7 +1,6 @@
 <script>
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import MainButton from '$components/inputs-and-buttons/MainButton.svelte';
 	import Markdown from '$components/Markdown.svelte';
 
 	/** @type {{name: string, short_description?: string, long_description?: string, rhid: number} | null} */
@@ -48,16 +47,8 @@
 				</div>
 			{/if}
 			<div class="actions">
-				<MainButton
-					content="View on RoutineHub"
-					href="https://routinehub.co/shortcut/{packageData.rhid}"
-					variant="primary"
-				/>
-				<MainButton
-					content="Edit Package"
-					href="/packages/{packageData.rhid}/edit"
-					variant="primary"
-				/>
+				<a class="button button--primary" href="https://routinehub.co/shortcut/{packageData.rhid}">View on RoutineHub</a>
+				<a class="button button--primary" href="/packages/{packageData.rhid}/edit">Edit Package</a>
 			</div>
 		</div>
 	{:else}

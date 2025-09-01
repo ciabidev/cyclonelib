@@ -1,5 +1,4 @@
-/* @import "tailwindcss"; */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+Mono:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+Mono:wght@100..900&display=swap');
 
 :root {
 	--bg-color: #ffffff; /* dark: #1e272e */
@@ -11,7 +10,6 @@
 	--card-bg: #00000015;
 	/* --main-color: #337e4c; */
 	--main-color: #4871e0;
-	--wheatwhole-color: #52b171;
 	--text-color: #282828;
 
 	--code-bg: #1f2228;
@@ -25,23 +23,40 @@
 	--color-warning: #ffd63a;
 	--color-error: #f7374f;
 
-	--dark-main-color: #214dc4;
-	--dark-color-allgood: #52b171; /* TODO: Fix these dark variants */
-	--dark-color-error: #e62e42;
-	--dark-color-warning: #f7b731;
+	--dark-main-color: #4368cc;
+	--dark-color-allgood: #36b661; /* TODO: Fix these dark variants */
+	--dark-color-error: #da2f43;
+	--dark-color-warning: #dfbc32;
+
+	--blue: #2f8af9;
+	--focus-ring: solid 2px var(--blue);
+	--focus-ring-offset: -2px;
 
 	--button: #f4f4f4;
-	--button-hover: #00000017;
+	--button-hover: #ededed;
 	--button-press: #e8e8e8;
 	--button-stroke: rgba(0, 0, 0, 0.06);
 	--button-box-shadow: 0 0 0 1px var(--button-stroke) inset;
+	--button-text: #282828;
 
 	--button-elevated: #e3e3e3;
 	--button-elevated-hover: #dadada;
 	--button-elevated-press: #d3d3d3;
 
-	--popover: var(--button);
-	--popover-box-shadow: var(--button-box-shadow);
+	--button-active-hover: #2a2a2a;
+
+	--popup: #f1f1f1;
+	--popup-backdrop: rgba(255, 255, 255, 0.6);
+
+	/* Dialog styles */
+	--dialog-backdrop: rgba(0, 0, 0, 0.5);
+	--dialog-padding: 18px;
+	--popup-bg: var(--bg-color);
+	--popup-stroke: rgba(0, 0, 0, 0.1);
+	--secondary: var(--text-color);
+	--red: #f7374f;
+	--white: #ffffff;
+	--gray: #adadad;
 
 	--card: var(--button);
 	--card-box-shadow: var(--button-box-shadow);
@@ -63,6 +78,7 @@
 	--border-radius: 12px;
 	font-size: 15px;
 }
+
 
 @keyframes fadeIn {
 	to {
@@ -524,12 +540,12 @@ template {
 
 body {
 	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden;
 	width: 100vw;
-	height: 96vh;
+	height: 100%; /* Use small viewport height for better iOS Safari compatibility */
 	background-size: cover;
 	font-family:
-		Noto Sans Mono,
+		Fira Mono,
 		monospace;
 	cursor: default;
 	-webkit-font-smoothing: antialiased;
@@ -540,12 +556,14 @@ body {
 	padding: 0;
 	opacity: 0;
 	animation: fadeIn 200ms forwards;
+	background: var(--nav-bg); /* for cozy navbar */
+	overflow: hidden;
 }
 
 html,
 body {
 	height: 100%;
-	overflow-y: auto;
+	overflow: hidden;
 	overscroll-behavior: auto;
 	-webkit-overflow-scrolling: touch; /* ✅ iOS elastic scroll */
 }
@@ -572,7 +590,7 @@ p {
 	font-size: 1rem;
 }
 
-a {
+a:not(:has(img)) {
 	text-decoration-thickness: 5px;
 	color: var(--main-color);
 	transition: all 0.2s ease-in-out;
@@ -583,7 +601,7 @@ a {
 	-o-transition: all 0.2s ease-in-out;
 }
 
-a:hover {
+a:not(:has(img)):hover {
 	filter: brightness(1.25);
 }
 
@@ -595,35 +613,44 @@ img {
 }
 
 code {
-	font-family: monospace;
+	font-family: Fira Mono;
 	font: 0.5rem;
 	color: white;
-	background-color: var(--code-bg);
 	padding: 1px 10px;
 	border-radius: 6px;
 	overflow-x: auto;
 }
 
+pre {
+	tab-size: 4;
+	white-space: pre;
+	font-family: Fira Mono;
+	overflow-x: auto;
+	max-width: 100%;
+	scrollbar-width: thin;
+	padding-bottom: 0.3rem;
+	scrollbar-color: var(--code-scrollbar) var(--code-bg);
+}
 
-.basket {
-	/* a second body */
+/* .basket {
 	display: flex;
 	flex-direction: column;
 	position: absolute;
 	width: 100%;
 	height: 100dvh;
-	/* background-image: var(--grid-bg); */
 	background-color: var(--bg-color);
-}
+}  */
 
 .loaf {
 	/* content of the page */
-	position: relative;
 	/*border: solid red .3125rem;
-  */
+   */
 	overflow-y: auto;
 	width: 100%;
-	height: 100dvh;
+	background-color: var(--bg-color);
+	border-bottom-left-radius: var(--border-radius);
+	border-bottom-right-radius: var(--border-radius);
+	height: calc(100% - var(--navbar-height) - env(safe-area-inset-bottom)); 
 }
 
 .center-container {
@@ -755,6 +782,7 @@ img {
 @media only screen and (max-width: 600px) {
 	:root {
 		font-size: 14px;
+		--navbar-height: var(--mobile-navbar-height);
 	}
 }
 
@@ -765,6 +793,7 @@ img {
 
 	:root {
 		font-size: 14px;
+		--navbar-height: var(--mobile-navbar-height);
 	}
 }
 
@@ -775,4 +804,239 @@ img {
 		font-size: 16px;
 	}
 }
+
+/* Global Button Styles (from cobalt-main) */
+button, .button {
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 6px 13px;
+gap: 6px;
+text-decoration: none;
+border: none;
+border-radius: var(--border-radius);
+font-size: 14.5px;
+cursor: pointer;
+background-color: var(--button);
+color: var(--button-text);
+box-shadow: var(--button-box-shadow);
+font-weight: 500;
+width: fit-content;
+}
+
+.button.elevated {
+background-color: var(--button-elevated);
+}
+
+.button.active {
+	color: var(--white);
+	background-color: var(--secondary);
+}
+
+.button.active:focus-visible,
+a.active:focus-visible {
+color: var(--white) !important;
+background-color: var(--blue) !important;
+}
+
+@media (hover: hover) {
+.button:hover {
+	background-color: var(--button-hover);
+}
+
+.button.elevated:not(.color):hover {
+	background-color: var(--button-elevated-hover);
+}
+
+.button.active:not(.color):hover {
+	background-color: var(--button-active-hover);
+}
+}
+
+/* Prevent link brightness filter from affecting button-like links */
+a.button:hover {
+	filter: none;
+}
+
+.button:active {
+background-color: var(--button-press);
+}
+
+.button.elevated:not(.color):active {
+background-color: var(--button-elevated-press);
+}
+
+.button.elevated {
+box-shadow: none;
+}
+
+.button.active:not(.color):active {
+background-color: var(--button-active-hover);
+}
+
+button[disabled] {
+	cursor: default;
+}
+
+/* Button variants */
+.button--primary {
+	background: var(--main-color);
+	color: white;
+}
+
+@media not all and (hover: none) {
+	.button--primary:hover {
+		background: var(--dark-main-color);
+	}
+}
+
+.button--success {
+	background: var(--color-allgood);
+	color: white;
+}
+
+@media not all and (hover: none) {
+	.button--success:hover {
+		background: var(--dark-color-allgood);
+	}
+}
+
+.button--danger {
+	background: var(--color-error);
+	color: white;
+}
+
+@media not all and (hover: none) {
+	.button--danger:hover {
+		background: var(--dark-color-error);
+	}
+}
+
+:focus-visible {
+	outline: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible {
+	outline: var(--focus-ring);
+	outline-offset: var(--focus-ring-offset);
+}
+
+/* Dialog System Styles */
+:global(dialog) {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+background: none;
+max-height: 100%;
+max-width: 100%;
+height: 100%;
+width: 100%;
+margin: 0;
+padding: 0;
+border: none;
+pointer-events: all;
+inset-inline-start: unset;
+inset-inline-end: unset;
+overflow: hidden;
+}
+
+:global(dialog:modal) {
+inset-block-start: 0;
+inset-block-end: 0;
+}
+
+:global(dialog:modal::backdrop) {
+display: none;
+}
+
+:global(.dialog-body) {
+--dialog-padding: 18px;
+display: flex;
+flex-direction: column;
+align-items: center;
+background: var(--popup-bg);
+box-shadow: 0 0 0 2px var(--popup-stroke) inset;
+border-radius: 29px;
+filter: drop-shadow(0 0 40px var(--button));
+padding: var(--dialog-padding);
+position: relative;
+will-change: transform, opacity, filter;
+}
+
+:global(dialog.open .dialog-body) {
+animation: modal-in 0.35s;
+animation-delay: 0.06s;
+animation-fill-mode: backwards;
+}
+
+:global(dialog.closing .dialog-body) {
+animation: modal-out 0.15s;
+opacity: 0;
+}
+
+@media screen and (max-width: 535px) {
+:global(dialog) {
+	justify-content: flex-end;
+}
+
+:global(dialog.open .dialog-body) {
+	animation: modal-in-mobile 0.4s;
+}
+
+:global(dialog .dialog-body) {
+	margin-bottom: calc(var(--padding) + calc(env(safe-area-inset-bottom) - 15px * sign(env(safe-area-inset-bottom))));
+	box-shadow: 0 0 0 2px var(--popup-stroke) inset;
+}
+}
+
+@keyframes modal-in {
+from {
+	transform: scale(0.8);
+	opacity: 0;
+}
+35% {
+	opacity: 1;
+}
+50% {
+	transform: scale(1.01);
+}
+100% {
+	transform: scale(1);
+}
+}
+
+@keyframes modal-out {
+from {
+	opacity: 1;
+}
+to {
+	opacity: 0;
+	transform: scale(0.9);
+	visibility: hidden;
+}
+}
+
+@keyframes modal-in-mobile {
+0% {
+	transform: translateY(0);
+	opacity: 0;
+}
+1% {
+	transform: translateY(200px);
+}
+35% {
+	opacity: 1;
+}
+50% {
+	transform: translateY(-5px);
+}
+100% {
+	transform: translateY(0px);
+}
+}
+
+
 

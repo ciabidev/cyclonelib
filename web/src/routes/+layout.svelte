@@ -9,23 +9,20 @@
 
 <script lang="ts">
   import type { LayoutData } from "./$types";
-
   import LoveNote from "$components/LoveNote.svelte";
   import Navbar from "$components/navbar/Navbar.svelte";
-	import type { Snippet } from "svelte";
-	import Toasts from "$components/toasts/Toasts.svelte";
+  	import type { Snippet } from "svelte";
+  import Toasts from "$components/toasts/Toasts.svelte";
+  import DialogHolder from "$components/dialog/DialogHolder.svelte";
   let { data, children }: { data: LayoutData; children: Snippet } = $props();
 </script>
 
+  <Navbar />
 
-<div class="basket">
   <Toasts />
-  <!-- acts as a second "body"-->
-  <div class="loaf">
-    <!-- main content of the page -->
+  <DialogHolder />
+  <div class="loaf"> <!-- includes main content of the page only -->
     {@render children()}
   </div>
 
-  <Navbar />
-</div>
 

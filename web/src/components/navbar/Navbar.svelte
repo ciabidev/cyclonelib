@@ -5,11 +5,15 @@
   import StarIcon from "~icons/basil/star-outline";
   // @ts-ignore
   import BoxIcon from '~icons/basil/box-outline';
+  // @ts-ignore
+  import MoonIcon from '~icons/basil/moon-outline';
+  // @ts-ignore
+  import SunIcon from '~icons/basil/sun-outline';
 
   import NavTab from "./NavTab.svelte";
 
   import NavbarLogo from "./NavbarLogo.svelte";
-  
+
 </script>
 
 <div class="navbar-container">
@@ -24,14 +28,14 @@
 
 <style>
   .navbar-container {
-    display: flex;
-    flex-direction: column;
-    position: sticky;
-    height: calc(var(--navbar-height));
-    bottom: 0;
-    width: 100%;
-    z-index: 1005;
-    background-color: var(--nav-bg);
+  	display: flex;
+  	flex-direction: column;
+  	position: fixed;
+  	height: calc(var(--navbar-height));
+  	bottom: 0;
+  	width: 100%;
+  	z-index: 1005;
+  	background-color: var(--nav-bg);
   }
 
   .navbar {
@@ -52,6 +56,7 @@
     flex-direction: row;
     align-items: center;
     overflow-x: scroll;
+    overflow-y: hidden;
     height: 100%;
     overflow-y: none;
     z-index: 1005;
@@ -61,31 +66,7 @@
   .navbar > * {
     z-index: 1505;
   }
-  
-    /* cozy navbar */
-    .navbar-container:before {
-      content: "";
-      position: absolute;
-      top: -40px;
-      left: 0;
-      height: 40px;
-      width: 40px;
-      border-bottom-left-radius: 50%;
-      box-shadow: 0 20px 0 0 var(--nav-bg, #000000);
-      z-index: 10;
-    }
 
-    .navbar-container:after {
-      content: "";
-      position: absolute;
-      top: -40px;
-      right: 0;
-      height: 40px;
-      width: 40px;
-      border-bottom-right-radius: 50%;
-      box-shadow: 0 20px 0 0 var(--nav-bg, #000000);
-      z-index: 10;
-    }
 
     @media screen and (max-width: 600px) {
       .navbar-container {

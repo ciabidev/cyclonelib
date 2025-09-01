@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
-	import MainButton from '$components/inputs-and-buttons/MainButton.svelte';
+	import { createDialog } from '$lib/state/dialogs';
 
 	/** @type {{name: string, short_description?: string, long_description?: string, rhid: number} | null} */
 	let packageData = $state(null);
@@ -83,16 +83,7 @@
 		}
 	}
 
-	async function deletePackage() {
-		if (!edit_code) {
-			error = 'Edit code is required to delete';
-			return;
-		}
-
-		if (!confirm('Are you sure you want to delete this package? This action cannot be undone.')) {
-			return;
-		}
-
+	async function performDelete() {
 		deleting = true;
 		error = '';
 		success = '';
@@ -120,13 +111,47 @@
 			deleting = false;
 		}
 	}
+
+	function showDeleteDialog() {
+		if (!edit_code) {
+			error = 'Edit code is required to delete';
+			return;
+		}
+
+		createDialog({
+			id: 'delete-package-dialog',
+			type: 'small',
+			title: 'Delete Package',
+			icon: 'warn-red',
+			bodyText: 'Are you sure you want to delete this package? This action cannot be undone.',
+			buttons: [
+				{
+					text: 'Cancel',
+					main: false,
+					action: () => {
+						// Dialog will close automatically
+					}
+				},
+				{
+					text: 'Delete',
+					color: 'red',
+					main: true,
+					action: performDelete
+				}
+			]
+		});
+	}
+
+	async function deletePackage() {
+		showDeleteDialog();
+	}
 </script>
 
 <div class="page-wrapper">
 	<div class="main">
 		<h1>Edit Package</h1>
 		<p>Modify the package details below.</p>
-		<MainButton content="Back to Package" href="/packages/{rhidParam}" />
+		<a class="button" href="/packages/{rhidParam}">Back to Package</a>
 
 		{#if loading}
 			<p>Loading package details...</p>
@@ -153,16 +178,8 @@
 					<Input id="edit_code" placeholder="Enter edit code to confirm changes" bind:value={edit_code} />
 				</div>
 				<div class="buttons">
-					<MainButton
-						content={updating ? 'Updating...' : 'Update Package'}
-						variant="primary"
-						onclick={updatePackage}
-					/>
-					<MainButton
-						content={deleting ? 'Deleting...' : 'Delete Package'}
-						variant="danger"
-						onclick={deletePackage}
-					/>
+					<button class="button button--primary" onclick={updatePackage}>{updating ? 'Updating...' : 'Update Package'}</button>
+					<button class="button button--danger" onclick={deletePackage}>{deleting ? 'Deleting...' : 'Delete Package'}</button>
 				</div>
 			</div>
 		{:else}

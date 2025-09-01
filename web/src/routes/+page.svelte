@@ -2,6 +2,8 @@
 	import URLButton from '$components/inputs-and-buttons/URLButton.svelte';
 	import Codeblock from '$components/Codeblock.svelte';
 	import UrlButton from '$components/inputs-and-buttons/URLButton.svelte';
+
+	const badge_code = `[![This shortcut uses or supports Cyclone](https://i.imgur.com/6RCqPh6.jpeg)](https://routinehub.co/shortcut/19577)`
 </script>
 
 <!--bottom navbar-->
@@ -80,8 +82,9 @@
 			Leave a ❤️ on our <a href="https://routinehub.co/shortcut/19577">RoutineHub page</a> or add this
 			badge to your shortcut’s description:
 		</p>
-<Codeblock code="[![This shortcut uses or supports Cyclone](https://i.imgur.com/6RCqPh6.jpeg)](https://routinehub.co/shortcut/19577)" language="markdown" />
-		<p>
+<Codeblock code={badge_code} language="markdown" />
+
+<p>
 			<a href="https://routinehub.co/shortcut/19577"
 				><img
 					src="https://i.imgur.com/6RCqPh6.jpeg"
@@ -89,6 +92,7 @@
 				/></a
 			>
 		</p>
+
 	</div>
 </div>
 
@@ -97,12 +101,11 @@
 		width: 100%;
 		display: flex;
 		flex-direction: row; /* has to be row so we can horizontally center */
-		justify-content: center;
 		flex-wrap: wrap;
-		min-height: max-content;
-		height: 100%;
+		justify-content: center;
+		min-height: 100%;
 		overscroll-behavior: none;
-		padding: calc(var(--padding) + 0.9375rem);
+		padding: calc(var(--padding) + 0.9375rem); /* for navbar */
 	}
 
 	.main {

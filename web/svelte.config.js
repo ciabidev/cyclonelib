@@ -13,7 +13,8 @@ const config = {
 			// the contents of a directory, not the directory itself
 			'$components/*': './src/components/*',
 			'$static/*': './static/*',
-			'$stores/*': './src/stores/*'
+			'$stores/*': './src/stores/*',
+			'$lib/*': './src/lib/*'
 		}
 	}
 };

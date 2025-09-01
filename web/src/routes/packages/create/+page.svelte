@@ -1,7 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
-	import MainButton from '$components/inputs-and-buttons/MainButton.svelte';
 
 	let name = $state('');
 	let short_description = $state('');
@@ -65,7 +64,7 @@
 	<div class="main">
 		<h1>Create Package</h1>
 		<p>Fill in the details to create a new package.</p>
-		<MainButton content="Back to Packages" href="/packages" />
+		<a class="button" href="/packages">Back to Packages</a>
 
 		<div class="form">
 			<div class="field">
@@ -89,11 +88,7 @@
 				<p style="color: var(--color-error);">This is a secret code that is required to manage your package. Don't forget it and don't share it!</p>
 				<Input id="edit_code" placeholder="Enter edit code for future modifications" bind:value={edit_code} />
 			</div>
-			<MainButton
-				content={loading ? 'Creating...' : 'Create Package'}
-				variant="primary"
-				onclick={submit}
-			/>
+			<button class="button button--primary" onclick={submit}>{loading ? 'Creating...' : 'Create Package'}</button>
 		</div>
 
 		{#if error}
@@ -112,8 +107,7 @@
 		flex-direction: row;
 		justify-content: center;
 		flex-wrap: wrap;
-		min-height: max-content;
-		height: 100%;
+		min-height: 100%;
 		overscroll-behavior: none;
 		padding: calc(var(--padding) + 0.9375rem);
 	}

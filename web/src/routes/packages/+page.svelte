@@ -1,11 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
 	import ProjectCard from '$components/ProjectCard.svelte'; /* the Cyclone website is forked from Ciabi's website, and I run both the Ciabi and Cyclone website. Old names may still be used. */
-	import MainButton from '$components/inputs-and-buttons/MainButton.svelte';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	// @ts-ignore
 	import SearchIcon from '~icons/streamline-flex/magnifying-glass-remix';
-/** @type {Array<{name: string, description: string, rhid: number, created_at?: string}>} */
+	/** @type {Array<{name: string, short_description: string, long_description: string, rhid: number, created_at?: string}>} */
 	let packages = $state([]);
 	let searchQuery = $state('');
 	let loading = $state(true);
@@ -51,21 +50,23 @@
 			? packages
 			: packages.filter(pkg =>
 				pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				pkg.description.toLowerCase().includes(searchQuery.toLowerCase())
+				pkg.short_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				pkg.long_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				String(pkg.rhid).includes(searchQuery)
 			)
 	);
 </script>
 
-<div class="projects-page-wrapper">
+<div class="page-wrapper">
 	<main class="header">
 		<h1>packages</h1>
 		<p>all of the packages can be found here. anonymous</p>
 	</main>
 	<div class="search-container">
-		<Input placeholder="search packages" width="60%" min_width="500px" bind:value={searchQuery} Icon={SearchIcon} />
+		<Input placeholder="search packages" bind:value={searchQuery} min_width="100%" Icon={SearchIcon} />
 	</div>
 	<div class="options">
-		<MainButton content="Create Package" href="/packages/create" variant="primary" />
+		<a class="button button--primary" href="/packages/create">Create Package</a>
 	</div>
 	<div class="projects">
 		{#if loading}
@@ -76,7 +77,7 @@
 			{#each filteredPackages as pkg}
 				<ProjectCard
 					name={pkg.name}
-					description={pkg.description}
+					description={pkg.short_description}
 					url={`https://routinehub.co/shortcut/${pkg.rhid}`}
 					urlshort={`routinehub.co/shortcut/${pkg.rhid}`}
 					img=""
@@ -92,13 +93,12 @@
 </div>
 
 <style>
-	.projects-page-wrapper {
+	.page-wrapper {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		min-height: max-content;
-		height: 100%;
+		min-height: 100%;
 		gap: 20px;
 		overscroll-behavior: none;
 		padding: calc(var(--padding) + 15px);
@@ -122,6 +122,7 @@
 	.search-container {
 		display: flex;
 		justify-content: center;
+		max-width: 750px;
 		width: 100%;
 	}
 
@@ -143,7 +144,7 @@
 	}
 
 	@media only screen and (max-height: 400px) {
-		.projects-page-wrapper {
+		.page-wrapper {
 			justify-content: center;
 			align-items: center;
 			height: max-content;

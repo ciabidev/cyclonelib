@@ -1,6 +1,5 @@
-<script>
-	import URLButton from '$components/inputs-and-buttons/URLButton.svelte';
-	import Codeblock from '$components/Codeblock.svelte';
+<script lang="ts">
+	import { createDialog } from "$lib/state/dialogs";
 </script>
 
 <!--bottom navbar-->
@@ -17,6 +16,23 @@
 			in a short amount of time. you can ALWAYS check inside Cyclone's code, since its a normal shortcut.
 		</p>
 		<p>When you're ready, tap on <b style="color: #007AFF;">Done</b></p>
+		<button onclick={() => createDialog({
+			id: 'test-dialog',
+			type: 'small',
+			title: 'Test Dialog',
+			bodyText: 'This is a test dialog from the cobalt-main dialog system!',
+			buttons: [
+				{
+					text: 'OK',
+					main: true,
+					action: () => console.log('OK clicked')
+				},
+				{
+					text: 'Cancel',
+					action: () => console.log('Cancel clicked')
+				}
+			]
+		})}>Test Dialog</button>
 	</div>
 </div>
 
