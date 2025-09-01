@@ -59,7 +59,7 @@ class DialogManager {
      *   title: 'Delete Item',
      *   bodyText: 'Are you sure you want to delete this item?',
      *   buttons: [
-     *     { text: 'Cancel', action: () => {} },
+     *     { text: 'cancel', action: () => {} },
      *     { text: 'Delete', main: true, action: () => deleteItem() }
      *   ]
      * });

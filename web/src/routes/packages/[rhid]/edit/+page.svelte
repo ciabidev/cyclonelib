@@ -312,7 +312,7 @@
 			bodyText: 'Are you sure you want to delete this package? This action cannot be undone.',
 			buttons: [
 				{
-					text: 'Cancel',
+					text: 'cancel',
 					main: false,
 					action: () => {
 						// Dialog will close automatically

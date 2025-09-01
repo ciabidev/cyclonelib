@@ -28,8 +28,8 @@
 					action: () => console.log('ok clicked')
 				},
 				{
-					text: 'Cancel',
-					action: () => console.log('Cancel clicked')
+					text: 'cancel',
+					action: () => console.log('cancel clicked')
 				}
 			]
 		})}>Test Dialog</button>

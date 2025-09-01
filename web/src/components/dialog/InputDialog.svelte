@@ -1,59 +1,63 @@
 <script lang="ts">
     /**
-     * SmallDialog - Standard dialog component for the application
+     * InputDialog - Dialog component with input field
      *
-     * The primary dialog component used throughout the application.
-     * Provides a consistent interface for displaying messages, confirmations,
-     * and user interactions.
+     * A dialog component that includes an input field using the Input.svelte component.
+     * Provides a consistent interface for user input dialogs throughout the application.
      *
      * Features:
      * - Title and body text support
+     * - Input field with placeholder and value binding
      * - Icon support for visual context
      * - Configurable buttons with actions
      * - Dismissable/backdrop click support
-     * - Left-aligned layout option
-     * - Meowbalt integration for special dialogs
+     * - Support for different input types (text, password, etc.)
+     * - Support for textarea (long input)
      *
      * Usage:
      * ```typescript
      * createDialog({
-     *   id: 'confirm-delete',
-     *   type: 'small',
-     *   title: 'Delete Item',
-     *   bodyText: 'Are you sure?',
+     *   id: 'input-name',
+     *   type: 'input',
+     *   title: 'Enter Name',
+     *   placeholder: 'Your name here...',
+     *   value: '',
      *   buttons: [
      *     { text: 'cancel', action: () => {} },
-     *     { text: 'Delete', main: true, action: () => deleteItem() }
+     *     { text: 'Save', main: true, action: () => saveName(value) }
      *   ]
      * });
      * ```
      */
 
-    import type { DialogButton, SmallDialogIcons } from "$lib/types/dialog";
+    import type { DialogButton } from "$lib/types/dialog";
     import DialogContainer from "$components/dialog/DialogContainer.svelte";
     import DialogButtons from "$components/dialog/DialogButtons.svelte";
+    import Input from "$components/inputs-and-buttons/Input.svelte";
 
     // Props with defaults
     let {
         id,
-        meowbalt = undefined,
         icon = undefined,
         title = "",
         bodyText = "",
-        bodySubText = "",
+        placeholder = "",
+        value = $bindable(''),
+        inputType = 'text',
+        long = false,
         buttons = undefined,
-        dismissable = true,
-        leftAligned = false
+        dismissable = true
     }: {
         id: string;
-        meowbalt?: string;
-        icon?: SmallDialogIcons;
+        icon?: any;
         title?: string;
         bodyText?: string;
-        bodySubText?: string;
+        placeholder?: string;
+        value?: string;
+        inputType?: string;
+        long?: boolean;
         buttons?: DialogButton[];
         dismissable?: boolean;
-        leftAligned?: boolean;
     } = $props();
 
     // Reference to close function from DialogContainer
@@ -61,17 +65,13 @@
 </script>
 
 <DialogContainer {id} {dismissable} bind:close>
-    <div
-        class="dialog-body small-dialog"
-        class:meowbalt-visible={meowbalt}
-        class:align-left={leftAligned}
-    >
+    <div class="dialog-body input-dialog">
         <div class="dialog-inner-container">
             {#if title || icon}
                 <div class="popup-header">
-                    {#if icon === "warn-red"}
-                        <div class="popup-icon {icon}">
-                            <!-- Icon would go here -->
+                    {#if icon}
+                        <div class="popup-icon">
+                            <svelte:component this={icon} />
                         </div>
                     {/if}
                     {#if title}
@@ -82,9 +82,14 @@
             {#if bodyText}
                 <div class="body-text" tabindex="-1">{bodyText}</div>
             {/if}
-            {#if bodySubText}
-                <div class="subtext popup-subtext">{bodySubText}</div>
-            {/if}
+            <div class="input-container">
+                <Input
+                    {placeholder}
+                    bind:value
+                    type={inputType}
+                    {long}
+                />
+            </div>
         </div>
         {#if buttons}
             <DialogButtons {buttons} closeFunc={close} dialogId={id} />
@@ -93,7 +98,7 @@
 </DialogContainer>
 
 <style>
-    .small-dialog,
+    .input-dialog,
     .dialog-inner-container {
         display: flex;
         flex-direction: column;
@@ -105,21 +110,12 @@
         gap: 8px;
     }
 
-    .small-dialog {
+    .input-dialog {
         text-align: center;
-        max-width: 340px;
+        max-width: 400px;
         width: calc(100% - var(--padding) - var(--dialog-padding) * 2);
         max-height: 85%;
         margin: calc(var(--padding) / 2);
-    }
-
-    .small-dialog.meowbalt-visible {
-        padding-top: calc(var(--padding) * 4);
-    }
-
-    .meowbalt-container {
-        position: absolute;
-        top: -120px;
     }
 
     .popup-title {
@@ -141,10 +137,6 @@
         width: 50px;
     }
 
-    .warn-red :global(svg) {
-        stroke: var(--red);
-    }
-
     .body-text {
         font-size: 14.5px;
         font-weight: 500;
@@ -155,23 +147,8 @@
         -webkit-user-select: text;
     }
 
-    .popup-subtext {
-        opacity: 0.7;
-        padding: 0;
-    }
-
-    .align-left .body-text {
-        text-align: start;
-    }
-
-    .align-left .popup-header {
-        align-items: start;
-        gap: 2px;
-    }
-
-    .align-left .popup-icon :global(svg) {
-        height: 40px;
-        width: 40px;
-        stroke-width: 1.8px;
+    .input-container {
+        width: 100%;
+        margin: var(--padding) 0;
     }
 </style>
