@@ -119,11 +119,11 @@
         flex-direction: row;
         align-items: center;
         gap: calc(var(--padding) / 2);
-        color: var(--secondary);
+        color: var(--text-color);
     }
 
     .popup-title {
-        color: var(--secondary);
+        color: var(--text-color);
         font-size: 19px;
     }
 

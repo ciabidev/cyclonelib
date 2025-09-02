@@ -64,8 +64,7 @@
 </script>
 {#if button.link}
     <a
-        class="button elevated link-button"
-        class:color={button.color}
+        class="button button--link"
         class:active={button.main}
         href={button.link}
     >
@@ -73,8 +72,7 @@
     </a>
 {:else}
     <button
-        class="button elevated popup-button {button.color}"
-        class:color={button.color}
+        class="button button--active {button.color === 'red' ? 'button--danger' : ''}"
         class:active={button.main}
         {disabled}
         on:click={async () => {
@@ -95,25 +93,11 @@
         {button.text}{seconds ? ` (${seconds})` : ""}
     </button>
 {/if}
+
 <style>
-    .link-button {
-        text-decoration: none;
-        font-weight: 500;
-        width: 100%;
-    }
 
-    .popup-button {
+    button {
         width: 100%;
-        height: 40px;
         transition: 0.2s opacity;
-    }
-
-    .popup-button.red {
-        background-color: var(--red);
-        color: var(--white);
-    }
-
-    .popup-button[disabled] {
-        opacity: 0.6;
     }
 </style>

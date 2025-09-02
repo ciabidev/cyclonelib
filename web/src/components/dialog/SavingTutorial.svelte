@@ -5,7 +5,7 @@
 <div id="saving-tutorial" class:expanded={tutorialExpanded}>
     <button
         id="tutorial-button"
-        class="button elevated"
+        class="button button--elevated"
         on:click={() => {
             tutorialExpanded = !tutorialExpanded;
         }}
@@ -71,7 +71,7 @@
         align-items: center;
         justify-content: center;
         font-weight: bold;
-        color: var(--secondary);
+        color: var(--text-color);
     }
 
     .tutorial-body *:not(.shortcut) {
@@ -84,7 +84,7 @@
     }
 
     .tutorial-body {
-        color: var(--secondary);
+        color: var(--text-color);
         padding: var(--padding);
         padding-top: 6px;
     }

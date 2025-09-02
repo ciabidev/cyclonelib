@@ -80,7 +80,9 @@ export async function GET({ url }) {
  * @throws {500} If database connection fails
  */
 export async function POST({ request }) {
+  console.log('POST /api/packages called');
   const mongoUri = process.env.MONGO_URI;
+  console.log('MONGO_URI available:', !!mongoUri);
 
   if (!mongoUri) {
     throw error(500, {
@@ -90,6 +92,7 @@ export async function POST({ request }) {
 
   try {
     const { edit_code, name, short_description, long_description, rhid } = await request.json();
+    console.log('Received data:', { name, short_description, long_description, rhid, edit_code: edit_code ? '[REDACTED]' : undefined });
     const { connectDB, serializeDoc, hashEditCode } = await import('$lib/server/db-utils.js');
 
     const db = await connectDB();

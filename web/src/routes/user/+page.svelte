@@ -16,7 +16,7 @@
 			in a short amount of time. you can ALWAYS check inside Cyclone's code, since its a normal shortcut.
 		</p>
 		<p>When you're ready, tap on <b style="color: #007AFF;">Done</b></p>
-		<button class="button" onclick={() => createDialog({
+		<button class="button button--default" onclick={() => createDialog({
 			id: 'test-dialog',
 			type: 'small',
 			title: 'Test Dialog',

@@ -11,7 +11,15 @@
 	let loading = $state(false);
 
 	async function submit() {
-		if (!name || !short_description || !long_description || !rhid || !edit_code) {
+		// Trim whitespace from inputs with null checks and string conversion
+		const trimmedName = String(name || '').trim();
+		const trimmedShortDesc = String(short_description || '').trim();
+		const trimmedLongDesc = String(long_description || '').trim();
+		const trimmedRhid = String(rhid || '').trim();
+		const trimmedEditCode = String(edit_code || '').trim();
+
+		// Check for empty fields
+		if (!trimmedName || !trimmedShortDesc || !trimmedLongDesc || !trimmedRhid || !trimmedEditCode) {
 			// Clear any existing dialogs first
 			killDialog();
 			createDialog({
@@ -30,7 +38,10 @@
 			});
 			return;
 		}
-		if (isNaN(parseInt(rhid))) {
+
+		// Validate RHID is a valid number
+		const rhidNum = parseInt(trimmedRhid);
+		if (isNaN(rhidNum) || rhidNum <= 0) {
 			// Clear any existing dialogs first
 			killDialog();
 			createDialog({
@@ -38,7 +49,7 @@
 				type: 'small',
 				title: 'Validation Error',
 				icon: 'warn-red',
-				bodyText: 'RoutineHub ID must be a valid number',
+				bodyText: 'RoutineHub ID must be a valid positive number',
 				buttons: [
 					{
 						text: 'ok',
@@ -57,11 +68,11 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					name,
-					short_description,
-					long_description,
-					rhid: parseInt(rhid),
-					edit_code
+					name: trimmedName,
+					short_description: trimmedShortDesc,
+					long_description: trimmedLongDesc,
+					rhid: rhidNum,
+					edit_code: trimmedEditCode
 				})
 			});
 
@@ -138,7 +149,7 @@
 	<div class="main">
 		<h1>Create Package</h1>
 		<p>Fill in the details to create a new package.</p>
-		<a class="button" href="/packages">Back to Packages</a>
+		<a class="button button--default" href="/packages">Back to Packages</a>
 
 		<div class="form">
 			<div class="field">

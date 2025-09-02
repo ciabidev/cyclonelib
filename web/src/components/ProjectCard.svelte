@@ -20,7 +20,7 @@
 	</div>
 </div>
 {#if rhid}
-<a class="button" href="/packages/{rhid}">View Package </a>
+<a class="button button--default" href="/packages/{rhid}">View Package </a>
 {/if}
 </div>
 <style>

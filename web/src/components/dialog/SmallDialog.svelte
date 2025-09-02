@@ -123,7 +123,7 @@
     }
 
     .popup-title {
-        color: var(--secondary);
+        color: var(--text-color);
         font-size: 19px;
     }
 

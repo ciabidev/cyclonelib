@@ -48,7 +48,7 @@
   aria-selected={isTabCurrentPage}
   bind:this={tab}
 >
-  <Icon style="font-size: 25px; " class="icon" />
+  <Icon style="font-size: var(--icon-size-mobile); " class="icon" />
   <span>{name}</span>
 </a>
 
@@ -75,8 +75,8 @@
     color: var(--navbar-highlight);
     height: 100%;
     /* dark: color: black; */
-    font-size: 13px;
-    padding: var(--padding);
+    font-size: var(--navbar-font-size);
+    padding: var(--navbar-tab-padding);
     opacity: 0.75;
     text-decoration: none;
      user-select: none;
@@ -108,11 +108,21 @@
 }
 
  @media only screen and (max-width: 600px) {
-    a[role="tab"] {
-      padding: calc(var(--padding) - 12px) 3px;
-      height: fit-content;
-    }
-  } 
+   a[role="tab"] {
+     padding: 3px 1px;
+     height: fit-content;
+   }
+
+   .icon {
+     font-size: var(--icon-size-mobile) !important;
+   }
+ }
+
+ @media only screen and (min-width: 601px) {
+   .icon {
+     font-size: var(--icon-size-desktop) !important;
+   }
+ }
 
   
 </style>

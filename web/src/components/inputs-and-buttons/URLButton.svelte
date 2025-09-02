@@ -39,7 +39,6 @@
 
 	.url-button:hover {
 		background: var(--button-hover);
-		filter: brightness(1.1);
 	}
 
     

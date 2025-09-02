@@ -59,7 +59,7 @@
 	{#if loading}
 		<p>Loading package details...</p>
 	{:else if packageData}
-		<a class="button" href="/packages">Back to Packages</a>
+		<a class="button button--default" href="/packages">Back to Packages</a>
 		<div class="package-header">
 			<h1>{packageData.name}</h1>
 		</div>

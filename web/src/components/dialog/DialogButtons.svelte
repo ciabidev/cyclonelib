@@ -22,20 +22,33 @@
     let { buttons, closeFunc, dialogId }: { buttons: DialogButtonType[]; closeFunc: () => void; dialogId: string } = $props();
 </script>
 
-<div class="popup-buttons">
+<div class="button-group">
     {#each buttons as button}
         <DialogButton {button} {closeFunc} {dialogId} />
     {/each}
 </div>
 
 <style>
-    .popup-buttons {
+    .button-group {
         display: flex;
-        flex-direction: row;
         width: 100%;
         gap: calc(var(--padding) / 2);
-        overflow: scroll;
+        overflow-x: auto;
         border-radius: var(--border-radius);
         min-height: 40px;
+        scrollbar-width: thin;
+    }
+
+    .button-group::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .button-group::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .button-group::-webkit-scrollbar-thumb {
+        background: var(--sub-color);
+        border-radius: 2px;
     }
 </style>
