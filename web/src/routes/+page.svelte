@@ -65,7 +65,7 @@
 				<a href="https://pollinations.ai">Pollinations.ai</a>
 			</li>
 			<li>🌧️ <strong>CyCloud Hosting</strong> – store text online and use it anywhere</li>
-			<li>📦 <strong>Build Functions</strong> – turn repetitive steps into reusable blocks</li>
+			<li>📦 <strong>Build Packages</strong> – turn repetitive steps into reusable blocks</li>
 		</ul>
 		<h2>How to start:</h2>
 		<ol>
