@@ -264,7 +264,6 @@ pre {
  */
 
 a {
-	background-color: transparent;
 	-webkit-tap-highlight-color: transparent;
 	-ms-touch-action: manipulation;
 }
@@ -819,7 +818,8 @@ BUTTON SYSTEM:
 */
 
 /* Global Button Styles (from cobalt-main) */
-button, .button {
+button,
+.button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -949,7 +949,6 @@ button:disabled {
 	cursor: default;
 }
 
-
 /* Prevent link brightness filter from affecting button-like links */
 a.button:hover {
 	filter: none;
@@ -959,6 +958,28 @@ a.button:hover {
 a:not(:has(img)):not(.button):hover {
 	filter: brightness(1.25);
 	-webkit-filter: brightness(1.25);
+}
+
+a.url-button {
+	user-select: none;
+	-webkit-user-select: none; /* Safari / iOS */
+	-ms-user-select: none;
+	flex-shrink: 0;
+	display: flex;
+	min-width: fit-content;
+	flex-basis: content;
+	flex-direction: row;
+	align-items: center;
+	gap: 10px;
+	position: relative;
+	border-radius: var(--border-radius);
+	padding: 7px 9px;
+	width: max-content;
+	text-decoration: none;
+}
+
+a.url-button:hover {
+	background: var(--button-hover);
 }
 
 :focus-visible {
