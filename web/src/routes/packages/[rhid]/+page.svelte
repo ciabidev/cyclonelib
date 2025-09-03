@@ -65,12 +65,12 @@
 		</div>
 		<div class="package-content">
 			{#if packageData.short_description}
-				<div class="short-description">
+				<div class="short-description long-text">
 					<b>Short Description:</b> {packageData.short_description}
 				</div>
 			{/if}
 			{#if packageData.long_description}
-				<div class="long-description">
+				<div class="long-description long-text">
 					<h1>Detailed Description</h1>
 					<Markdown source={packageData.long_description} />
 				</div>

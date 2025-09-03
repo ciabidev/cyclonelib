@@ -20,7 +20,7 @@
 </svelte:head>
 
 <div class="page-wrapper">
-	<div class="main">
+	<main class="long-text">
 		<a href="https://wheatwhole.github.io">????</a>
 		<URLButton url="https://routinehub.co/shortcut/19577" name="Get Cyclone" img="icons/cyclone.webp" urlshort="routinehub.co/shortcut/19577" />
 		<h2 id="-build-better-and-faster">⏩ Build Better and Faster</h2>
@@ -33,7 +33,6 @@
 		</p>
 		<h2 id="-why-cyclone">🌀 Why Cyclone</h2>
 		<p><a href="https://routinehub.co/shortcut/22695">Demo Shortcut</a></p>
-		<p>Here’s what you get:</p>
 		<ul>
 			<li>
 				⬆️ <strong>Auto-Updater</strong> – keep your shortcuts on the latest version with an easy update
@@ -93,7 +92,7 @@
 			>
 		</p>
 
-		</div>
+		</main>
 </div>
 
 <style>
@@ -108,14 +107,12 @@
 		padding: calc(var(--padding) + 0.9375rem); /* for navbar */
 	}
 
-	.main {
+	main {
 		width: 100%;
 		max-width: 700px;
-		gap: 1rem;
 		display: flex;
 		flex-direction: column;
 	}
-
 
 	@media only screen and (max-height: 25rem) {
 		.page-wrapper {

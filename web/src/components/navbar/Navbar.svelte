@@ -20,18 +20,22 @@
   <nav class="navbar">
     <NavbarLogo />
     <nav class="navbar-tabs">
-      <NavTab name={"about?"} Icon={InfoIcon} href={"/"} />
-      <NavTab name={"packages"} Icon={BoxIcon} href={"/packages"} />
+      <NavTab name={"about?"} Icon={InfoIcon} path={"/"} />
+      <NavTab name={"packages"} Icon={BoxIcon} path={"/packages"} />
     </nav>
   </nav>
 </div>
 
 <style>
+  .navbar, .navbar-tabs, .navbar-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  
   .navbar-container {
-  	display: flex;
-  	flex-direction: column;
   	position: fixed;
-  	height: calc(var(--navbar-height));
+  	height: var(--navbar-height);
   	bottom: 0;
   	width: 100%;
   	z-index: 1005;
@@ -39,12 +43,8 @@
   }
 
   .navbar {
-    width: fit-content;
     z-index: 100;
-    order: 3;
-    display: flex;
     overflow-x: auto;
-    flex-direction: row;
     width: 100%;
     overflow-y: hidden;
     justify-content: center;
@@ -52,13 +52,9 @@
 
   .navbar-tabs {
     display: flex;
-    padding: var(--navbar-inner-padding);
     flex-direction: row;
+    padding: var(--navbar-inner-padding);
     align-items: center;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    height: 100%;
-    overflow-y: none;
     z-index: 1005;
     justify-content: space-evenly;
   }

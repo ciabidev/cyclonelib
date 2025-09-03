@@ -1,9 +1,9 @@
 <script lang="ts">
-  let { Icon, href, name } = $props();
+  let { Icon, path, name } = $props();
   import { fly } from "svelte/transition";
   import { page } from "$app/state";
 
-  let tabPath = $derived(href.split("/")[1]);
+  let tabPath = $derived(path.split("/")[1]);
 
   let currentPage = $derived(page.url.pathname.split("/")[1]);
 
@@ -44,7 +44,7 @@
   id="tab"
   draggable="false"
   class:active={isTabCurrentPage}
-  {href}
+  href={path}
   aria-selected={isTabCurrentPage}
   bind:this={tab}
 >
@@ -72,17 +72,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: var(--navbar-highlight);
+    min-width: 80px;
+    padding: 0 var(--navbar-tab-padding);
     height: 100%;
-    /* dark: color: black; */
+    color: var(--navbar-highlight);
     font-size: var(--navbar-font-size);
-    padding: var(--navbar-tab-padding);
     opacity: 0.75;
     text-decoration: none;
-     user-select: none;
-  -webkit-user-select: none;  /* Safari / iOS */
-  -ms-user-select: none; 
-    min-width: 90px;
      user-select: none;
   -webkit-user-select: none;  /* Safari / iOS */
   -ms-user-select: none; 

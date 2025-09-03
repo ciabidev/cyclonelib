@@ -88,10 +88,10 @@
 </script>
 
 <div class="page-wrapper">
-	<main class="header">
+	<div class="header long-text">
 		<h1>packages</h1>
 		<p>all of the packages can be found here. anonymous</p>
-	</main>
+	</div>
 	<div class="search-container">
 		<Input placeholder="search packages" bind:value={searchQuery} min_width="100%" Icon={SearchIcon} />
 	</div>
@@ -111,10 +111,10 @@
 					img=""
 					banner=""
 					tiny={`RoutineHub ID: ${pkg.rhid}`}
-					rhid={pkg.rhid}
+					extra_html={[`<a class="button button--default" href="/packages/${pkg.rhid}">View Package</a>`]}
 				></ProjectCard>
 			{:else}
-				<p>No packages found.</p>
+				<p class="long-text">No packages found.</p>
 			{/each}
 		{/if}
 	</div>
@@ -144,6 +144,7 @@
 		justify-content: center;
 		align-items: center;
 		width: 100%;
+		max-width: 700px;
 		gap: 20px;
 	}
 
@@ -174,4 +175,5 @@
 		}
 	}
 </style>
+
 

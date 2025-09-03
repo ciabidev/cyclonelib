@@ -1,28 +1,40 @@
 <script>
-	let { url, urlshort, name, description, img = null, banner = null, tiny = null, rhid = null } = $props();
+	let {
+		url,
+		urlshort,
+		name,
+		description,
+		img = null,
+		banner = null,
+		tiny = null,
+		extra_html = null
+	} = $props();
 	// @ts-ignore
 	import LinkIcon from '~icons/tabler/external-link';
 	import URLButton from './inputs-and-buttons/URLButton.svelte';
 </script>
 
 <div class="card-wrapper">
-<div class="card">
-	{#if banner}
-		<div class="banner-container" style="--banner-url: url({banner})"></div>
-	{/if}
-	<div class="card-content">
-		<URLButton {url} {urlshort} {name} {img} />
-		<div class="card-text">
-			<h2 class="project-name">{name}</h2>
-			<div class="sub-text tiny">{tiny}</div>
-			<div class="sub-text description">{description}</div>
+	<div class="card">
+		{#if banner}
+			<div class="banner-container" style="--banner-url: url({banner})"></div>
+		{/if}
+		<div class="card-content">
+			<URLButton {url} {urlshort} {name} {img} />
+			<div class="card-text">
+				<h2 class="project-name">{name}</h2>
+				<div class="sub-text tiny">{tiny}</div>
+				<div class="sub-text description long-text">{description}</div>
+			</div>
 		</div>
 	</div>
+	{#if extra_html}
+		{#each extra_html as html}
+			{@html html}
+		{/each}
+	{/if}
 </div>
-{#if rhid}
-<a class="button button--default" href="/packages/{rhid}">View Package </a>
-{/if}
-</div>
+
 <style>
 	/* i know all these random flex styles are a bandaid solution but for some reason items just wouldn't stay in the flexbox so i had to use this */
 	.card-wrapper {
@@ -40,9 +52,8 @@
 		min-height: 250px;
 		transition: all 0.3s var(--actions-and-stuff-ahh-transition);
 		max-width: 500px;
-		overflow: hidden;
-		box-shadow: var(--card-box-shadow);
-		filter: drop-shadow(0 0 8px var(--card-stroke)) drop-shadow(0 0 10px var(--card-stroke));
+		box-shadow:
+			var(--card-box-shadow);
 	}
 
 	.card-content {
