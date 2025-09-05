@@ -7,7 +7,7 @@ export async function GET() {
     "suggestions": "https://tally.so/r/mVXylJ",
     "source": "https://github.com/cyclonelib/cyclonelib",
     "web": "https://cyclonelib.vercel.app",
-    "api": "https://cyclonelib.vercel.app/api/docs"
+    "api": "https://cyclonelib.vercel.app/api"
   };
 
   return json(links, {
