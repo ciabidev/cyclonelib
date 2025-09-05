@@ -6,7 +6,7 @@
 <div class="lovenote-container">
   <HeartSolid style="color: red; min-width: 15px; min-height: 15px; max-width: 15px; max-height: 15px;" />
   
-  <div class="sub-text lovenote">made with love by the ciabi development team (me 😢)</div>
+  <div class="small-text lovenote">made with love by the ciabi development team (me 😢)</div>
 </div>
 
 <style>

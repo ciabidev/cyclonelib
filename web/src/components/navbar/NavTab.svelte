@@ -106,7 +106,6 @@
  @media only screen and (max-width: 600px) {
    a[role="tab"] {
      padding: 3px 1px;
-     height: fit-content;
    }
 
    .icon {

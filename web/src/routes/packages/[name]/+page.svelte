@@ -4,13 +4,13 @@
 	import Markdown from '$components/Markdown.svelte';
 	import { createDialog, killDialog } from '$lib/state/dialogs';
 
-	/** @type {{name: string, short_description?: string, long_description?: string, rhid: number} | null} */
+	/** @type {{name: string, short_description?: string, long_description?: string, package_url: string} | null} */
 	let packageData = $state(null);
 	let loading = $state(true);
 
 	onMount(async () => {
 		try {
-			const response = await fetch(`/api/packages/${$page.params.rhid}`);
+			const response = await fetch(`/api/packages/${$page.params.name}`);
 			if (response.ok) {
 				packageData = await response.json();
 			} else {
@@ -66,7 +66,7 @@
 		<div class="package-content">
 			{#if packageData.short_description}
 				<div class="short-description long-text">
-					<b>Short Description:</b> {packageData.short_description}
+					<strong>Short Description:</strong> {packageData.short_description}
 				</div>
 			{/if}
 			{#if packageData.long_description}
@@ -76,8 +76,8 @@
 				</div>
 			{/if}
 			<div class="actions">
-				<a class="button button--primary" href="https://routinehub.co/shortcut/{packageData.rhid}">View on RoutineHub</a>
-				<a class="button button--primary" href="/packages/{packageData.rhid}/edit">Edit Package</a>
+				<a class="button button--primary" href="{packageData.package_url}">Open Package URL</a>
+				<a class="button button--primary" href="/packages/{packageData.name}/edit">Edit Package</a>
 			</div>
 		</div>
 	{:else}

@@ -29,7 +29,7 @@
 <style>
   .navbar, .navbar-tabs, .navbar-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: row;    
   }
 
   

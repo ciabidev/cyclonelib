@@ -104,7 +104,7 @@
 		justify-content: center;
 		min-height: 100%;
 		overscroll-behavior: none;
-		padding: calc(var(--padding) + 0.9375rem); /* for navbar */
+		padding: calc(var(--padding) + 0.9375rem); 
 	}
 
 	main {

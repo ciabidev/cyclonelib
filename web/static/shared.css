@@ -314,9 +314,10 @@ pre {
 	font-size: 1.125rem;
 }
 
-.sub-text {
+.small-text {
 	color: var(--sub-color);
 	font-weight: 430;
+	font-size: 0.9rem;
 }
 
 .divider {
@@ -338,7 +339,7 @@ pre {
 	justify-content: center;
 }
 
-.contact-container > .sub-text {
+.contact-container > .small-text {
 	text-align: center;
 }
 

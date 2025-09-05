@@ -9,7 +9,7 @@
 	{/if}
 	<div class="url-text">
 		<div class="url-name">{name}</div>
-		<span class="url-short sub-text" data-sveltekit-replacestate
+		<span class="url-short small-text" data-sveltekit-replacestate
 			><LinkIcon
 				style="min-width: 1rem; min-height: 1rem; flex-shrink: 0;"
 				class="icon"

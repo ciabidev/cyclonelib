@@ -23,8 +23,8 @@
 			<URLButton {url} {urlshort} {name} {img} />
 			<div class="card-text">
 				<h2 class="project-name">{name}</h2>
-				<div class="sub-text tiny">{tiny}</div>
-				<div class="sub-text description long-text">{description}</div>
+				<div class="small-text tiny">{tiny}</div>
+				<div class="small-text description long-text">{description}</div>
 			</div>
 		</div>
 	</div>
@@ -49,9 +49,7 @@
 		box-sizing: border-box;
 		position: relative;
 		align-items: flex-start;
-		min-height: 250px;
 		transition: all 0.3s var(--actions-and-stuff-ahh-transition);
-		max-width: 500px;
 		box-shadow:
 			var(--card-box-shadow);
 	}

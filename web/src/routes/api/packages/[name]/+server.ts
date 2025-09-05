@@ -3,22 +3,22 @@ import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
 import type { RequestHandler } from './$types.js';
 
 /**
- * GET /api/packages/[rhid]
+ * GET /api/packages/[name]
  * Retrieve a package
  *
  * @param {Object} options - Request options
  * @param {Object} options.params - URL parameters
- * @param {string} options.params.rhid - Package RHID
+ * @param {string} options.params.name - Package name
  * @returns {Promise<Response>} JSON response with package data
  *
  * @example
- * GET /api/packages/12345
+ * GET /api/packages/my-package-name
  *
  * Response: {
  *   "_id": "507f1f77bcf86cd799439011",
- *   "name": "My Package",
+ *   "name": "my-package-name",
  *   "description": "A useful package",
- *   "rhid": 12345
+ *   "package_url": "https://routinehub.co/shortcut/12345?shortcut_name=Simple%20Base64"
  * }
  *
  * @throws {404} If package not found
@@ -26,7 +26,7 @@ import type { RequestHandler } from './$types.js';
  */
 export const GET: RequestHandler = async ({ params }) => {
   const mongoUri = process.env.MONGO_URI;
-  const { rhid } = params;
+  const { name } = params;
 
   if (!mongoUri) {
     throw error(500, {
@@ -36,7 +36,7 @@ export const GET: RequestHandler = async ({ params }) => {
 
   try {
     const db = await connectDB();
-    const packageDoc = await db.collection('packages').findOne({ rhid: parseInt(rhid) });
+    const packageDoc = await db.collection('packages').findOne({ name });
 
     if (!packageDoc) {
       throw error(404, { message: 'Package not found' });
@@ -51,7 +51,7 @@ export const GET: RequestHandler = async ({ params }) => {
     });
   } catch (err: any) {
     if (err.status) throw err; // Re-throw SvelteKit errors
-    console.error('Database error in GET /api/packages/[rhid]:', err);
+    console.error('Database error in GET /api/packages/[name]:', err);
     throw error(500, {
       message: 'Failed to retrieve package'
     });
@@ -59,13 +59,13 @@ export const GET: RequestHandler = async ({ params }) => {
 };
 
 /**
- * PATCH /api/packages/[rhid]
+ * PATCH /api/packages/[name]
  * Update a package
  *
  * @param {Object} options - Request options
  * @param {Request} options.request - HTTP request with package data
  * @param {Object} options.params - URL parameters
- * @param {string} options.params.rhid - Package RHID
+ * @param {string} options.params.name - Package name
  * @returns {Promise<Response>} JSON response with updated package
  *
  * @body {Object} data - Update data
@@ -73,30 +73,31 @@ export const GET: RequestHandler = async ({ params }) => {
  * @body {string} [data.name] - New package name
  * @body {string} [data.short_description] - New short description
  * @body {string} [data.long_description] - New long description (supports markdown)
- * @body {number} [data.rhid] - New package RHID
+ * @body {string} [data.package_url] - New package URL
  *
  * @example
- * PATCH /api/packages/12345
+ * PATCH /api/packages/my-package-name
  * Body: {
  *   "edit_code": "secret123",
- *   "name": "Updated Package Name"
+ *   "name": "updated-package-name"
  * }
  *
  * Response: {
  *   "_id": "507f1f77bcf86cd799439011",
- *   "name": "Updated Package Name",
+ *   "name": "updated-package-name",
  *   "description": "A useful package",
- *   "rhid": 12345
+ *   "package_url": "https://routinehub.co/shortcut/12345?shortcut_name=Simple%20Base64"
  * }
  *
  * @throws {404} If package not found
  * @throws {403} If edit code does not match
- * @throws {409} If new name or RHID already exists
+ * @throws {409} If new name already exists
+ * @throws {400} If package_url validation fails
  * @throws {500} If database connection fails
  */
 export const PATCH: RequestHandler = async ({ request, params }) => {
   const mongoUri = process.env.MONGO_URI;
-  const { rhid } = params;
+  const { name } = params;
 
   if (!mongoUri) {
     throw error(500, {
@@ -105,10 +106,10 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
   }
 
   try {
-    const { edit_code, name, short_description, long_description, rhid: newRhid } = await request.json();
+    const { edit_code, name: newName, short_description, long_description, package_url } = await request.json();
 
     const db = await connectDB();
-    const existingPackage = await db.collection('packages').findOne({ rhid: parseInt(rhid) });
+    const existingPackage = await db.collection('packages').findOne({ name });
 
     if (!existingPackage) {
       throw error(404, { message: 'Package not found' });
@@ -119,23 +120,36 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     }
 
     const updateFields: Record<string, any> = {};
-    if (name !== undefined && name !== existingPackage.name) {
-      const existingName = await db.collection('packages').findOne({ name, _id: { $ne: existingPackage._id } });
+    if (newName !== undefined && newName !== existingPackage.name) {
+      // Validate package name format
+      if (!/^[a-z0-9-]+$/.test(newName)) {
+        throw error(400, { message: 'Package name must contain only lowercase letters, numbers, and hyphens' });
+      }
+      // Validate package name length
+      if (newName.length > 214) {
+        throw error(400, { message: 'Package name must be 214 characters or less' });
+      }
+
+      const existingName = await db.collection('packages').findOne({ name: newName, _id: { $ne: existingPackage._id } });
       if (existingName) {
         throw error(409, { message: 'Package name is already taken' });
       }
-      updateFields.name = name;
+      updateFields.name = newName;
     }
     if (short_description !== undefined) updateFields.short_description = short_description;
     if (long_description !== undefined) updateFields.long_description = long_description;
-    if (newRhid !== undefined && newRhid !== existingPackage.rhid) {
-      const existingRhidCheck = await db.collection('packages').findOne({ rhid: newRhid, _id: { $ne: existingPackage._id } });
-      if (existingRhidCheck) {
-        throw error(409, {
-          message: 'Package RHID is already taken. If someone has uploaded your package here and you want it removed, please contact us.'
-        });
+    if (package_url !== undefined && package_url !== existingPackage.package_url) {
+      // Validate package_url contains shortcut_name query parameter
+      try {
+        const url = new URL(package_url);
+        const shortcutName = url.searchParams.get('shortcut_name');
+        if (!shortcutName) {
+          throw error(400, { message: 'Package URL must include ?shortcut_name= query parameter' });
+        }
+      } catch (urlError) {
+        throw error(400, { message: 'Invalid package URL format' });
       }
-      updateFields.rhid = newRhid;
+      updateFields.package_url = package_url;
     }
 
     if (Object.keys(updateFields).length === 0) {
@@ -162,28 +176,28 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     });
   } catch (err: any) {
     if (err.status) throw err; // Re-throw SvelteKit errors
-    console.error('Database error in PATCH /api/packages/[rhid]:', err);
+    console.error('Database error in PATCH /api/packages/[name]:', err);
     throw error(500, {
       message: 'Failed to update package'
     });
   }
-}
+};
 
 /**
- * DELETE /api/packages/[rhid]
+ * DELETE /api/packages/[name]
  * Delete a package
  *
  * @param {Object} options - Request options
  * @param {Request} options.request - HTTP request with edit_code
  * @param {Object} options.params - URL parameters
- * @param {string} options.params.rhid - Package RHID
+ * @param {string} options.params.name - Package name
  * @returns {Promise<Response>} JSON response confirming deletion
  *
  * @body {Object} data - Request data
  * @body {string} data.edit_code - Edit code for verification
  *
  * @example
- * DELETE /api/packages/12345
+ * DELETE /api/packages/my-package-name
  * Body: {
  *   "edit_code": "secret123"
  * }
@@ -198,7 +212,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
  */
 export const DELETE: RequestHandler = async ({ request, params }) => {
   const mongoUri = process.env.MONGO_URI;
-  const { rhid } = params;
+  const { name } = params;
 
   if (!mongoUri) {
     throw error(500, {
@@ -210,7 +224,7 @@ export const DELETE: RequestHandler = async ({ request, params }) => {
     const { edit_code } = await request.json();
 
     const db = await connectDB();
-    const existingPackage = await db.collection('packages').findOne({ rhid: parseInt(rhid) });
+    const existingPackage = await db.collection('packages').findOne({ name });
 
     if (!existingPackage) {
       throw error(404, { message: 'Package not found' });
@@ -231,12 +245,12 @@ export const DELETE: RequestHandler = async ({ request, params }) => {
     });
   } catch (err: any) {
     if (err.status) throw err; // Re-throw SvelteKit errors
-    console.error('Database error in DELETE /api/packages/[rhid]:', err);
+    console.error('Database error in DELETE /api/packages/[name]:', err);
     throw error(500, {
       message: 'Failed to delete package'
     });
   }
-}
+};
 
 export async function OPTIONS() {
   return new Response(null, {

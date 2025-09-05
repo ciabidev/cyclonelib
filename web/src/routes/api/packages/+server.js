@@ -3,22 +3,20 @@ import { connectDB, serializeDoc } from '$lib/server/db-utils.js';
 
 
 export async function GET({ url }) {
-  const mongoUri = process.env.MONGO_URI;
+	const mongoUri = process.env.MONGO_URI;
 
-  if (!mongoUri) {
-    throw error(500, {
-      message: 'Database configuration missing. MONGO_URI environment variable not set.'
-    });
-  }
+	if (!mongoUri) {
+		throw error(500, {
+			message: 'Database configuration missing. MONGO_URI environment variable not set.'
+		});
+	}
 
-  try {
-    const name = url.searchParams.get('name');
-    const rhid = url.searchParams.get('rhid');
+	try {
+		const name = url.searchParams.get('name');
 
-    const db = await connectDB();
-    const query = {};
-    if (name) query.name = { $regex: name, $options: 'i' };
-    if (rhid) query.rhid = { $regex: rhid, $options: 'i' };
+		const db = await connectDB();
+		const query = {};
+		if (name) query.name = { $regex: name, $options: 'i' };
 
     // Add timeout to prevent hanging
     const docs = await Promise.race([
@@ -53,30 +51,31 @@ export async function GET({ url }) {
  * @returns {Promise<Response>} JSON response with created package
  *
  * @body {Object} package - Package data
- * @body {string} package.name - Package name (must be unique)
+ * @body {string} package.name - Package name (must be unique, lowercase with hyphens)
  * @body {string} package.short_description - Short description
  * @body {string} package.long_description - Long description (supports markdown)
- * @body {number} package.rhid - Package RHID (must be unique)
+ * @body {string} package.package_url - Package URL with ?shortcut_name= query parameter (shortcut name can be different from package name)
  * @body {string} package.edit_code - Edit code for future modifications
  * @body {Date} package.created_at - Creation timestamp (auto-generated)
  *
  * @example
  * POST /api/packages
  * Body: {
- *   "name": "My Package",
+ *   "name": "my-shortcut-package",
  *   "description": "A useful package",
- *   "rhid": 12345,
+ *   "package_url": "https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7?shortcut_name=Simple%20Base64",
  *   "edit_code": "secret123"
  * }
  *
  * Response: {
  *   "_id": "507f1f77bcf86cd799439011",
- *   "name": "My Package",
+ *   "name": "my-shortcut-package",
  *   "description": "A useful package",
- *   "rhid": 12345
+ *   "package_url": "https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7?shortcut_name=Simple%20Base64"
  * }
  *
- * @throws {409} If package name or RHID already exists
+ * @throws {409} If package name already exists
+ * @throws {400} If package name format is invalid or package_url validation fails
  * @throws {500} If database connection fails
  */
 export async function POST({ request }) {
@@ -91,9 +90,32 @@ export async function POST({ request }) {
   }
 
   try {
-    const { edit_code, name, short_description, long_description, rhid } = await request.json();
-    console.log('Received data:', { name, short_description, long_description, rhid, edit_code: edit_code ? '[REDACTED]' : undefined });
+    const { edit_code, name, short_description, long_description, package_url } = await request.json();
+    console.log('Received data:', { name, short_description, long_description, package_url, edit_code: edit_code ? '[REDACTED]' : undefined });
     const { connectDB, serializeDoc, hashEditCode } = await import('$lib/server/db-utils.js');
+
+    // Validate package name format (lowercase with hyphens)
+    if (!/^[a-z0-9-]+$/.test(name)) {
+      throw error(400, { message: 'Package name must contain only lowercase letters, numbers, and hyphens' });
+    }
+
+    // Validate package name length
+    if (name.length > 214) {
+      throw error(400, { message: 'Package name must be 214 characters or less' });
+    }
+
+    // Validate package_url contains shortcut_name query parameter
+    let url;
+    try {
+      url = new URL(package_url);
+    } catch (urlError) {
+      throw error(400, { message: 'Invalid URL format. Please enter a valid URL.' });
+    }
+
+    const shortcutName = url.searchParams.get('shortcut_name');
+    if (!shortcutName) {
+      throw error(400, { message: 'Package URL must include ?shortcut_name= query parameter' });
+    }
 
     const db = await connectDB();
 
@@ -103,19 +125,11 @@ export async function POST({ request }) {
       throw error(409, { message: 'Package name is already taken' });
     }
 
-    // Check for existing rhid
-    const existingRhid = await db.collection('packages').findOne({ rhid });
-    if (existingRhid) {
-      throw error(409, {
-        message: 'Package RHID is already taken. If someone has uploaded your package here and you want it removed, please contact us.'
-      });
-    }
-
     const packageDict = {
       name,
       short_description,
       long_description,
-      rhid,
+      package_url,
       edit_code: hashEditCode(edit_code),
       created_at: new Date()
     };

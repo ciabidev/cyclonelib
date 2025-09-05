@@ -12,10 +12,10 @@
 		<p class="long-text">A whirlwind of useful functions for efficient shortcut development</p>
 		<p class="long-text">welcome and thanks for downloading!</p>
 		<p class="long-text">
-			<b>For users:</b> developers use Cyclone to speed up development process and create complex shortcuts
+			<strong>For users:</strong> developers use Cyclone to speed up development process and create complex shortcuts
 			in a short amount of time. you can ALWAYS check inside Cyclone's code, since its a normal shortcut.
 		</p>
-		<p class="long-text">When you're ready, tap on <b style="color: #007AFF;">Done</b></p>
+		<p class="long-text">When you're ready, tap on <b style="color: #007AFF;">Done</strong></p>
 		<button class="button button--default" onclick={() => createDialog({
 			id: 'test-dialog',
 			type: 'small',

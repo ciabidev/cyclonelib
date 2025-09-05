@@ -5,28 +5,38 @@
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import { createDialog, killDialog, closeDialogAnimated } from '$lib/state/dialogs';
 
-	/** @type {{name: string, short_description?: string, long_description?: string, rhid: number} | null} */
+	/** @type {{name: string, short_description?: string, long_description?: string, package_url: string} | null} */
 	let packageData = $state(null);
-	let rhidParam = $page.params.rhid;
+	let nameParam = $page.params.name;
 	let name = $state('');
 	let short_description = $state('');
 	let long_description = $state('');
-	let rhid = $state('');
+	let package_url = $state('');
 	let edit_code = $state('');
 	let loading = $state(true);
 	let updating = $state(false);
 	let deleting = $state(false);
 
+	// Format the package name for preview
+	let formattedName = $derived(
+		name.trim()
+			.toLowerCase()
+			.replace(/[^a-z0-9\s-]/g, '') // Remove invalid characters
+			.replace(/\s+/g, '-') // Replace spaces with hyphens
+			.replace(/-+/g, '-') // Replace multiple hyphens with single
+			.replace(/^-|-$/g, '') // Remove leading/trailing hyphens
+	);
+
 	onMount(async () => {
 		try {
-			const response = await fetch(`/api/packages/${rhidParam}`);
+			const response = await fetch(`/api/packages/${nameParam}`);
 			if (response.ok) {
 				packageData = await response.json();
 				if (packageData) {
 					name = packageData.name;
 					short_description = packageData.short_description || '';
 					long_description = packageData.long_description || '';
-					rhid = packageData.rhid.toString();
+					package_url = packageData.package_url;
 				}
 			} else {
 				// Clear any existing dialogs first
@@ -74,11 +84,11 @@
 		const trimmedName = String(name || '').trim();
 		const trimmedShortDesc = String(short_description || '').trim();
 		const trimmedLongDesc = String(long_description || '').trim();
-		const trimmedRhid = String(rhid || '').trim();
+		const trimmedPackageUrl = String(package_url || '').trim();
 		const trimmedEditCode = String(edit_code || '').trim();
 
 		// Check for empty fields
-		if (!trimmedName || !trimmedShortDesc || !trimmedLongDesc || !trimmedRhid || !trimmedEditCode) {
+		if (!trimmedName || !trimmedShortDesc || !trimmedLongDesc || !trimmedPackageUrl || !trimmedEditCode) {
 			// Clear any existing dialogs first
 			killDialog();
 			// Add a small delay before creating the error dialog to ensure proper dialog management
@@ -101,9 +111,11 @@
 			return;
 		}
 
-		// Validate RHID is a valid number
-		const rhidNum = parseInt(trimmedRhid);
-		if (isNaN(rhidNum) || rhidNum <= 0) {
+		// Validate package_url contains shortcut_name query parameter
+		let url;
+		try {
+			url = new URL(trimmedPackageUrl);
+		} catch (urlError) {
 			// Clear any existing dialogs first
 			killDialog();
 			// Add a small delay before creating the error dialog to ensure proper dialog management
@@ -113,7 +125,31 @@
 					type: 'small',
 					title: 'Validation Error',
 					icon: 'warn-red',
-					bodyText: 'RoutineHub ID must be a valid positive number',
+					bodyText: 'Invalid URL format. Please enter a valid URL.',
+					buttons: [
+						{
+							text: 'ok',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
+			}, 200);
+			return;
+		}
+
+		const shortcutName = url.searchParams.get('shortcut_name');
+		if (!shortcutName) {
+			// Clear any existing dialogs first
+			killDialog();
+			// Add a small delay before creating the error dialog to ensure proper dialog management
+			setTimeout(() => {
+				createDialog({
+					id: 'update-package-validation-error',
+					type: 'small',
+					title: 'Validation Error',
+					icon: 'warn-red',
+					bodyText: 'Package URL must include ?shortcut_name= query parameter',
 					buttons: [
 						{
 							text: 'ok',
@@ -129,14 +165,14 @@
 		updating = true;
 
 		try {
-			const response = await fetch(`/api/packages/${rhidParam}`, {
+			const response = await fetch(`/api/packages/${nameParam}`, {
 				method: 'PATCH',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					name: trimmedName,
 					short_description: trimmedShortDesc,
 					long_description: trimmedLongDesc,
-					rhid: rhidNum,
+					package_url: trimmedPackageUrl,
 					edit_code: trimmedEditCode
 				})
 			});
@@ -156,7 +192,7 @@
 							action: () => {
 								// Small delay to allow dialog to close properly before navigation
 								setTimeout(() => {
-									goto(`/packages/${rhidParam}`);
+									goto(`/packages/${nameParam}`);
 								}, 200);
 							}
 						}
@@ -213,7 +249,7 @@
 		deleting = true;
 
 		try {
-			const response = await fetch(`/api/packages/${rhidParam}`, {
+			const response = await fetch(`/api/packages/${nameParam}`, {
 				method: 'DELETE',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
@@ -348,7 +384,7 @@
 	<div class="main">
 		<h1>Edit Package</h1>
 		<p>Modify the package details below.</p>
-		<a class="button button--default" href="/packages/{rhidParam}">Back to Package</a>
+		<a class="button button--default" href="/packages/{nameParam}">Back to Package</a>
 
 		{#if loading}
 			<p>Loading package details...</p>
@@ -357,6 +393,15 @@
 				<div class="field">
 					<label for="name">Package Name</label>
 					<Input id="name" placeholder="Enter package name" bind:value={name} />
+				{#if formattedName}
+					<small class="small-text" style="color: var(--main-color);">
+						Name will be: <strong>{formattedName}</strong>
+					</small>
+				{:else}
+					<small class="small-text" style="color: var(--main-color);">
+						Must be lowercase letters, numbers, and hyphens only
+					</small>
+				{/if}
 				</div>
 				<div class="field">
 					<label for="short_description">Short Description</label>
@@ -367,8 +412,8 @@
 					<Input id="long_description" placeholder="Enter detailed description" bind:value={long_description} long={true} />
 				</div>
 				<div class="field">
-					<label for="rhid">RoutineHub ID</label>
-					<Input id="rhid" placeholder="Enter RoutineHub ID (number)" bind:value={rhid} type="number" />
+					<label for="package_url">Package URL</label>
+					<Input id="package_url" placeholder="Enter package URL with ?shortcut_name= parameter" bind:value={package_url} />
 				</div>
 				<div class="field">
 					<label for="edit_code">Edit Code</label>

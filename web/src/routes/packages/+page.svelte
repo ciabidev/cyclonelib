@@ -5,7 +5,7 @@
 	import { createDialog, killDialog } from '$lib/state/dialogs';
 	// @ts-ignore
 	import SearchIcon from '~icons/streamline-flex/magnifying-glass-remix';
-	/** @type {Array<{name: string, short_description: string, long_description: string, rhid: number, created_at?: string}>} */
+	/** @type {Array<{name: string, short_description: string, long_description: string, package_url: string, created_at?: string}>} */
 	let packages = $state([]);
 	let searchQuery = $state('');
 	let loading = $state(true);
@@ -82,7 +82,7 @@
 				pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				pkg.short_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				pkg.long_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				String(pkg.rhid).includes(searchQuery)
+				pkg.package_url.toLowerCase().includes(searchQuery.toLowerCase())
 			)
 	);
 </script>
@@ -106,12 +106,11 @@
 				<ProjectCard
 					name={pkg.name}
 					description={pkg.short_description}
-					url={`https://routinehub.co/shortcut/${pkg.rhid}`}
-					urlshort={`routinehub.co/shortcut/${pkg.rhid}`}
+					url={pkg.package_url}
+					urlshort="download package directly"
 					img=""
 					banner=""
-					tiny={`RoutineHub ID: ${pkg.rhid}`}
-					extra_html={[`<a class="button button--default" href="/packages/${pkg.rhid}">View Package</a>`]}
+					extra_html={[`<a class="button button--default" href="/packages/${pkg.name}">View Package</a>`]}
 				></ProjectCard>
 			{:else}
 				<p class="long-text">No packages found.</p>
@@ -155,23 +154,33 @@
 		width: 100%;
 	}
 
+
 	.projects {
 		justify-content: center;
-		align-items: center;
-		flex-direction: row;
+		flex-direction: column;
 		flex-wrap: wrap;
 		gap: 15px;
 		display: flex;
-		max-width: 100%;
-		width: 100%;
+		max-width: 700px;
+		width: 100%; /* this is a bandaid solution for the weird flexbox behavior */
 	}
 
+	.projects > *, .options > *, .search-container > * {
+		width: 100%;
+	}
 
 	@media only screen and (max-height: 400px) {
 		.page-wrapper {
 			justify-content: center;
 			align-items: center;
 			height: max-content;
+		}
+	}
+
+	@media only screen and (max-width: 600px) {
+		.projects {
+			flex-direction: column;
+			gap: 10px;
 		}
 	}
 </style>
