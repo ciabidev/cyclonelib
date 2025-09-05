@@ -15,7 +15,7 @@
 			<strong>For users:</strong> developers use Cyclone to speed up development process and create complex shortcuts
 			in a short amount of time. you can ALWAYS check inside Cyclone's code, since its a normal shortcut.
 		</p>
-		<p class="long-text">When you're ready, tap on <b style="color: #007AFF;">Done</strong></p>
+		<p class="long-text">When you're ready, tap on <strong style="color: #007AFF;">Done</strong></p>
 		<button class="button button--default" onclick={() => createDialog({
 			id: 'test-dialog',
 			type: 'small',
