@@ -143,6 +143,7 @@
 								setTimeout(() => {
 									// Redirect to version creation for the new package
 									goto(`/packages/${$formattedName}/versions/create`);
+								 console.log(${$formattedName})
 								}, 200);
 							}
 						}
