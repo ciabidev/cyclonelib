@@ -142,7 +142,7 @@
 								// Small delay to allow dialog to close properly before navigation
 								setTimeout(() => {
 									// Redirect to version creation for the new package
-									goto(`/packages/${formattedName}/versions/create`);
+									goto(`/packages/${$formattedName}/versions/create`);
 								}, 200);
 							}
 						}
