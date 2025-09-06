@@ -7,7 +7,7 @@
 
 	let short_description = $state('');
 	let long_description = $state('');
-	let package_url = $state('');
+	// let download_url = $state(''); // Commented out for versioning system
 	let edit_code = $state('');
 	let loading = $state(false);
 
@@ -27,7 +27,7 @@
 		const trimmedName = String(name || '').trim();
 		const trimmedShortDesc = String(short_description || '').trim();
 		const trimmedLongDesc = String(long_description || '').trim();
-		const trimmedPackageUrl = String(package_url || '').trim();
+		// const trimmedPackageUrl = String(download_url || '').trim(); // Commented out for versioning system
 		const trimmedEditCode = String(edit_code || '').trim();
 
 		// Check for empty fields
@@ -35,7 +35,7 @@
 			!trimmedName ||
 			!trimmedShortDesc ||
 			!trimmedLongDesc ||
-			!trimmedPackageUrl ||
+			// !trimmedPackageUrl || // Commented out for versioning system
 			!trimmedEditCode
 		) {
 			// Clear any existing dialogs first
@@ -48,7 +48,7 @@
 				bodyText: 'All fields are required',
 				buttons: [
 					{
-						text: 'ok',
+						text: 'continue',
 						main: true,
 						action: () => {}
 					}
@@ -57,7 +57,9 @@
 			return;
 		}
 
-		// Validate package_url contains shortcut_name query parameter
+		// Validate download_url contains shortcut_name query parameter
+		// Commented out for versioning system - will be handled in version creation
+		/*
 		let url;
 		try {
 			url = new URL(trimmedPackageUrl);
@@ -72,7 +74,7 @@
 				bodyText: 'Invalid URL format. Please enter a valid URL.',
 				buttons: [
 					{
-						text: 'ok',
+						text: 'continue',
 						main: true,
 						action: () => {}
 					}
@@ -90,10 +92,10 @@
 				type: 'small',
 				title: 'Validation Error',
 				icon: 'warn-red',
-				bodyText: 'Package URL must include ?shortcut_name= query parameter',
+				bodyText: 'Download URL must include ?shortcut_name= query parameter',
 				buttons: [
 					{
-						text: 'ok',
+						text: 'continue',
 						main: true,
 						action: () => {}
 					}
@@ -101,6 +103,7 @@
 			});
 			return;
 		}
+		*/
 
 		loading = true;
 
@@ -109,10 +112,10 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					name: trimmedName,
+					name: formattedName,
 					short_description: trimmedShortDesc,
 					long_description: trimmedLongDesc,
-					package_url: trimmedPackageUrl,
+					// download_url: trimmedPackageUrl, // Commented out for versioning system
 					edit_code: trimmedEditCode
 				})
 			});
@@ -127,18 +130,19 @@
 					bodyText: 'Package created successfully!',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {
 								// Clear form
 								name = '';
 								short_description = '';
 								long_description = '';
-								package_url = '';
+								// download_url = ''; // Commented out for versioning system
 								edit_code = '';
 								// Small delay to allow dialog to close properly before navigation
 								setTimeout(() => {
-									goto('/packages');
+									// Redirect to version creation for the new package
+									goto(`/packages/${formattedName}/versions/create`);
 								}, 200);
 							}
 						}
@@ -156,7 +160,7 @@
 					bodyText: data.message || 'Failed to create package',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {}
 						}
@@ -171,10 +175,10 @@
 				type: 'small',
 				title: 'Network Error',
 				icon: 'warn-red',
-				bodyText: 'Network error occurred while creating package',
+				bodyText: 'a network error occurred while creating the package',
 				buttons: [
 					{
-						text: 'ok',
+						text: 'continue',
 						main: true,
 						action: () => {}
 					}
@@ -200,10 +204,6 @@
 					<small class="small-text" style="color: var(--main-color);">
 						Name will be: <strong>{formattedName}</strong>
 					</small>
-				{:else}
-					<small class="small-text" style="color: var(--main-color);">
-						Must be lowercase letters, numbers, and hyphens only
-					</small>
 				{/if}
 			</div>
 			<div class="field">
@@ -223,22 +223,23 @@
 					long={true}
 				/>
 			</div>
+			<!-- Download URL field commented out for versioning system -->
+			<!--
 			<div class="field">
-				<label for="package_url">Package URL</label>
+				<label for="download_url">Download URL</label>
 				<p class="long-text">
 					Must include <strong>?shortcut_name=</strong> query parameter (your exact Shortcut Name URL-Encoded).
-				</p>
-				<p class="long-text">
 					Example: https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7<strong
 						>?shortcut_name=Simple%20Base64</strong
 					>
 				</p>
 				<Input
-					id="package_url"
-					placeholder="Enter package URL with ?shortcut_name= parameter"
-					bind:value={package_url}
+					id="download_url"
+					placeholder="Enter Download URL with ?shortcut_name= parameter"
+					bind:value={download_url}
 				/>
 			</div>
+			-->
 			<div class="field">
 				<label for="edit_code">Edit Code</label>
 				<p style="color: var(--color-error);" class="long-text">

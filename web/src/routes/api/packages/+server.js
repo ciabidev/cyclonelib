@@ -54,7 +54,8 @@ export async function GET({ url }) {
  * @body {string} package.name - Package name (must be unique, lowercase with hyphens)
  * @body {string} package.short_description - Short description
  * @body {string} package.long_description - Long description (supports markdown)
- * @body {string} package.package_url - Package URL with ?shortcut_name= query parameter (shortcut name can be different from package name)
+ * @body {string} package.download_url - Download URL with ?shortcut_name= query parameter (shortcut name can be different from package name)
+ * @body {string} package.shortcut_name - Shortcut name extracted from download_url query parameter (auto-generated)
  * @body {string} package.edit_code - Edit code for future modifications
  * @body {Date} package.created_at - Creation timestamp (auto-generated)
  *
@@ -63,19 +64,20 @@ export async function GET({ url }) {
  * Body: {
  *   "name": "my-shortcut-package",
  *   "description": "A useful package",
- *   "package_url": "https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7?shortcut_name=Simple%20Base64",
+ *   "download_url": "https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7?shortcut_name=Simple%20Base64",
  *   "edit_code": "secret123"
  * }
  *
  * Response: {
  *   "_id": "507f1f77bcf86cd799439011",
  *   "name": "my-shortcut-package",
- *   "description": "A useful package",
- *   "package_url": "https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7?shortcut_name=Simple%20Base64"
+ *   "short_description": "A useful package",
+ *   "download_url": "https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7?shortcut_name=Simple%20Base64",
+ *   "shortcut_name": "Simple Base64"
  * }
  *
  * @throws {409} If package name already exists
- * @throws {400} If package name format is invalid or package_url validation fails
+ * @throws {400} If package name format is invalid or download_url validation fails
  * @throws {500} If database connection fails
  */
 export async function POST({ request }) {
@@ -90,8 +92,9 @@ export async function POST({ request }) {
   }
 
   try {
-    const { edit_code, name, short_description, long_description, package_url } = await request.json();
-    console.log('Received data:', { name, short_description, long_description, package_url, edit_code: edit_code ? '[REDACTED]' : undefined });
+    const { edit_code, name, short_description, long_description, download_url } = await request.json();
+    // download_url is now optional for versioning system
+    console.log('Received data:', { name, short_description, long_description, download_url, edit_code: edit_code ? '[REDACTED]' : undefined });
     const { connectDB, serializeDoc, hashEditCode } = await import('$lib/server/db-utils.js');
 
     // Validate package name format (lowercase with hyphens)
@@ -104,17 +107,20 @@ export async function POST({ request }) {
       throw error(400, { message: 'Package name must be 214 characters or less' });
     }
 
-    // Validate package_url contains shortcut_name query parameter
-    let url;
-    try {
-      url = new URL(package_url);
-    } catch (urlError) {
-      throw error(400, { message: 'Invalid URL format. Please enter a valid URL.' });
-    }
+    // Validate download_url contains shortcut_name query parameter (optional for versioning system)
+    let shortcutName = null;
+    if (download_url) {
+      let url;
+      try {
+        url = new URL(download_url);
+      } catch (urlError) {
+        throw error(400, { message: 'Invalid URL format. Please enter a valid URL.' });
+      }
 
-    const shortcutName = url.searchParams.get('shortcut_name');
-    if (!shortcutName) {
-      throw error(400, { message: 'Package URL must include ?shortcut_name= query parameter' });
+      shortcutName = url.searchParams.get('shortcut_name');
+      if (!shortcutName) {
+        throw error(400, { message: 'Download URL must include ?shortcut_name= query parameter' });
+      }
     }
 
     const db = await connectDB();
@@ -129,7 +135,8 @@ export async function POST({ request }) {
       name,
       short_description,
       long_description,
-      package_url,
+      download_url,
+      shortcut_name: shortcutName,
       edit_code: hashEditCode(edit_code),
       created_at: new Date()
     };

@@ -5,13 +5,13 @@
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import { createDialog, killDialog, closeDialogAnimated } from '$lib/state/dialogs';
 
-	/** @type {{name: string, short_description?: string, long_description?: string, package_url: string} | null} */
+	/** @type {{name: string, short_description?: string, long_description?: string, download_url: string} | null} */
 	let packageData = $state(null);
 	let nameParam = $page.params.name;
 	let name = $state('');
 	let short_description = $state('');
 	let long_description = $state('');
-	let package_url = $state('');
+	// let download_url = $state(''); // Commented out for versioning system
 	let edit_code = $state('');
 	let loading = $state(true);
 	let updating = $state(false);
@@ -36,7 +36,7 @@
 					name = packageData.name;
 					short_description = packageData.short_description || '';
 					long_description = packageData.long_description || '';
-					package_url = packageData.package_url;
+					// download_url = packageData.download_url; // Commented out for versioning system
 				}
 			} else {
 				// Clear any existing dialogs first
@@ -49,7 +49,7 @@
 					bodyText: 'Failed to load package details.',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {}
 						}
@@ -67,7 +67,7 @@
 				bodyText: 'An error occurred while loading package details.',
 				buttons: [
 					{
-						text: 'ok',
+						text: 'continue',
 						main: true,
 						action: () => {}
 					}
@@ -84,11 +84,11 @@
 		const trimmedName = String(name || '').trim();
 		const trimmedShortDesc = String(short_description || '').trim();
 		const trimmedLongDesc = String(long_description || '').trim();
-		const trimmedPackageUrl = String(package_url || '').trim();
+		// const trimmedPackageUrl = String(download_url || '').trim(); // Commented out for versioning system
 		const trimmedEditCode = String(edit_code || '').trim();
 
 		// Check for empty fields
-		if (!trimmedName || !trimmedShortDesc || !trimmedLongDesc || !trimmedPackageUrl || !trimmedEditCode) {
+		if (!trimmedName || !trimmedShortDesc || !trimmedLongDesc || /* !trimmedPackageUrl || */ !trimmedEditCode) {
 			// Clear any existing dialogs first
 			killDialog();
 			// Add a small delay before creating the error dialog to ensure proper dialog management
@@ -101,7 +101,7 @@
 					bodyText: 'All fields are required',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {}
 						}
@@ -111,7 +111,9 @@
 			return;
 		}
 
-		// Validate package_url contains shortcut_name query parameter
+		// Validate download_url contains shortcut_name query parameter
+		// Commented out for versioning system - will be handled in version creation
+		/*
 		let url;
 		try {
 			url = new URL(trimmedPackageUrl);
@@ -128,7 +130,7 @@
 					bodyText: 'Invalid URL format. Please enter a valid URL.',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {}
 						}
@@ -149,10 +151,10 @@
 					type: 'small',
 					title: 'Validation Error',
 					icon: 'warn-red',
-					bodyText: 'Package URL must include ?shortcut_name= query parameter',
+					bodyText: 'Download URL must include ?shortcut_name= query parameter',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {}
 						}
@@ -161,6 +163,7 @@
 			}, 200);
 			return;
 		}
+		*/
 
 		updating = true;
 
@@ -169,10 +172,10 @@
 				method: 'PATCH',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					name: trimmedName,
+					name: formattedName,
 					short_description: trimmedShortDesc,
 					long_description: trimmedLongDesc,
-					package_url: trimmedPackageUrl,
+					// download_url: trimmedPackageUrl, // Commented out for versioning system
 					edit_code: trimmedEditCode
 				})
 			});
@@ -187,7 +190,7 @@
 					bodyText: 'Package updated successfully!',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {
 								// Small delay to allow dialog to close properly before navigation
@@ -212,7 +215,7 @@
 						bodyText: data.message || 'Failed to update package',
 						buttons: [
 							{
-								text: 'ok',
+								text: 'continue',
 								main: true,
 								action: () => {}
 							}
@@ -233,7 +236,7 @@
 					bodyText: 'Network error occurred while updating package',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {}
 						}
@@ -267,7 +270,7 @@
 					bodyText: 'Package deleted successfully!',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {
 								// Small delay to allow dialog to close properly before navigation
@@ -292,7 +295,7 @@
 						bodyText: data.message || 'Failed to delete package',
 						buttons: [
 							{
-								text: 'OK',
+								text: 'continue',
 								main: true,
 								action: () => {}
 							}
@@ -313,7 +316,7 @@
 					bodyText: 'Network error occurred while deleting package',
 					buttons: [
 						{
-							text: 'OK',
+							text: 'continue',
 							main: true,
 							action: () => {}
 						}
@@ -339,7 +342,7 @@
 					bodyText: 'Edit code is required to delete this package',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {}
 						}
@@ -397,10 +400,6 @@
 					<small class="small-text" style="color: var(--main-color);">
 						Name will be: <strong>{formattedName}</strong>
 					</small>
-				{:else}
-					<small class="small-text" style="color: var(--main-color);">
-						Must be lowercase letters, numbers, and hyphens only
-					</small>
 				{/if}
 				</div>
 				<div class="field">
@@ -411,10 +410,13 @@
 					<label for="long_description">Long Description</label>
 					<Input id="long_description" placeholder="Enter detailed description" bind:value={long_description} long={true} />
 				</div>
+				<!-- Download URL field commented out for versioning system -->
+				<!--
 				<div class="field">
-					<label for="package_url">Package URL</label>
-					<Input id="package_url" placeholder="Enter package URL with ?shortcut_name= parameter" bind:value={package_url} />
+					<label for="download_url">Download URL</label>
+					<Input id="download_url" placeholder="Enter Download URL with ?shortcut_name= parameter" bind:value={download_url} />
 				</div>
+				-->
 				<div class="field">
 					<label for="edit_code">Edit Code</label>
 					<Input id="edit_code" placeholder="Enter edit code to confirm changes" bind:value={edit_code} />

@@ -33,6 +33,7 @@
 			{@html html}
 		{/each}
 	{/if}
+	<slot></slot>
 </div>
 
 <style>

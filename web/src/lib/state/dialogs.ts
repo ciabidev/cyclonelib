@@ -21,7 +21,7 @@
  *   title: 'Hello World',
  *   bodyText: 'This is a dialog',
  *   buttons: [
- *     { text: 'OK', main: true, action: () => console.log('OK clicked') }
+ *     { text: 'continue', main: true, action: () => console.log('OK clicked') }
  *   ]
  * });
  * ```

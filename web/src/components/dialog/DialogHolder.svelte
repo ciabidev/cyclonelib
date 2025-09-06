@@ -74,9 +74,9 @@
     #dialog-holder {
         position: fixed;
         padding-top: env(safe-area-inset-top);
-        height: 100%;
-        width: 100%;
-        z-index: 99;
+        height: 100vh;
+        width: 100vw;
+        z-index: 100000;
 
         display: flex;
         justify-content: center;

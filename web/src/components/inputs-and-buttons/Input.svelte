@@ -1,6 +1,6 @@
 <script>
 	let isFocused = $state(false);
-	let { placeholder, value = $bindable(''), Icon = null, width = '100%', min_width='100%', id = null, type = 'text', long = false } = $props();
+	let { placeholder, value = $bindable(''), description = null, Icon = null, width = '100%', min_width='100%', id = null, type = 'text', long = false } = $props();
 </script>
 
 <div class="input-wrapper" class:focused={isFocused} style="--width: {width}; --min-width: {min_width}">
@@ -32,8 +32,11 @@
 			{type}
 		/>
 	{/if}
-</div>
 
+</div>
+	{#if description}
+		<div class="subtext">{description}</div>
+	{/if}
 <style>
 	.input-wrapper {
 		box-shadow: var(--input-box-shadow);

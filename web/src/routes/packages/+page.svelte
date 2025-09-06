@@ -5,7 +5,7 @@
 	import { createDialog, killDialog } from '$lib/state/dialogs';
 	// @ts-ignore
 	import SearchIcon from '~icons/streamline-flex/magnifying-glass-remix';
-	/** @type {Array<{name: string, short_description: string, long_description: string, package_url: string, created_at?: string}>} */
+	/** @type {Array<{name: string, short_description: string, long_description: string, download_url: string, created_at?: string}>} */
 	let packages = $state([]);
 	let searchQuery = $state('');
 	let loading = $state(true);
@@ -39,7 +39,7 @@
 					bodyText: 'Failed to load packages. Please try again later.',
 					buttons: [
 						{
-							text: 'ok',
+							text: 'continue',
 							main: true,
 							action: () => {}
 						}
@@ -62,7 +62,7 @@
 				bodyText: errorMessage,
 				buttons: [
 					{
-						text: 'ok',
+						text: 'continue',
 						main: true,
 						action: () => {}
 					}
@@ -82,7 +82,7 @@
 				pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				pkg.short_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				pkg.long_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				pkg.package_url.toLowerCase().includes(searchQuery.toLowerCase())
+				pkg.download_url.toLowerCase().includes(searchQuery.toLowerCase())
 			)
 	);
 </script>
@@ -106,7 +106,7 @@
 				<ProjectCard
 					name={pkg.name}
 					description={pkg.short_description}
-					url={pkg.package_url}
+					url={pkg.download_url}
 					urlshort="download package directly"
 					img=""
 					banner=""

@@ -7,7 +7,7 @@
 	--toast-bg: #ebc285;
 	--hover-bg: rgba(0, 0, 0, 0.06);
 	--nav-hover-bg: #ffffff33;
-	--gray: #adadad;
+	--gray: #75757e;
 	--card-bg: #00000015;
 	/* --main-color: #337e4c; */
 	--main-color: #4871e0;
@@ -43,7 +43,9 @@
 
 	--button-active: var(--text-color);
 	--button-active-hover: #2a2a2a;
-
+	
+	--switcher-padding: 3.5px;
+	
 	/* Dialog styles */
 	--dialog-backdrop: rgba(255, 255, 255, 0.5);
 	--dialog-padding: 18px;
@@ -124,10 +126,6 @@ a {
 	-webkit-touch-callout: none;
 }
 
-a:visited {
-	color: inherit;
-}
-
 svg,
 img {
 	pointer-events: none;
@@ -167,7 +165,7 @@ h6 {
 
 .subtext {
 	font-size: 12.5px;
-	font-weight: 500;
+	font-weight: 400;
 	color: var(--gray);
 	line-height: 1.4;
 	padding: 0 var(--padding);
@@ -181,6 +179,7 @@ h6 {
 body {
 	overflow-x: hidden;
 	overflow: hidden;
+	word-wrap:break-word;
 	width: 100vw;
 	height: 100%; /* Use small viewport height for better iOS Safari compatibility */
 	background-size: cover;
@@ -511,7 +510,7 @@ button,
 	background-color: var(--button-default);
 	color: var(--text-color);
 }
-.button--active {
+.button.active, button.active {
 	background-color: var(--button-active);
 	color: var(--bg-color);
 }
@@ -568,6 +567,11 @@ button,
 }
 
 /* Button States */
+
+.button.active:hover {
+	background-color: var(--button-active-hover);
+	color: var(--bg-color);
+}
 
 .button--default:hover {
 	background-color: var(--button-default-hover);

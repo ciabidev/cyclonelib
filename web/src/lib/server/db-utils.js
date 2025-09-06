@@ -51,11 +51,14 @@ export async function connectDB() {
  */
 export function serializeDoc(doc, exclude = []) {
   if (!doc) return null;
+  /** @type {Record<string, any>} */
   const serialized = {};
   for (const [key, value] of Object.entries(doc)) {
     if (exclude.includes(key)) continue;
     if (value instanceof ObjectId) {
       serialized[key] = value.toString();
+    } else if (value instanceof Date) {
+      serialized[key] = value.toISOString();
     } else if (typeof value === 'object' && value !== null) {
       if (Array.isArray(value)) {
         serialized[key] = value.map(v => typeof v === 'object' ? serializeDoc(v, exclude) : v);

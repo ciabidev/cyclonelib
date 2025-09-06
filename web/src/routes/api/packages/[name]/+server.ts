@@ -18,7 +18,7 @@ import type { RequestHandler } from './$types.js';
  *   "_id": "507f1f77bcf86cd799439011",
  *   "name": "my-package-name",
  *   "description": "A useful package",
- *   "package_url": "https://routinehub.co/shortcut/12345?shortcut_name=Simple%20Base64"
+ *   "download_url": "https://routinehub.co/shortcut/12345?shortcut_name=Simple%20Base64"
  * }
  *
  * @throws {404} If package not found
@@ -73,7 +73,7 @@ export const GET: RequestHandler = async ({ params }) => {
  * @body {string} [data.name] - New package name
  * @body {string} [data.short_description] - New short description
  * @body {string} [data.long_description] - New long description (supports markdown)
- * @body {string} [data.package_url] - New package URL
+ * @body {string} [data.download_url] - New Download URL
  *
  * @example
  * PATCH /api/packages/my-package-name
@@ -86,13 +86,13 @@ export const GET: RequestHandler = async ({ params }) => {
  *   "_id": "507f1f77bcf86cd799439011",
  *   "name": "updated-package-name",
  *   "description": "A useful package",
- *   "package_url": "https://routinehub.co/shortcut/12345?shortcut_name=Simple%20Base64"
+ *   "download_url": "https://routinehub.co/shortcut/12345?shortcut_name=Simple%20Base64"
  * }
  *
  * @throws {404} If package not found
  * @throws {403} If edit code does not match
  * @throws {409} If new name already exists
- * @throws {400} If package_url validation fails
+ * @throws {400} If download_url validation fails
  * @throws {500} If database connection fails
  */
 export const PATCH: RequestHandler = async ({ request, params }) => {
@@ -106,7 +106,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
   }
 
   try {
-    const { edit_code, name: newName, short_description, long_description, package_url } = await request.json();
+    const { edit_code, name: newName, short_description, long_description, download_url } = await request.json();
 
     const db = await connectDB();
     const existingPackage = await db.collection('packages').findOne({ name });
@@ -138,18 +138,18 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
     }
     if (short_description !== undefined) updateFields.short_description = short_description;
     if (long_description !== undefined) updateFields.long_description = long_description;
-    if (package_url !== undefined && package_url !== existingPackage.package_url) {
-      // Validate package_url contains shortcut_name query parameter
+    if (download_url !== undefined && download_url !== existingPackage.download_url) {
+      // Validate download_url contains shortcut_name query parameter
       try {
-        const url = new URL(package_url);
+        const url = new URL(download_url);
         const shortcutName = url.searchParams.get('shortcut_name');
         if (!shortcutName) {
-          throw error(400, { message: 'Package URL must include ?shortcut_name= query parameter' });
+          throw error(400, { message: 'Download URL must include ?shortcut_name= query parameter' });
         }
       } catch (urlError) {
-        throw error(400, { message: 'Invalid package URL format' });
+        throw error(400, { message: 'Invalid Download URL format' });
       }
-      updateFields.package_url = package_url;
+      updateFields.download_url = download_url;
     }
 
     if (Object.keys(updateFields).length === 0) {
