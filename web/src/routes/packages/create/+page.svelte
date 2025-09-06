@@ -141,9 +141,9 @@
 								edit_code = '';
 								// Small delay to allow dialog to close properly before navigation
 								setTimeout(() => {
-									// Redirect to version creation for the new package
-									goto(`/packages/${$formattedName}/versions/create`);
-								 console.log(${$formattedName})
+								  const slug = $formattedName;
+								  console.log('Redirecting to', slug);
+								  goto(`/packages/${slug}/versions/create`);
 								}, 200);
 							}
 						}
