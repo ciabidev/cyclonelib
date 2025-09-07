@@ -2,7 +2,10 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
-	import { createDialog, killDialog } from '$lib/state/dialogs';
+	import PageContainer from '$components/PageContainer.svelte';
+	import FormField from '$components/FormField.svelte';
+	import { showErrorDialog } from '$lib/utils/dialog-helpers';
+	import { createDialog } from '$lib/state/dialogs';
 
 	let version_number = $state('');
 	let patch_notes = $state('');
@@ -20,21 +23,7 @@
 
 		// Check for empty fields
 		if (!trimmedVersion || !trimmedNotes || !trimmedUrl) {
-			killDialog();
-			createDialog({
-				id: 'create-version-validation-error',
-				type: 'small',
-				title: 'Validation Error',
-				icon: 'warn-red',
-				bodyText: 'All fields are required',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showErrorDialog('create-version-validation-error', 'Validation Error', 'All fields are required');
 			return;
 		}
 
@@ -43,41 +32,13 @@
 		try {
 			url = new URL(trimmedUrl);
 		} catch (urlError) {
-			killDialog();
-			createDialog({
-				id: 'create-version-validation-error',
-				type: 'small',
-				title: 'Validation Error',
-				icon: 'warn-red',
-				bodyText: 'Invalid URL format. Please enter a valid URL.',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showErrorDialog('create-version-validation-error', 'Validation Error', 'Invalid URL format. Please enter a valid URL.');
 			return;
 		}
 
 		const shortcutName = url.searchParams.get('shortcut_name');
 		if (!shortcutName) {
-			killDialog();
-			createDialog({
-				id: 'create-version-validation-error',
-				type: 'small',
-				title: 'Validation Error',
-				icon: 'warn-red',
-				bodyText: 'Download URL must include ?shortcut_name= query parameter',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showErrorDialog('create-version-validation-error', 'Validation Error', 'Download URL must include ?shortcut_name= query parameter');
 			return;
 		}
 
@@ -95,152 +56,62 @@
 			});
 
 			if (response.ok) {
-				killDialog();
-				createDialog({
-					id: 'create-version-success',
-					type: 'small',
-					title: 'Success',
-					bodyText: 'Version created successfully!',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {
-								// Clear form
-								version_number = '';
-								patch_notes = '';
-								download_url = '';
-								// Redirect to package page
-								setTimeout(() => {
-									goto(`/packages/${packageName}`);
-								}, 200);
-							}
-						}
-					]
+				showErrorDialog('create-version-success', 'Success', 'Version created successfully!', () => {
+					// Clear form
+					version_number = '';
+					patch_notes = '';
+					download_url = '';
+					// Redirect to package page
+					setTimeout(() => {
+						goto(`/packages/${packageName}`);
+					}, 200);
 				});
 			} else {
 				const data = await response.json();
-				killDialog();
-				createDialog({
-					id: 'create-version-error',
-					type: 'small',
-					title: 'Error Creating Version',
-					icon: 'warn-red',
-					bodyText: data.message || 'Failed to create version',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
+				showErrorDialog('create-version-error', 'Error Creating Version', data.message || 'Failed to create version');
 			}
 		} catch (err) {
-			killDialog();
-			createDialog({
-				id: 'create-version-network-error',
-				type: 'small',
-				title: 'Network Error',
-				icon: 'warn-red',
-				bodyText: 'A network error occurred while creating the version',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showErrorDialog('create-version-network-error', 'Network Error', 'A network error occurred while creating the version');
 		} finally {
 			loading = false;
 		}
 	}
 </script>
 
-<div class="page-wrapper">
-	<div class="main">
-		<h1>Create Version for {packageName}</h1>
-		<p>Create the first version for your package.</p>
-		<a class="button button--default" href="/packages/{packageName}">Back to Package</a>
+<PageContainer containerId="create-version-page-container" pageId="create-version-page">
+	<h1>Create Version for {packageName}</h1>
+	<p>Create the first version for your package.</p>
+	<a class="button " href="/packages/{packageName}">Back to Package</a>
 
-		<div class="form">
-			<div class="field">
-				<label for="version_number">Version Number</label>
-				<Input id="version_number" placeholder="e.g., 1.0.0" bind:value={version_number} />
-			</div>
-			<div class="field">
-				<label for="patch_notes">Patch Notes</label>
-				<Input
-					id="patch_notes"
-					placeholder="Describe what's new in this version"
-					bind:value={patch_notes}
-					long={true}
-				/>
-			</div>
-			<div class="field">
-				<label for="download_url">Download URL</label>
-				<p class="long-text">
-					Must include <strong>?shortcut_name=</strong> query parameter (your exact Shortcut Name URL-Encoded).
-					Example: https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7<strong
-						>?shortcut_name=Simple%20Base64</strong
-					>
-				</p>
-				<Input
-					id="download_url"
-					placeholder="Enter Download URL with ?shortcut_name= parameter"
-					bind:value={download_url}
-				/>
-			</div>
-			<button class="button button--primary" onclick={submit}
-				>{loading ? 'Creating...' : 'Create Version'}</button
-			>
-		</div>
+	<div class="form">
+		<FormField label="Version Number" id="version_number">
+			<Input id="version_number" placeholder="e.g., 1.0.0" bind:value={version_number} />
+		</FormField>
+		<FormField label="Patch Notes" id="patch_notes">
+			<Input
+				id="patch_notes"
+				placeholder="Describe what's new in this version"
+				bind:value={patch_notes}
+				long={true}
+			/>
+		</FormField>
+		<FormField label="Download URL" id="download_url" hint="Must include ?shortcut_name= query parameter (your exact Shortcut Name URL-Encoded). Example: https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7?shortcut_name=Simple%20Base64">
+			<Input
+				id="download_url"
+				placeholder="Enter Download URL with ?shortcut_name= parameter"
+				bind:value={download_url}
+			/>
+		</FormField>
+		<button class="button button--primary" onclick={submit}
+			>{loading ? 'Creating...' : 'Create Version'}</button
+		>
 	</div>
-</div>
+</PageContainer>
 
 <style>
-	.page-wrapper {
-		width: 100%;
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		flex-wrap: wrap;
-		min-height: 100%;
-		overscroll-behavior: none;
-		padding: calc(var(--padding) + 0.9375rem);
-	}
-
-	.main {
-		width: 100%;
-		max-width: 700px;
-		gap: 1rem;
-		display: flex;
-		flex-direction: column;
-	}
-
 	.form {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-	}
-
-	.field {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-
-	label {
-		font-weight: bold;
-	}
-
-	@media only screen and (max-height: 25rem) {
-		.page-wrapper {
-			justify-content: center;
-			align-items: center;
-			flex-wrap: wrap;
-			height: max-content;
-		}
 	}
 </style>

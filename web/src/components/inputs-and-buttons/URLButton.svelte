@@ -20,6 +20,7 @@
 
 <style>
 	.url-text {
+		line-height: var(--readable-line-height);
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -49,5 +50,27 @@
 		width: 3rem;
 		height: 3rem;
 		border-radius: 12px;
+	}
+
+	a.url-button {
+		user-select: none;
+		-webkit-user-select: none; /* Safari / iOS */
+		-ms-user-select: none;
+		flex-shrink: 0;
+		display: flex;
+		min-width: fit-content;
+		flex-basis: content;
+		flex-direction: row;
+		align-items: center;
+		gap: 10px;
+		position: relative;
+		border-radius: var(--border-radius);
+		padding: 7px 9px;
+		width: max-content;
+		text-decoration: none;
+	}
+
+	a.url-button:hover {
+		background: var(--button-default-hover);
 	}
 </style>

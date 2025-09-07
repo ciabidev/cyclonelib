@@ -3,7 +3,10 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
-	import { createDialog, killDialog, closeDialogAnimated } from '$lib/state/dialogs';
+	import PageContainer from '$components/PageContainer.svelte';
+	import FormField from '$components/FormField.svelte';
+	import { showErrorDialog } from '$lib/utils/dialog-helpers';
+	import { createDialog, closeDialogAnimated } from '$lib/state/dialogs';
 
 	/** @type {{name: string, short_description?: string, long_description?: string, download_url: string} | null} */
 	let packageData = $state(null);
@@ -39,40 +42,10 @@
 					// download_url = packageData.download_url; // Commented out for versioning system
 				}
 			} else {
-				// Clear any existing dialogs first
-				killDialog();
-				createDialog({
-					id: 'load-package-error',
-					type: 'small',
-					title: 'Error Loading Package',
-					icon: 'warn-red',
-					bodyText: 'Failed to load package details.',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
+				showErrorDialog('load-package-error', 'Error Loading Package', 'Failed to load package details.');
 			}
 		} catch (err) {
-			// Clear any existing dialogs first
-			killDialog();
-			createDialog({
-				id: 'load-package-network-error',
-				type: 'small',
-				title: 'Error Loading Package',
-				icon: 'warn-red',
-				bodyText: 'An error occurred while loading package details.',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showErrorDialog('load-package-network-error', 'Error Loading Package', 'An error occurred while loading package details.');
 			console.error('Error fetching package:', err);
 		} finally {
 			loading = false;
@@ -89,25 +62,7 @@
 
 		// Check for empty fields
 		if (!trimmedName || !trimmedShortDesc || !trimmedLongDesc || /* !trimmedPackageUrl || */ !trimmedEditCode) {
-			// Clear any existing dialogs first
-			killDialog();
-			// Add a small delay before creating the error dialog to ensure proper dialog management
-			setTimeout(() => {
-				createDialog({
-					id: 'update-package-validation-error',
-					type: 'small',
-					title: 'Validation Error',
-					icon: 'warn-red',
-					bodyText: 'All fields are required',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
-			}, 200);
+			showErrorDialog('update-package-validation-error', 'Validation Error', 'All fields are required');
 			return;
 		}
 
@@ -181,68 +136,17 @@
 			});
 
 			if (response.ok) {
-				// Clear any existing dialogs first
-				killDialog();
-				createDialog({
-					id: 'update-package-success',
-					type: 'small',
-					title: 'Success',
-					bodyText: 'Package updated successfully!',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {
-								// Small delay to allow dialog to close properly before navigation
-								setTimeout(() => {
-									goto(`/packages/${nameParam}`);
-								}, 200);
-							}
-						}
-					]
+				showErrorDialog('update-package-success', 'Success', 'Package updated successfully!', () => {
+					setTimeout(() => {
+						goto(`/packages/${nameParam}`);
+					}, 200);
 				});
 			} else {
 				const data = await response.json();
-				// Clear any existing dialogs first
-				killDialog();
-				// Add a small delay before creating the error dialog to ensure proper dialog management
-				setTimeout(() => {
-					createDialog({
-						id: 'update-package-error',
-						type: 'small',
-						title: 'Error Updating Package',
-						icon: 'warn-red',
-						bodyText: data.message || 'Failed to update package',
-						buttons: [
-							{
-								text: 'continue',
-								main: true,
-								action: () => {}
-							}
-						]
-					});
-				}, 200);
+				showErrorDialog('update-package-error', 'Error Updating Package', data.message || 'Failed to update package');
 			}
 		} catch (err) {
-			// Clear any existing dialogs first
-			killDialog();
-			// Add a small delay before creating the error dialog to ensure proper dialog management
-			setTimeout(() => {
-				createDialog({
-					id: 'update-package-network-error',
-					type: 'small',
-					title: 'Network Error',
-					icon: 'warn-red',
-					bodyText: 'Network error occurred while updating package',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
-			}, 200);
+			showErrorDialog('update-package-network-error', 'Network Error', 'Network error occurred while updating package');
 		} finally {
 			updating = false;
 		}
@@ -261,68 +165,19 @@
 			});
 
 			if (response.ok) {
-				// Clear any existing dialogs first
-				killDialog();
-				createDialog({
-					id: 'delete-package-success',
-					type: 'small',
-					title: 'Success',
-					bodyText: 'Package deleted successfully!',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {
-								// Small delay to allow dialog to close properly before navigation
-								setTimeout(() => {
-									goto('/packages');
-								}, 200);
-							}
-						}
-					]
+				showErrorDialog('delete-package-success', 'Success', 'Package deleted successfully!', () => {
+					setTimeout(() => {
+						goto('/packages');
+					}, 200);
 				});
 			} else {
 				const data = await response.json();
-				// Close the confirmation dialog with animation
 				closeDialogAnimated('delete-package-dialog');
-				// Add a small delay before creating the error dialog to ensure proper dialog management
-				setTimeout(() => {
-					createDialog({
-						id: 'delete-package-error',
-						type: 'small',
-						title: 'Error Deleting Package',
-						icon: 'warn-red',
-						bodyText: data.message || 'Failed to delete package',
-						buttons: [
-							{
-								text: 'continue',
-								main: true,
-								action: () => {}
-							}
-						]
-					});
-				}, 200);
+				showErrorDialog('delete-package-error', 'Error Deleting Package', data.message || 'Failed to delete package');
 			}
 		} catch (err) {
-			// Close the confirmation dialog with animation
 			closeDialogAnimated('delete-package-dialog');
-			// Add a small delay before creating the error dialog to ensure proper dialog management
-			setTimeout(() => {
-				createDialog({
-					id: 'delete-package-network-error',
-					type: 'small',
-					title: 'Network Error',
-					icon: 'warn-red',
-					bodyText: 'Network error occurred while deleting package',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
-			}, 200);
+			showErrorDialog('delete-package-network-error', 'Network Error', 'Network error occurred while deleting package');
 		} finally {
 			deleting = false;
 		}
@@ -330,30 +185,10 @@
 
 	function showDeleteDialog() {
 		if (!edit_code) {
-			// Clear any existing dialogs first
-			killDialog();
-			// Add a small delay before creating the error dialog to ensure proper dialog management
-			setTimeout(() => {
-				createDialog({
-					id: 'delete-package-edit-code-error',
-					type: 'small',
-					title: 'Edit Code Required',
-					icon: 'warn-red',
-					bodyText: 'Edit code is required to delete this package',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
-			}, 200);
+			showErrorDialog('delete-package-edit-code-error', 'Edit Code Required', 'Edit code is required to delete this package');
 			return;
 		}
 
-		// Clear any existing dialogs first
-		killDialog();
 		createDialog({
 			id: 'delete-package-dialog',
 			type: 'small',
@@ -383,104 +218,52 @@
 	}
 </script>
 
-<div class="page-wrapper">
-	<div class="main">
-		<h1>Edit Package</h1>
-		<p>Modify the package details below.</p>
-		<a class="button button--default" href="/packages/{nameParam}">Back to Package</a>
+<PageContainer containerId="edit-package-page-container" pageId="edit-package-page">
+	<h1>Edit Package</h1>
+	<p>Modify the package details below.</p>
+	<a class="button " href="/packages/{nameParam}">Back to Package</a>
 
-		{#if loading}
-			<p>Loading package details...</p>
-		{:else if packageData}
-			<div class="form">
-				<div class="field">
-					<label for="name">Package Name</label>
-					<Input id="name" placeholder="Enter package name" bind:value={name} />
+	{#if loading}
+		<p>Loading package details...</p>
+	{:else if packageData}
+		<div class="form">
+			<FormField label="Package Name" id="name">
+				<Input id="name" placeholder="Enter package name" bind:value={name} />
 				{#if formattedName}
 					<small class="small-text" style="color: var(--main-color);">
 						Name will be: <strong>{formattedName}</strong>
 					</small>
 				{/if}
-				</div>
-				<div class="field">
-					<label for="short_description">Short Description</label>
-					<Input id="short_description" placeholder="Enter short description (brief summary)" bind:value={short_description} />
-				</div>
-				<div class="field">
-					<label for="long_description">Long Description</label>
-					<Input id="long_description" placeholder="Enter detailed description" bind:value={long_description} long={true} />
-				</div>
-				<!-- Download URL field commented out for versioning system -->
-				<!--
-				<div class="field">
-					<label for="download_url">Download URL</label>
-					<Input id="download_url" placeholder="Enter Download URL with ?shortcut_name= parameter" bind:value={download_url} />
-				</div>
-				-->
-				<div class="field">
-					<label for="edit_code">Edit Code</label>
-					<Input id="edit_code" placeholder="Enter edit code to confirm changes" bind:value={edit_code} />
-				</div>
-				<div class="buttons">
-					<button class="button button--primary" onclick={updatePackage}>{updating ? 'Updating...' : 'Update Package'}</button>
-					<button class="button button--danger" onclick={deletePackage}>{deleting ? 'Deleting...' : 'Delete Package'}</button>
-				</div>
+			</FormField>
+			<FormField label="Short Description" id="short_description">
+				<Input id="short_description" placeholder="Enter short description (brief summary)" bind:value={short_description} />
+			</FormField>
+			<FormField label="Long Description" id="long_description">
+				<Input id="long_description" placeholder="Enter detailed description" bind:value={long_description} long={true} />
+			</FormField>
+			<!-- Download URL field commented out for versioning system -->
+			<!--
+			<FormField label="Download URL" id="download_url">
+				<Input id="download_url" placeholder="Enter Download URL with ?shortcut_name= parameter" bind:value={download_url} />
+			</FormField>
+			-->
+			<FormField label="Edit Code" id="edit_code">
+				<Input id="edit_code" placeholder="Enter edit code to confirm changes" bind:value={edit_code} />
+			</FormField>
+			<div class="actions">
+				<button class="button button--primary" onclick={updatePackage}>{updating ? 'Updating...' : 'Update Package'}</button>
+				<button class="button button--danger" onclick={deletePackage}>{deleting ? 'Deleting...' : 'Delete Package'}</button>
 			</div>
-		{:else}
-			<p>Package not found.</p>
-		{/if}
-	</div>
-</div>
+		</div>
+	{:else}
+		<p>Package not found.</p>
+	{/if}
+</PageContainer>
 
 <style>
-	.page-wrapper {
-		width: 100%;
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		flex-wrap: wrap;
-		min-height: 100%;
-		overscroll-behavior: none;
-		padding: calc(var(--padding) + 0.9375rem);
-	}
-
-	.main {
-		width: 100%;
-		max-width: 700px;
-		gap: 1rem;
-		display: flex;
-		flex-direction: column;
-	}
-
 	.form {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-	}
-
-	.field {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-
-	label {
-		font-weight: bold;
-	}
-
-	.buttons {
-		display: flex;
-		gap: 15px;
-		flex-wrap: wrap;
-	}
-
-
-	@media only screen and (max-height: 25rem) {
-		.page-wrapper {
-			justify-content: center;
-			align-items: center;
-			flex-wrap: wrap;
-			height: max-content;
-		}
 	}
 </style>

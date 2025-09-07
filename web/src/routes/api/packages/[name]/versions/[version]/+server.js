@@ -1,5 +1,5 @@
 import { json, error } from '@sveltejs/kit';
-import { connectDB, serializeDoc } from '$lib/server/db-utils.js';
+import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
 
 export async function GET({ params }) {
 	const mongoUri = process.env.MONGO_URI;
@@ -49,7 +49,11 @@ export async function PATCH({ request, params }) {
 	}
 
 	try {
-		const { version_number, patch_notes, download_url } = await request.json();
+		const { version_number, patch_notes, download_url, edit_code } = await request.json();
+
+		if (!edit_code || !edit_code.trim()) {
+			throw error(400, { message: 'Edit code is required to update version' });
+		}
 
 		// Validate download_url contains shortcut_name query parameter
 		let url;
@@ -65,6 +69,16 @@ export async function PATCH({ request, params }) {
 		}
 
 		const db = await connectDB();
+
+		// Check if package exists and validate edit code
+		const packageDoc = await db.collection('packages').findOne({ name });
+		if (!packageDoc) {
+			throw error(404, { message: 'Package not found' });
+		}
+
+		if (packageDoc.edit_code !== hashEditCode(edit_code.trim())) {
+			throw error(403, { message: 'Edit code does not match' });
+		}
 
 		// Check if version exists
 		const existingVersion = await db.collection('versions').findOne({

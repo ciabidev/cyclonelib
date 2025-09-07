@@ -4,13 +4,14 @@
 	import Markdown from '$components/Markdown.svelte';
 	import ProjectCard from '$components/ProjectCard.svelte';
 	import Switcher from '$components/inputs-and-buttons/Switcher.svelte';
-	import { createDialog, killDialog } from '$lib/state/dialogs';
+	import PageContainer from '$components/PageContainer.svelte';
+	import { showErrorDialog, showNetworkErrorDialog } from '$lib/utils/dialog-helpers';
 
 	/** @type {{name: string, short_description?: string, long_description?: string, download_url: string} | null} */
 	let packageData = $state(null);
 	let versions = $state([]);
 	let loading = $state(true);
-	let activeTab = $state('versions');
+	let activeTab = $state('main-info');
 
 	onMount(async () => {
 		try {
@@ -18,22 +19,7 @@
 			if (response.ok) {
 				packageData = await response.json();
 			} else {
-				// Clear any existing dialogs first
-				killDialog();
-				createDialog({
-					id: 'load-package-details-error',
-					type: 'small',
-					title: 'Error Loading Package',
-					icon: 'warn-red',
-					bodyText: 'Failed to load package details.',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
+				showErrorDialog('load-package-details-error', 'Error Loading Package', 'Failed to load package details.');
 			}
 
 			// Load versions
@@ -42,22 +28,7 @@
 				versions = await versionsResponse.json();
 			}
 		} catch (err) {
-			// Clear any existing dialogs first
-			killDialog();
-			createDialog({
-				id: 'load-package-details-network-error',
-				type: 'small',
-				title: 'Error Loading Package',
-				icon: 'warn-red',
-				bodyText: 'An error occurred while loading package details.',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showNetworkErrorDialog('load-package-details-network-error', 'loading package details');
 			console.error('Error fetching package:', err);
 		} finally {
 			loading = false;
@@ -65,29 +36,29 @@
 	});
 </script>
 
-<div class="package-details-wrapper">
+<PageContainer containerId="package-details-page-container" pageId="package-details-page" maxWidth="800px">
 	{#if loading}
 		<p>Loading package details...</p>
 	{:else if packageData}
-		<a class="button button--default" href="/packages">Back to Packages</a>
+		<a class="button " href="/packages">Back to Packages</a>
 		<div class="package-header">
 			<h1>{packageData.name}</h1>
 		</div>
 
 		<Switcher full={true}>
 			<button
-				class="button button--secondary"
-				class:active={activeTab === 'versions'}
-				onclick={() => activeTab = 'versions'}
-			>
-				Versions
-			</button>
-			<button
-				class="button button--secondary"
+				class="button "
 				class:active={activeTab === 'main-info'}
 				onclick={() => activeTab = 'main-info'}
 			>
 				Main Info
+			</button>
+			<button
+				class="button "
+				class:active={activeTab === 'versions'}
+				onclick={() => activeTab = 'versions'}
+			>
+				Versions
 			</button>
 		</Switcher>
 
@@ -96,7 +67,9 @@
 				<div class="versions-tab">
 					<div class="versions-header">
 						<h2>Versions</h2>
-						<a class="button button--primary" href="/packages/{packageData.name}/versions/create">Create Version</a>
+						<div class="actions">
+							<a class="button button--primary" href="/packages/{packageData.name}/versions/create">Create Version</a>
+						</div>
 					</div>
 					<div class="versions-list">
 						{#each versions as version}
@@ -106,10 +79,10 @@
 								url={version.download_url}
 								urlshort={version.shortcut_name}
 							>
-						<div class="version-options">
-							<a class="button button--default" href="/packages/{packageData.name}/versions/{encodeURIComponent(version.version_number)}/edit">Edit Version</a>
-							<a class="button button--primary" href={version.download_url}>Download Shortcut</a>
-						</div>
+							<div class="actions">
+								<a class="button " href="/packages/{packageData.name}/versions/{encodeURIComponent(version.version_number)}/edit">Edit Version</a>
+								<a class="button button--primary" href={version.download_url}>Download Shortcut</a>
+							</div>
 						</ProjectCard>
 						{:else}
 							<p>No versions found. <a href="/packages/{packageData.name}/versions/create">Create the first version</a></p>
@@ -140,20 +113,9 @@
 	{:else}
 		<p>Package not found.</p>
 	{/if}
-</div>
+</PageContainer>
 
 <style>
-	.package-details-wrapper {
-		width: 100%;
-		max-width: 800px;
-		margin: 0 auto;
-		padding: calc(var(--padding) + 15px);
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
-		min-height: 100%;
-	}
-
 	.package-header {
 		display: flex;
 		flex-direction: column;
@@ -166,20 +128,10 @@
 		font-weight: 600;
 	}
 
-	.version-options {
-		display: flex;
-		gap: 15px;
-		flex-direction: row;
-	}
 	.package-content {
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
-	}
-	.actions {
-		display: flex;
-		gap: 15px;
-		flex-wrap: wrap;
 	}
 
 	.tab-content {
@@ -205,5 +157,4 @@
 		flex-direction: column;
 		gap: 15px;
 	}
-
 </style>

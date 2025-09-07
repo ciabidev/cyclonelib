@@ -23,23 +23,23 @@
 	--color-warning: #ffd63a;
 	--color-error: #f7374f;
 
-	--dark-main-color: #4368cc;
-	--dark-color-allgood: #36b661; /* TODO: Fix these dark variants */
-	--dark-color-error: #da2f43;
+	--dark-main-color: #3c5ebb;
+	--dark-color-allgood: #36b661;
+	--dark-color-error: #d32f42;
 	--dark-color-warning: #dfbc32;
 
 	--focus-ring: solid 2px var(---main-color);
 	--focus-ring-offset: -2px;
 
-	--button-default: #f4f4f4;
-	--button-default-hover: #ededed;
-	--button-press: #e8e8e8;
-	--button-stroke: rgba(0, 0, 0, 0.06);
-	--button-box-shadow: 0 0 0 1px var(--button-stroke) inset;
+	--shadow-main: rgba(0, 0, 0, 0.05) 0px 0px 10px 0px;
 
-	--button-elevated: #e3e3e3;
-	--button-elevated-hover: #dadada;
-	--button-elevated-press: #d3d3d3;
+	--button-default: #f4f4f4;
+	--button-default-hover: #e7e7e7;
+	--button-press: #dbdbdb;
+	--button-stroke: rgba(0, 0, 0, 0.06);
+	/* old button-box-shadow: 0 0 0 1px var(--button-stroke) inset; */
+    --button-box-shadow: var(--shadow-main),  0px 0px 0px 1px var(--button-stroke) inset;
+
 
 	--button-active: var(--text-color);
 	--button-active-hover: #2a2a2a;
@@ -81,6 +81,7 @@
 	--grid-bg-size: 15px 15px;
 	--border-radius: 12px;
 	font-size: 15px;
+	--readable-line-height: 1.8;
 }
 
 @keyframes fadeIn {
@@ -186,7 +187,6 @@ body {
 	font-family:
 		Fira Mono,
 		monospace;
-	cursor: default;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	margin: 0;
@@ -209,7 +209,6 @@ body {
 
 h1,
 h2 {
-	font-weight: 500;
 	padding: 6px 0;
 	line-height: 1.3;
 }
@@ -391,7 +390,7 @@ img {
 .long-text,
 .long-text *:not(h1, h2, h3, h4, h5, h6) {
 	font-size: 15px;
-	line-height: 1.8;
+	line-height: var(--readable-line-height);
 	font-family: Fira Mono, monospace;
 	user-select: text;
 	-webkit-user-select: text;
@@ -473,7 +472,7 @@ tr th:first-child {
 
 /*
 BUTTON SYSTEM:
-- .button--default: Base button styles
+- .: Base button styles
 - .button--primary: Main action buttons
 - .button--danger: Destructive actions
 - .button--success: Success/confirmation actions
@@ -485,6 +484,17 @@ BUTTON SYSTEM:
 */
 
 /* Global Button Styles (from cobalt-main) */
+.actions {
+	display: flex;
+	gap: 15px;
+	flex-direction: row;
+}
+@media only screen and (max-width: 600px) {
+	.actions {
+		flex-direction: column;
+		gap: 10px;
+	}
+}
 button,
 .button {
 	display: flex;
@@ -496,6 +506,7 @@ button,
 	border: none;
 	border-radius: var(--border-radius);
 	font-size: 14.5px;
+	text-align: center;
 	cursor: pointer;
 	font-weight: 500;
 	transition: all 0.2s ease-in-out;
@@ -504,14 +515,29 @@ button,
 	-ms-transition: all 0.2s ease-in-out;
 	-o-transition: all 0.2s ease-in-out;
 	box-shadow: var(--button-box-shadow);
-}
-
-.button--default {
 	background-color: var(--button-default);
 	color: var(--text-color);
 }
+
+.button:hover, button:hover {
+	background-color: var(--button-default-hover);
+}
+
 .button.active, button.active {
 	background-color: var(--button-active);
+	color: var(--bg-color);
+}
+
+button:active, .button:active {
+	background-color: var(--button-press);
+}
+
+button:disabled, .button:disabled {
+	opacity: 0.6;
+	cursor: default;
+}
+.button.active:hover {
+	background-color: var(--button-active-hover);
 	color: var(--bg-color);
 }
 
@@ -543,17 +569,6 @@ button,
 	text-decoration: underline;
 }
 
-.button--url {
-	background: transparent;
-	box-shadow: none;
-	color: var(--text-color);
-	padding: 7px 9px;
-	min-width: fit-content;
-	flex-basis: content;
-	flex-direction: row;
-	gap: 10px;
-	text-decoration: none;
-}
 
 /* Button Sizes */
 .button--small {
@@ -568,14 +583,6 @@ button,
 
 /* Button States */
 
-.button.active:hover {
-	background-color: var(--button-active-hover);
-	color: var(--bg-color);
-}
-
-.button--default:hover {
-	background-color: var(--button-default-hover);
-}
 .button--primary:hover {
 	background: var(--dark-main-color);
 }
@@ -611,51 +618,9 @@ button,
 	background-color: var(--button-elevated-press);
 }
 
-.button--default:active {
-	background-color: var(--button-press);
-}
-
-.button--default:disabled,
-button:disabled {
-	opacity: 0.6;
-	cursor: default;
-}
-
-/* Prevent link brightness filter from affecting button-like links */
-a.button:hover {
-	filter: none;
-	-webkit-filter: none;
-}
-
-a:not(:has(img)):not(.button):hover {
+a:not(:has(img)):not(.button):not(.url-button):hover {
 	filter: brightness(1.25);
 	-webkit-filter: brightness(1.25);
-}
-
-a.url-button {
-	user-select: none;
-	-webkit-user-select: none; /* Safari / iOS */
-	-ms-user-select: none;
-	flex-shrink: 0;
-	display: flex;
-	min-width: fit-content;
-	flex-basis: content;
-	flex-direction: row;
-	align-items: center;
-	gap: 10px;
-	position: relative;
-	border-radius: var(--border-radius);
-	padding: 7px 9px;
-	width: max-content;
-	text-decoration: none;
-}
-
-a.url-button:hover {
-	background: var(--button-hover);
-}
-
-:focus-visible {
-	outline: none;
 }
 
 button:focus-visible,
@@ -665,119 +630,3 @@ select:focus-visible {
 	outline-offset: var(--focus-ring-offset);
 }
 
-/* Dialog System Styles */
-:global(dialog) {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	background: none;
-	max-height: 100%;
-	max-width: 100%;
-	height: 100%;
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	border: none;
-	pointer-events: all;
-	inset-inline-start: unset;
-	inset-inline-end: unset;
-	overflow: hidden;
-}
-
-:global(dialog:modal) {
-	inset-block-start: 0;
-	inset-block-end: 0;
-}
-
-:global(dialog:modal::backdrop) {
-	display: none;
-}
-
-:global(.dialog-body) {
-	--dialog-padding: 18px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	background: var(--popup-bg);
-	box-shadow: 0 0 0 2px var(--popup-stroke) inset;
-	border-radius: 29px;
-	filter: drop-shadow(0 0 40px var(--button));
-	padding: var(--dialog-padding);
-	position: relative;
-	will-change: transform, opacity, filter;
-}
-
-:global(dialog.open .dialog-body) {
-	animation: modal-in 0.35s;
-	animation-delay: 0.06s;
-	animation-fill-mode: backwards;
-}
-
-:global(dialog.closing .dialog-body) {
-	animation: modal-out 0.15s;
-	opacity: 0;
-}
-
-@media screen and (max-width: 535px) {
-	:global(dialog) {
-		justify-content: flex-end;
-	}
-
-	:global(dialog.open .dialog-body) {
-		animation: modal-in-mobile 0.4s;
-	}
-
-	:global(dialog .dialog-body) {
-		margin-bottom: calc(
-			var(--padding) + calc(env(safe-area-inset-bottom) - 15px * sign(env(safe-area-inset-bottom)))
-		);
-		box-shadow: 0 0 0 2px var(--popup-stroke) inset;
-	}
-}
-
-@keyframes modal-in {
-	from {
-		transform: scale(0.8);
-		opacity: 0;
-	}
-	35% {
-		opacity: 1;
-	}
-	50% {
-		transform: scale(1.01);
-	}
-	100% {
-		transform: scale(1);
-	}
-}
-
-@keyframes modal-out {
-	from {
-		opacity: 1;
-	}
-	to {
-		opacity: 0;
-		transform: scale(0.9);
-		visibility: hidden;
-	}
-}
-
-@keyframes modal-in-mobile {
-	0% {
-		transform: translateY(0);
-		opacity: 0;
-	}
-	1% {
-		transform: translateY(200px);
-	}
-	35% {
-		opacity: 1;
-	}
-	50% {
-		transform: translateY(-5px);
-	}
-	100% {
-		transform: translateY(0px);
-	}
-}

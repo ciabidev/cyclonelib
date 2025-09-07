@@ -20,7 +20,9 @@
 			<div class="banner-container" style="--banner-url: url({banner})"></div>
 		{/if}
 		<div class="card-content">
+			{#if url}
 			<URLButton {url} {urlshort} {name} {img} />
+			{/if}
 			<div class="card-text">
 				<h2 class="project-name">{name}</h2>
 				<div class="small-text tiny">{tiny}</div>
@@ -50,6 +52,7 @@
 		box-sizing: border-box;
 		position: relative;
 		align-items: flex-start;
+		min-width: fit-content;
 		transition: all 0.3s var(--actions-and-stuff-ahh-transition);
 		box-shadow:
 			var(--card-box-shadow);
@@ -62,7 +65,6 @@
 		padding-bottom: 12px;
 		display: flex;
 		flex-direction: column;
-		gap: 12px;
 		flex: 1;
 	}
 
@@ -73,7 +75,6 @@
 		flex-direction: column;
 		text-decoration: none;
 		position: relative;
-		gap: 0.5rem;
 	}
 
 	.banner-container {
@@ -89,10 +90,6 @@
 		background-size: cover;
 	}
 
-	.project-name {
-		display: flex;
-		font-weight: 600;
-	}
 	.tiny {
 		font-size: 0.8rem;
 	}

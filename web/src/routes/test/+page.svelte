@@ -20,7 +20,7 @@
 			<p class="long-text">Test page for the Loaf-web layout</p>
 		</section>
 		<section id="test-dialog">
-			<button class="button button--default" onclick={() => createDialog({
+			<button class="button " onclick={() => createDialog({
 				id: 'test-dialog',
 				type: 'small',
 				title: 'Test Dialog',
@@ -41,14 +41,14 @@
 		</section>
 		<section id="test-switcher--defualt">
 		<Switcher>
-			<button class="button button--default" class:active={active1 === 0} onclick={() => active1 = 0}>six</button>
-			<button class="button button--default" class:active={active1 === 1} onclick={() => active1 = 1}>seven</button>
+			<button class="button " class:active={active1 === 0} onclick={() => active1 = 0}>six</button>
+			<button class="button " class:active={active1 === 1} onclick={() => active1 = 1}>seven</button>
 		</Switcher>
 		</section>
 		<section id="test-switcher--big">
 		<Switcher description="This is a description on a big switcher!" full>
-			<button class="button button--default" class:active={active2 === 0} onclick={() => active2 = 0}>eight</button>
-			<button class="button button--default" class:active={active2 === 1} onclick={() => active2 = 1}>nine</button>
+			<button class="button " class:active={active2 === 0} onclick={() => active2 = 0}>eight</button>
+			<button class="button " class:active={active2 === 1} onclick={() => active2 = 1}>nine</button>
 		</Switcher>
 		</section>
 		<section id="test-input">

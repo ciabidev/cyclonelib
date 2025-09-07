@@ -8,6 +8,7 @@
 </svelte:head>
 
 <script lang="ts">
+  import "../app.css";
   import type { LayoutData } from "./$types";
   import LoveNote from "$components/LoveNote.svelte";
   import Navbar from "$components/navbar/Navbar.svelte";
@@ -23,6 +24,8 @@
   <DialogHolder />
   <div class="loaf"> <!-- includes main content of the page only -->
     {@render children()}
+    
   </div>
+
 
 

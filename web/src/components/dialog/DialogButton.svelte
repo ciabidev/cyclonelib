@@ -72,7 +72,7 @@
     </a>
 {:else}
     <button
-        class="button button--active {button.color === 'red' ? 'button--danger' : ''}"
+        class="button  {button.color === 'red' ? 'button--danger' : ''}"
         class:active={button.main}
         {disabled}
         on:click={async () => {

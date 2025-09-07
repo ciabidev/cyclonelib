@@ -3,11 +3,14 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
-	import { createDialog, killDialog } from '$lib/state/dialogs';
+	import PageContainer from '$components/PageContainer.svelte';
+	import FormField from '$components/FormField.svelte';
+	import { showErrorDialog } from '$lib/utils/dialog-helpers';
 
 	let version_number = $state('');
 	let patch_notes = $state('');
 	let download_url = $state('');
+	let edit_code = $state('');
 	let loading = $state(true);
 	let updating = $state(false);
 
@@ -24,38 +27,10 @@
 				patch_notes = versionData.patch_notes;
 				download_url = versionData.download_url;
 			} else {
-				killDialog();
-				createDialog({
-					id: 'load-version-error',
-					type: 'small',
-					title: 'Error Loading Version',
-					icon: 'warn-red',
-					bodyText: 'Failed to load version details.',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
+				showErrorDialog('load-version-error', 'Error Loading Version', 'Failed to load version details.');
 			}
 		} catch (err) {
-			killDialog();
-			createDialog({
-				id: 'load-version-network-error',
-				type: 'small',
-				title: 'Error Loading Version',
-				icon: 'warn-red',
-				bodyText: 'An error occurred while loading version details.',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showErrorDialog('load-version-network-error', 'Error Loading Version', 'An error occurred while loading version details.');
 			console.error('Error fetching version:', err);
 		} finally {
 			loading = false;
@@ -66,23 +41,10 @@
 		const trimmedVersion = String(version_number || '').trim();
 		const trimmedNotes = String(patch_notes || '').trim();
 		const trimmedUrl = String(download_url || '').trim();
+		const trimmedEditCode = String(edit_code || '').trim();
 
-		if (!trimmedVersion || !trimmedNotes || !trimmedUrl) {
-			killDialog();
-			createDialog({
-				id: 'update-version-validation-error',
-				type: 'small',
-				title: 'Validation Error',
-				icon: 'warn-red',
-				bodyText: 'All fields are required',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+		if (!trimmedVersion || !trimmedNotes || !trimmedUrl || !trimmedEditCode) {
+			showErrorDialog('update-version-validation-error', 'Validation Error', 'All fields are required');
 			return;
 		}
 
@@ -90,41 +52,13 @@
 		try {
 			url = new URL(trimmedUrl);
 		} catch (urlError) {
-			killDialog();
-			createDialog({
-				id: 'update-version-validation-error',
-				type: 'small',
-				title: 'Validation Error',
-				icon: 'warn-red',
-				bodyText: 'Invalid URL format. Please enter a valid URL.',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showErrorDialog('update-version-validation-error', 'Validation Error', 'Invalid URL format. Please enter a valid URL.');
 			return;
 		}
 
 		const shortcutName = url.searchParams.get('shortcut_name');
 		if (!shortcutName) {
-			killDialog();
-			createDialog({
-				id: 'update-version-validation-error',
-				type: 'small',
-				title: 'Validation Error',
-				icon: 'warn-red',
-				bodyText: 'Download URL must include ?shortcut_name= query parameter',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showErrorDialog('update-version-validation-error', 'Validation Error', 'Download URL must include ?shortcut_name= query parameter');
 			return;
 		}
 
@@ -137,156 +71,70 @@
 				body: JSON.stringify({
 					version_number: trimmedVersion,
 					patch_notes: trimmedNotes,
-					download_url: trimmedUrl
+					download_url: trimmedUrl,
+					edit_code: trimmedEditCode
 				})
 			});
 
 			if (response.ok) {
-				killDialog();
-				createDialog({
-					id: 'update-version-success',
-					type: 'small',
-					title: 'Success',
-					bodyText: 'Version updated successfully!',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {
-								setTimeout(() => {
-									goto(`/packages/${packageName}`);
-								}, 200);
-							}
-						}
-					]
+				showErrorDialog('update-version-success', 'Success', 'Version updated successfully!', () => {
+					setTimeout(() => {
+						goto(`/packages/${packageName}`);
+					}, 200);
 				});
 			} else {
 				const data = await response.json();
-				killDialog();
-				createDialog({
-					id: 'update-version-error',
-					type: 'small',
-					title: 'Error Updating Version',
-					icon: 'warn-red',
-					bodyText: data.message || 'Failed to update version',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
+				showErrorDialog('update-version-error', 'Error Updating Version', data.message || 'Failed to update version');
 			}
 		} catch (err) {
-			killDialog();
-			createDialog({
-				id: 'update-version-network-error',
-				type: 'small',
-				title: 'Network Error',
-				icon: 'warn-red',
-				bodyText: 'A network error occurred while updating the version',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showErrorDialog('update-version-network-error', 'Network Error', 'A network error occurred while updating the version');
 		} finally {
 			updating = false;
 		}
 	}
 </script>
 
-<div class="page-wrapper">
-	<div class="main">
-		<h1>Edit Version {versionParam}</h1>
-		<p>Edit the version details below.</p>
-		<a class="button button--default" href="/packages/{packageName}">Back to Package</a>
+<PageContainer containerId="edit-version-page-container" pageId="edit-version-page">
+	<h1>Edit Version {versionParam}</h1>
+	<p>Edit the version details below.</p>
+	<a class="button " href="/packages/{packageName}">Back to Package</a>
 
-		{#if loading}
-			<p>Loading version details...</p>
-		{:else}
-			<div class="form">
-				<div class="field">
-					<label for="version_number">Version Number</label>
-					<Input id="version_number" placeholder="e.g., 1.0.0" bind:value={version_number} />
-				</div>
-				<div class="field">
-					<label for="patch_notes">Patch Notes</label>
-					<Input
-						id="patch_notes"
-						placeholder="Describe what's new in this version"
-						bind:value={patch_notes}
-						long={true}
-					/>
-				</div>
-				<div class="field">
-					<label for="download_url">Download URL</label>
-					<p class="long-text">
-						Must include <strong>?shortcut_name=</strong> query parameter (your exact Shortcut Name URL-Encoded).
-						Example: https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7<strong
-							>?shortcut_name=Simple%20Base64</strong
-						>
-					</p>
-					<Input
-						id="download_url"
-						placeholder="Enter Download URL with ?shortcut_name= parameter"
-						bind:value={download_url}
-					/>
-				</div>
-				<button class="button button--primary" onclick={updateVersion}
-					>{updating ? 'Updating...' : 'Update Version'}</button
-				>
-			</div>
-		{/if}
-	</div>
-</div>
+	{#if loading}
+		<p>Loading version details...</p>
+	{:else}
+		<div class="form">
+			<FormField label="Version Number" id="version_number">
+				<Input id="version_number" placeholder="e.g., 1.0.0" bind:value={version_number} />
+			</FormField>
+			<FormField label="Patch Notes" id="patch_notes">
+				<Input
+					id="patch_notes"
+					placeholder="Describe what's new in this version"
+					bind:value={patch_notes}
+					long={true}
+				/>
+			</FormField>
+			<FormField label="Download URL" id="download_url" hint="Must include ?shortcut_name= query parameter (your exact Shortcut Name URL-Encoded). Example: https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7?shortcut_name=Simple%20Base64">
+				<Input
+					id="download_url"
+					placeholder="Enter Download URL with ?shortcut_name= parameter"
+					bind:value={download_url}
+				/>
+			</FormField>
+			<FormField label="Edit Code" id="edit_code">
+				<Input id="edit_code" placeholder="Enter edit code to confirm changes" bind:value={edit_code} />
+			</FormField>
+			<button class="button button--primary" onclick={updateVersion}
+				>{updating ? 'Updating...' : 'Update Version'}</button
+			>
+		</div>
+	{/if}
+</PageContainer>
 
 <style>
-	.page-wrapper {
-		width: 100%;
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		flex-wrap: wrap;
-		min-height: 100%;
-		overscroll-behavior: none;
-		padding: calc(var(--padding) + 0.9375rem);
-	}
-
-	.main {
-		width: 100%;
-		max-width: 700px;
-		gap: 1rem;
-		display: flex;
-		flex-direction: column;
-	}
-
 	.form {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-	}
-
-	.field {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-	}
-
-	label {
-		font-weight: bold;
-	}
-
-	@media only screen and (max-height: 25rem) {
-		.page-wrapper {
-			justify-content: center;
-			align-items: center;
-			flex-wrap: wrap;
-			height: max-content;
-		}
 	}
 </style>

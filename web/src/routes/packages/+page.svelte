@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 	import ProjectCard from '$components/ProjectCard.svelte'; /* the Cyclone website is forked from Ciabi's website, and I run both the Ciabi and Cyclone website. Old names may still be used. */
 	import Input from '$components/inputs-and-buttons/Input.svelte';
-	import { createDialog, killDialog } from '$lib/state/dialogs';
+	import PageContainer from '$components/PageContainer.svelte';
+	import { showErrorDialog, showNetworkErrorDialog } from '$lib/utils/dialog-helpers';
 	// @ts-ignore
 	import SearchIcon from '~icons/streamline-flex/magnifying-glass-remix';
 	/** @type {Array<{name: string, short_description: string, long_description: string, download_url: string, created_at?: string}>} */
@@ -29,45 +30,15 @@
 					return bDate - aDate;
 				});
 			} else {
-				// Clear any existing dialogs first
-				killDialog();
-				createDialog({
-					id: 'load-packages-error',
-					type: 'small',
-					title: 'Error Loading Packages',
-					icon: 'warn-red',
-					bodyText: 'Failed to load packages. Please try again later.',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
+				showErrorDialog('load-packages-error', 'Error Loading Packages', 'Failed to load packages. Please try again later.');
 				console.error('Failed to fetch packages:', response.status);
 			}
 		} catch (err) {
-			// Clear any existing dialogs first
-			killDialog();
 			let errorMessage = 'An error occurred while loading packages.';
 			if (err instanceof Error && err.name === 'AbortError') {
 				errorMessage = 'Request timed out. Please check your connection.';
 			}
-			createDialog({
-				id: 'load-packages-error',
-				type: 'small',
-				title: 'Error Loading Packages',
-				icon: 'warn-red',
-				bodyText: errorMessage,
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
+			showNetworkErrorDialog('load-packages-network-error', 'loading packages');
 			console.error('Error fetching packages:', err);
 		} finally {
 			loading = false;
@@ -87,18 +58,16 @@
 	);
 </script>
 
-<div class="page-wrapper">
+<PageContainer containerId="packages-page-container" pageId="packages-page">
 	<div class="header long-text">
 		<h1>packages</h1>
 		<p>all of the packages can be found here. anonymous</p>
 	</div>
-	<div class="search-container">
-		<Input placeholder="search packages" bind:value={searchQuery} min_width="100%" Icon={SearchIcon} />
-	</div>
-	<div class="options">
+	<Input placeholder="search packages" bind:value={searchQuery} min_width="100%" Icon={SearchIcon} />
+	<div class="actions">
 		<a class="button button--primary" href="/packages/create">Create Package</a>
 	</div>
-	<div class="projects">
+	<div class="packages">
 		{#if loading}
 			<p>Loading packages...</p>
 		{:else}
@@ -106,79 +75,38 @@
 				<ProjectCard
 					name={pkg.name}
 					description={pkg.short_description}
-					url={pkg.download_url}
-					urlshort="download package directly"
 					img=""
 					banner=""
-					extra_html={[`<a class="button button--default" href="/packages/${pkg.name}">View Package</a>`]}
+					extra_html={[`<a class="button " href="/packages/${pkg.name}">View Package</a>`]}
 				></ProjectCard>
 			{:else}
 				<p class="long-text">No packages found.</p>
 			{/each}
 		{/if}
 	</div>
-</div>
+</PageContainer>
 
 <style>
-	.page-wrapper {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		min-height: 100%;
-		gap: 20px;
-		overscroll-behavior: none;
-		padding: calc(var(--padding) + 15px);
-	}
-
-	.options {
-		display: flex;
-		flex-direction: row;
-		gap: 20px;
-	}
-
 	.header {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		width: 100%;
-		max-width: 700px;
 		gap: 20px;
 	}
 
-	.search-container {
-		display: flex;
-		justify-content: center;
-		max-width: 750px;
-		width: 100%;
-	}
-
-
-	.projects {
+	.packages {
 		justify-content: center;
 		flex-direction: column;
 		flex-wrap: wrap;
 		gap: 15px;
 		display: flex;
-		max-width: 700px;
-		width: 100%; /* this is a bandaid solution for the weird flexbox behavior */
-	}
-
-	.projects > *, .options > *, .search-container > * {
 		width: 100%;
 	}
 
-	@media only screen and (max-height: 400px) {
-		.page-wrapper {
-			justify-content: center;
-			align-items: center;
-			height: max-content;
-		}
-	}
-
 	@media only screen and (max-width: 600px) {
-		.projects {
+		.packages {
 			flex-direction: column;
 			gap: 10px;
 		}
