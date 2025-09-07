@@ -7,7 +7,14 @@ const config = {
 	extensions: ['.svelte', '.svx'],
 	preprocess: [vitePreprocess(), mdsvex({ extensions: ['.svx'] }), mdsvex()],
 	kit: {
-		adapter: adapter({ fallback: '404.html' }),
+		adapter: adapter({
+			fallback: '404.html',
+			platformProxy: {
+				configPath: 'wrangler.toml',
+				environment: 'production',
+				experimentalJsonConfig: false
+			}
+		}),
 		alias: {
 			// an alias ending /* will only match
 			// the contents of a directory, not the directory itself

@@ -1,9 +1,5 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import crypto from 'crypto';
-import dotenv from 'dotenv';
-
-// Load environment variables
-dotenv.config();
 
 const DB_NAME = 'cyclone';
 
@@ -32,7 +28,7 @@ export async function connectDB() {
     return newClient.db(DB_NAME);
   } catch (error) {
     console.error('Failed to connect to MongoDB:', error);
-    throw new Error(`Database connection failed: ${error.message}`);
+    throw new Error(`Database connection failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
