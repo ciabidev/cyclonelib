@@ -3,5 +3,6 @@
         "npm run dev": "cd web && npm run dev",
         "npm run build": "cd web && npm run build",
         "npm run start": "cd web && npm run start"
-    }
+    },
+    "name": "cyclone"
 }
