@@ -8,7 +8,7 @@ const config = {
 	preprocess: [vitePreprocess(), mdsvex({ extensions: ['.svx'] }), mdsvex()],
 	kit: {
 		adapter: adapter({
-			// Cloudflare adapter configuration
+			// Node.js adapter for full MongoDB support
 		}),
 		alias: {
 			// an alias ending /* will only match
