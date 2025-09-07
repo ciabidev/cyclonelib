@@ -115,7 +115,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
       throw error(404, { message: 'Package not found' });
     }
 
-    if (existingPackage.edit_code !== hashEditCode(edit_code.trim())) {
+    if (existingPackage.edit_code !== await hashEditCode(edit_code.trim())) {
       throw error(403, { message: 'Edit code does not match' });
     }
 
@@ -230,7 +230,7 @@ export const DELETE: RequestHandler = async ({ request, params }) => {
       throw error(404, { message: 'Package not found' });
     }
 
-    if (existingPackage.edit_code !== hashEditCode(edit_code.trim())) {
+    if (existingPackage.edit_code !== await hashEditCode(edit_code.trim())) {
       throw error(403, { message: 'Edit code does not match' });
     }
 

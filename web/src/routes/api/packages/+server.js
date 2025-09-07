@@ -137,7 +137,7 @@ export async function POST({ request }) {
       long_description,
       download_url,
       shortcut_name: shortcutName,
-      edit_code: hashEditCode(edit_code),
+      edit_code: await hashEditCode(edit_code),
       created_at: new Date()
     };
     const result = await db.collection('packages').insertOne(packageDict);

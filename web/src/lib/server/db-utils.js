@@ -1,5 +1,4 @@
 import { MongoClient, ObjectId } from 'mongodb';
-import crypto from 'crypto';
 
 const DB_NAME = 'cyclone';
 
@@ -72,12 +71,16 @@ export function serializeDoc(doc, exclude = []) {
  * Hash edit code using SHA-256 for secure storage
  *
  * @param {string} editCode - The edit code to hash
- * @returns {string} Hexadecimal string of the SHA-256 hash
+ * @returns {Promise<string>} Hexadecimal string of the SHA-256 hash
  *
  * @example
- * const hashed = hashEditCode('mySecret123');
+ * const hashed = await hashEditCode('mySecret123');
  * // Result: 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'
  */
-export function hashEditCode(editCode) {
-  return crypto.createHash('sha256').update(editCode).digest('hex');
+export async function hashEditCode(editCode) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(editCode);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
