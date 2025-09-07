@@ -76,7 +76,7 @@ export async function PATCH({ request, params }) {
 			throw error(404, { message: 'Package not found' });
 		}
 
-		if (packageDoc.edit_code !== hashEditCode(edit_code.trim())) {
+		if (packageDoc.edit_code !== await hashEditCode(edit_code.trim())) {
 			throw error(403, { message: 'Edit code does not match' });
 		}
 
