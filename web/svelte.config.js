@@ -23,6 +23,15 @@ const config = {
 			'$stores/*': './src/stores/*',
 			'$lib/*': './src/lib/*'
 		}
+	},
+	// Add Node.js polyfills for build process
+	vite: {
+		define: {
+			global: 'globalThis'
+		},
+		optimizeDeps: {
+			include: ['mongodb', 'dotenv', 'crypto', 'path', 'os', 'fs']
+		}
 	}
 };
 

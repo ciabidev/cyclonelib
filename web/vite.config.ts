@@ -19,6 +19,17 @@ export default defineConfig(({ mode }) => {
     define: {
       // Make sure environment variables are available
       'process.env.MONGO_URI': JSON.stringify(env.MONGO_URI)
+    },
+    optimizeDeps: {
+      include: ['mongodb', 'dotenv']
+    },
+    build: {
+      rollupOptions: {
+        external: (id) => {
+          // Don't externalize Node.js built-ins
+          return false
+        }
+      }
     }
   }
 })
