@@ -135,12 +135,6 @@
         align-items: center;
     }
 
-    .popup-icon :global(svg) {
-        stroke-width: 1.5px;
-        height: 50px;
-        width: 50px;
-    }
-
     .warn-red :global(svg) {
         stroke: var(--red);
     }
@@ -167,11 +161,5 @@
     .align-left .popup-header {
         align-items: start;
         gap: 2px;
-    }
-
-    .align-left .popup-icon :global(svg) {
-        height: 40px;
-        width: 40px;
-        stroke-width: 1.8px;
     }
 </style>
