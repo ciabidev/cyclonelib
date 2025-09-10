@@ -1,6 +1,9 @@
 import { supabase } from "$lib/supabaseClient";
 import { fail } from "@sveltejs/kit";
 
+// Disable prerendering for this page since it contains actions
+export const prerender = false;
+
 export const actions = {
   default: async ({ request }) => {
     const data = await request.formData();
