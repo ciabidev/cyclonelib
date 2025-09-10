@@ -1,48 +1,27 @@
-import { MongoClient, ObjectId } from 'mongodb';
 
-const DB_NAME = 'cyclone';
 
-let client;
-let db;
+import { supabaseServer } from './supabase-server.js';
 
+/**
+ * Get database connection (Supabase client)
+ * @returns {Object} Supabase client instance
+ */
 export async function connectDB() {
-  const mongoUri = process.env.MONGO_URI;
-  console.log('DEBUG: MONGO_URI from process.env:', mongoUri ? 'SET' : 'NOT SET');
-  console.log('DEBUG: All env vars starting with MONGO:', Object.keys(process.env).filter(key => key.includes('MONGO')));
-
-  if (!mongoUri) {
-    throw new Error('MONGO_URI is required');
-  }
-
-  try {
-    // Always create a new connection in serverless environment to avoid stale connections
-    const newClient = new MongoClient(mongoUri, {
-      maxPoolSize: 1, // Limit connection pool size for serverless
-      serverSelectionTimeoutMS: 5000, // 5 second timeout
-      socketTimeoutMS: 10000, // 10 second socket timeout
-      maxIdleTimeMS: 30000, // Close connections after 30 seconds of inactivity
-    });
-
-    await newClient.connect();
-    return newClient.db(DB_NAME);
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    throw new Error(`Database connection failed: ${error instanceof Error ? error.message : String(error)}`);
-  }
+  return supabaseServer;
 }
 
 /**
- * Serialize MongoDB document for JSON response
- * Converts ObjectId instances to strings and recursively serializes nested objects
+ * Serialize Supabase document for JSON response
+ * Converts timestamp strings and recursively serializes nested objects
  *
- * @param {Object} doc - MongoDB document to serialize
+ * @param {Object} doc - Supabase record to serialize
  * @param {string[]} [exclude=[]] - Array of field names to exclude from serialization
  * @returns {Object|null} Serialized document or null if doc is falsy
  *
  * @example
- * const doc = { _id: ObjectId('...'), name: 'test', secret: 'hidden' };
+ * const doc = { id: 1, name: 'test', secret: 'hidden', created_at: '2023-01-01T00:00:00Z' };
  * const serialized = serializeDoc(doc, ['secret']);
- * // Result: { _id: '...', name: 'test' }
+ * // Result: { id: 1, name: 'test', created_at: '2023-01-01T00:00:00.000Z' }
  */
 export function serializeDoc(doc, exclude = []) {
   if (!doc) return null;
@@ -50,11 +29,7 @@ export function serializeDoc(doc, exclude = []) {
   const serialized = {};
   for (const [key, value] of Object.entries(doc)) {
     if (exclude.includes(key)) continue;
-    if (value instanceof ObjectId) {
-      serialized[key] = value.toString();
-    } else if (value instanceof Date) {
-      serialized[key] = value.toISOString();
-    } else if (typeof value === 'object' && value !== null) {
+    if (typeof value === 'object' && value !== null) {
       if (Array.isArray(value)) {
         serialized[key] = value.map(v => typeof v === 'object' ? serializeDoc(v, exclude) : v);
       } else {

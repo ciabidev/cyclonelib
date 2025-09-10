@@ -2,21 +2,20 @@ import { json, error } from '@sveltejs/kit';
 import { connectDB, serializeDoc } from '$lib/server/db-utils.js';
 
 export async function GET({ params }) {
-	const mongoUri = process.env.MONGO_URI;
 	const { name } = params;
-
-	if (!mongoUri) {
-		throw error(500, {
-			message: 'Database configuration missing. MONGO_URI environment variable not set.'
-		});
-	}
 
 	try {
 		const db = await connectDB();
-		const versions = await db.collection('versions')
-			.find({ package_name: name })
-			.sort({ created_at: -1 })
-			.toArray();
+		const { data: versions, error: dbError } = await db
+			.from('versions')
+			.select('*')
+			.eq('package_name', name)
+			.order('created_at', { ascending: false });
+
+		if (dbError) {
+			console.error('Supabase error:', dbError);
+			throw error(500, { message: 'Database query failed' });
+		}
 
 		return json(versions.map(doc => serializeDoc(doc)), {
 			headers: {
@@ -34,14 +33,7 @@ export async function GET({ params }) {
 }
 
 export async function POST({ request, params }) {
-	const mongoUri = process.env.MONGO_URI;
 	const { name } = params;
-
-	if (!mongoUri) {
-		throw error(500, {
-			message: 'Database configuration missing. MONGO_URI environment variable not set.'
-		});
-	}
 
 	try {
 		const { version_number, patch_notes, download_url } = await request.json();
@@ -62,16 +54,33 @@ export async function POST({ request, params }) {
 		const db = await connectDB();
 
 		// Check if package exists
-		const packageDoc = await db.collection('packages').findOne({ name });
-		if (!packageDoc) {
-			throw error(404, { message: 'Package not found' });
+		const { data: packageDoc, error: packageError } = await db
+			.from('packages')
+			.select('name')
+			.eq('name', name)
+			.single();
+
+		if (packageError) {
+			if (packageError.code === 'PGRST116') { // Not found
+				throw error(404, { message: 'Package not found' });
+			}
+			console.error('Supabase error checking package:', packageError);
+			throw error(500, { message: 'Database query failed' });
 		}
 
 		// Check for existing version number
-		const existingVersion = await db.collection('versions').findOne({
-			package_name: name,
-			version_number
-		});
+		const { data: existingVersion, error: versionError } = await db
+			.from('versions')
+			.select('version_number')
+			.eq('package_name', name)
+			.eq('version_number', version_number)
+			.single();
+
+		if (versionError && versionError.code !== 'PGRST116') {
+			console.error('Supabase error checking version:', versionError);
+			throw error(500, { message: 'Database query failed' });
+		}
+
 		if (existingVersion) {
 			throw error(409, { message: 'Version number already exists for this package' });
 		}
@@ -82,11 +91,19 @@ export async function POST({ request, params }) {
 			patch_notes,
 			download_url,
 			shortcut_name: shortcutName,
-			created_at: new Date()
+			created_at: new Date().toISOString()
 		};
 
-		const result = await db.collection('versions').insertOne(versionDoc);
-		const created = await db.collection('versions').findOne({ _id: result.insertedId });
+		const { data: created, error: insertError } = await db
+			.from('versions')
+			.insert(versionDoc)
+			.select()
+			.single();
+
+		if (insertError) {
+			console.error('Supabase error inserting version:', insertError);
+			throw error(500, { message: 'Failed to create version' });
+		}
 
 		return json(serializeDoc(created), {
 			status: 201,
@@ -97,7 +114,7 @@ export async function POST({ request, params }) {
 			}
 		});
 	} catch (err) {
-		if (err.status) throw err;
+		if (err && typeof err === 'object' && 'status' in err) throw err;
 		console.error('Database error in POST /api/packages/[name]/versions:', err);
 		throw error(500, {
 			message: 'Failed to create version'

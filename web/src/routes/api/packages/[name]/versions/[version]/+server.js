@@ -2,24 +2,23 @@ import { json, error } from '@sveltejs/kit';
 import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
 
 export async function GET({ params }) {
-	const mongoUri = process.env.MONGO_URI;
 	const { name, version } = params;
-
-	if (!mongoUri) {
-		throw error(500, {
-			message: 'Database configuration missing. MONGO_URI environment variable not set.'
-		});
-	}
 
 	try {
 		const db = await connectDB();
-		const versionDoc = await db.collection('versions').findOne({
-			package_name: name,
-			version_number: decodeURIComponent(version)
-		});
+		const { data: versionDoc, error: dbError } = await db
+			.from('versions')
+			.select('*')
+			.eq('package_name', name)
+			.eq('version_number', decodeURIComponent(version))
+			.single();
 
-		if (!versionDoc) {
-			throw error(404, { message: 'Version not found' });
+		if (dbError) {
+			if (dbError.code === 'PGRST116') { // Not found
+				throw error(404, { message: 'Version not found' });
+			}
+			console.error('Supabase error:', dbError);
+			throw error(500, { message: 'Database query failed' });
 		}
 
 		return json(serializeDoc(versionDoc), {
@@ -30,7 +29,7 @@ export async function GET({ params }) {
 			}
 		});
 	} catch (err) {
-		if (err.status) throw err;
+		if (err && typeof err === 'object' && 'status' in err) throw err;
 		console.error('Database error in GET /api/packages/[name]/versions/[version]:', err);
 		throw error(500, {
 			message: 'Failed to retrieve version'
@@ -39,14 +38,7 @@ export async function GET({ params }) {
 }
 
 export async function PATCH({ request, params }) {
-	const mongoUri = process.env.MONGO_URI;
 	const { name, version } = params;
-
-	if (!mongoUri) {
-		throw error(500, {
-			message: 'Database configuration missing. MONGO_URI environment variable not set.'
-		});
-	}
 
 	try {
 		const { version_number, patch_notes, download_url, edit_code } = await request.json();
@@ -71,9 +63,18 @@ export async function PATCH({ request, params }) {
 		const db = await connectDB();
 
 		// Check if package exists and validate edit code
-		const packageDoc = await db.collection('packages').findOne({ name });
-		if (!packageDoc) {
-			throw error(404, { message: 'Package not found' });
+		const { data: packageDoc, error: packageError } = await db
+			.from('packages')
+			.select('*')
+			.eq('name', name)
+			.single();
+
+		if (packageError) {
+			if (packageError.code === 'PGRST116') { // Not found
+				throw error(404, { message: 'Package not found' });
+			}
+			console.error('Supabase error checking package:', packageError);
+			throw error(500, { message: 'Database query failed' });
 		}
 
 		if (packageDoc.edit_code !== await hashEditCode(edit_code.trim())) {
@@ -81,22 +82,36 @@ export async function PATCH({ request, params }) {
 		}
 
 		// Check if version exists
-		const existingVersion = await db.collection('versions').findOne({
-			package_name: name,
-			version_number: decodeURIComponent(version)
-		});
+		const { data: existingVersion, error: versionError } = await db
+			.from('versions')
+			.select('*')
+			.eq('package_name', name)
+			.eq('version_number', decodeURIComponent(version))
+			.single();
 
-		if (!existingVersion) {
-			throw error(404, { message: 'Version not found' });
+		if (versionError) {
+			if (versionError.code === 'PGRST116') { // Not found
+				throw error(404, { message: 'Version not found' });
+			}
+			console.error('Supabase error checking version:', versionError);
+			throw error(500, { message: 'Database query failed' });
 		}
 
 		// Check for version number conflict if changing version number
 		if (version_number !== existingVersion.version_number) {
-			const versionConflict = await db.collection('versions').findOne({
-				package_name: name,
-				version_number,
-				_id: { $ne: existingVersion._id }
-			});
+			const { data: versionConflict, error: conflictError } = await db
+				.from('versions')
+				.select('version_number')
+				.eq('package_name', name)
+				.eq('version_number', version_number)
+				.neq('id', existingVersion.id)
+				.single();
+
+			if (conflictError && conflictError.code !== 'PGRST116') {
+				console.error('Supabase error checking conflict:', conflictError);
+				throw error(500, { message: 'Database query failed' });
+			}
+
 			if (versionConflict) {
 				throw error(409, { message: 'Version number already exists for this package' });
 			}
@@ -109,14 +124,16 @@ export async function PATCH({ request, params }) {
 			shortcut_name: shortcutName
 		};
 
-		await db.collection('versions').updateOne(
-			{ _id: existingVersion._id },
-			{ $set: updateFields }
-		);
+		const { data: updated, error: updateError } = await db
+			.from('versions')
+			.update(updateFields)
+			.eq('id', existingVersion.id)
+			.select()
+			.single();
 
-		const updated = await db.collection('versions').findOne({ _id: existingVersion._id });
-		if (!updated) {
-			throw error(500, { message: 'Failed to retrieve updated version' });
+		if (updateError) {
+			console.error('Supabase error updating:', updateError);
+			throw error(500, { message: 'Failed to update version' });
 		}
 
 		return json(serializeDoc(updated), {
@@ -127,7 +144,7 @@ export async function PATCH({ request, params }) {
 			}
 		});
 	} catch (err) {
-		if (err.status) throw err;
+		if (err && typeof err === 'object' && 'status' in err) throw err;
 		console.error('Database error in PATCH /api/packages/[name]/versions/[version]:', err);
 		throw error(500, {
 			message: 'Failed to update version'

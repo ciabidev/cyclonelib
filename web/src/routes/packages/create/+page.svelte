@@ -30,7 +30,6 @@
 		const trimmedName = String(name || '').trim();
 		const trimmedShortDesc = String(short_description || '').trim();
 		const trimmedLongDesc = String(long_description || '').trim();
-		// const trimmedPackageUrl = String(download_url || '').trim(); // Commented out for versioning system
 		const trimmedEditCode = String(edit_code || '').trim();
 
 		// Check for empty fields
@@ -38,74 +37,24 @@
 			!formattedName ||
 			!trimmedShortDesc ||
 			!trimmedLongDesc ||
-			// !trimmedPackageUrl || // Commented out for versioning system
 			!trimmedEditCode
 		) {
 			showErrorDialog('create-package-validation-error', 'Validation Error', 'All fields are required');
 			return;
 		}
 
-		// Validate download_url contains shortcut_name query parameter
-		// Commented out for versioning system - will be handled in version creation
-		/*
-		let url;
-		try {
-			url = new URL(trimmedPackageUrl);
-		} catch (urlError) {
-			// Clear any existing dialogs first
-			killDialog();
-			createDialog({
-				id: 'create-package-validation-error',
-				type: 'small',
-				title: 'Validation Error',
-				icon: 'warn-red',
-				bodyText: 'Invalid URL format. Please enter a valid URL.',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
-			return;
-		}
-
-		const shortcutName = url.searchParams.get('shortcut_name');
-		if (!shortcutName) {
-			// Clear any existing dialogs first
-			killDialog();
-			createDialog({
-				id: 'create-package-validation-error',
-				type: 'small',
-				title: 'Validation Error',
-				icon: 'warn-red',
-				bodyText: 'Download URL must include ?shortcut_name= query parameter',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
-			return;
-		}
-		*/
-
 		loading = true;
 
 		try {
-			const response = await fetch('/api/packages', {
+			const formData = new FormData();
+			formData.append('name', formattedName);
+			formData.append('short_description', trimmedShortDesc);
+			formData.append('long_description', trimmedLongDesc);
+			formData.append('edit_code', trimmedEditCode);
+
+			const response = await fetch('/packages/create', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					name: formattedName,
-					short_description: trimmedShortDesc,
-					long_description: trimmedLongDesc,
-					// download_url: trimmedPackageUrl, // Commented out for versioning system
-					edit_code: trimmedEditCode
-				})
+				body: formData
 			});
 
 			if (response.ok) {
@@ -116,7 +65,6 @@
 					name = '';
 					short_description = '';
 					long_description = '';
-					// download_url = ''; // Commented out for versioning system
 					edit_code = '';
 					// Small delay to allow dialog to close properly before navigation
 					setTimeout(() => {
@@ -126,7 +74,7 @@
 				});
 			} else {
 				const data = await response.json();
-				showErrorDialog('create-package-error', 'Error Creating Package', data.message || 'Failed to create package');
+				showErrorDialog('create-package-error', 'Error Creating Package', data.error || 'Failed to create package');
 			}
 		} catch (err) {
 			showErrorDialog('create-package-network-error', 'Network Error', 'a network error occurred while creating the package');

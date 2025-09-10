@@ -25,21 +25,22 @@ import type { RequestHandler } from './$types.js';
  * @throws {500} If database connection fails
  */
 export const GET: RequestHandler = async ({ params }) => {
-  const mongoUri = process.env.MONGO_URI;
   const { name } = params;
-
-  if (!mongoUri) {
-    throw error(500, {
-      message: 'Database configuration missing. MONGO_URI environment variable not set.'
-    });
-  }
 
   try {
     const db = await connectDB();
-    const packageDoc = await db.collection('packages').findOne({ name });
+    const { data: packageDoc, error: dbError } = await db
+      .from('packages')
+      .select('*')
+      .eq('name', name)
+      .single();
 
-    if (!packageDoc) {
-      throw error(404, { message: 'Package not found' });
+    if (dbError) {
+      if (dbError.code === 'PGRST116') { // Not found
+        throw error(404, { message: 'Package not found' });
+      }
+      console.error('Supabase error:', dbError);
+      throw error(500, { message: 'Database query failed' });
     }
 
     return json(serializeDoc(packageDoc, ['edit_code']), {
@@ -96,23 +97,24 @@ export const GET: RequestHandler = async ({ params }) => {
  * @throws {500} If database connection fails
  */
 export const PATCH: RequestHandler = async ({ request, params }) => {
-  const mongoUri = process.env.MONGO_URI;
   const { name } = params;
-
-  if (!mongoUri) {
-    throw error(500, {
-      message: 'Database configuration missing. MONGO_URI environment variable not set.'
-    });
-  }
 
   try {
     const { edit_code, name: newName, short_description, long_description, download_url } = await request.json();
 
     const db = await connectDB();
-    const existingPackage = await db.collection('packages').findOne({ name });
+    const { data: existingPackage, error: findError } = await db
+      .from('packages')
+      .select('*')
+      .eq('name', name)
+      .single();
 
-    if (!existingPackage) {
-      throw error(404, { message: 'Package not found' });
+    if (findError) {
+      if (findError.code === 'PGRST116') { // Not found
+        throw error(404, { message: 'Package not found' });
+      }
+      console.error('Supabase error:', findError);
+      throw error(500, { message: 'Database query failed' });
     }
 
     if (existingPackage.edit_code !== await hashEditCode(edit_code.trim())) {
@@ -130,7 +132,18 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
         throw error(400, { message: 'Package name must be 214 characters or less' });
       }
 
-      const existingName = await db.collection('packages').findOne({ name: newName, _id: { $ne: existingPackage._id } });
+      const { data: existingName, error: nameCheckError } = await db
+        .from('packages')
+        .select('name')
+        .eq('name', newName)
+        .neq('id', existingPackage.id)
+        .single();
+
+      if (nameCheckError && nameCheckError.code !== 'PGRST116') {
+        console.error('Supabase error checking name:', nameCheckError);
+        throw error(500, { message: 'Database query failed' });
+      }
+
       if (existingName) {
         throw error(409, { message: 'Package name is already taken' });
       }
@@ -162,11 +175,18 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
       });
     }
 
-    await db.collection('packages').updateOne({ _id: existingPackage._id }, { $set: updateFields });
-    const updated = await db.collection('packages').findOne({ _id: existingPackage._id });
-    if (!updated) {
-      throw error(500, { message: 'Failed to retrieve updated package' });
+    const { data: updated, error: updateError } = await db
+      .from('packages')
+      .update(updateFields)
+      .eq('id', existingPackage.id)
+      .select()
+      .single();
+
+    if (updateError) {
+      console.error('Supabase error updating:', updateError);
+      throw error(500, { message: 'Failed to update package' });
     }
+
     return json(serializeDoc(updated, ['edit_code']), {
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -211,30 +231,39 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
  * @throws {500} If database connection fails
  */
 export const DELETE: RequestHandler = async ({ request, params }) => {
-  const mongoUri = process.env.MONGO_URI;
   const { name } = params;
-
-  if (!mongoUri) {
-    throw error(500, {
-      message: 'Database configuration missing. MONGO_URI environment variable not set.'
-    });
-  }
 
   try {
     const { edit_code } = await request.json();
 
     const db = await connectDB();
-    const existingPackage = await db.collection('packages').findOne({ name });
+    const { data: existingPackage, error: findError } = await db
+      .from('packages')
+      .select('*')
+      .eq('name', name)
+      .single();
 
-    if (!existingPackage) {
-      throw error(404, { message: 'Package not found' });
+    if (findError) {
+      if (findError.code === 'PGRST116') { // Not found
+        throw error(404, { message: 'Package not found' });
+      }
+      console.error('Supabase error:', findError);
+      throw error(500, { message: 'Database query failed' });
     }
 
     if (existingPackage.edit_code !== await hashEditCode(edit_code.trim())) {
       throw error(403, { message: 'Edit code does not match' });
     }
 
-    await db.collection('packages').deleteOne({ _id: existingPackage._id });
+    const { error: deleteError } = await db
+      .from('packages')
+      .delete()
+      .eq('id', existingPackage.id);
+
+    if (deleteError) {
+      console.error('Supabase error deleting:', deleteError);
+      throw error(500, { message: 'Failed to delete package' });
+    }
 
     return json({ message: 'Package deleted successfully' }, {
       headers: {

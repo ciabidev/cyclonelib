@@ -1,45 +1,17 @@
 <script>
-	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
 	import Markdown from '$components/Markdown.svelte';
 	import ProjectCard from '$components/ProjectCard.svelte';
 	import Switcher from '$components/inputs-and-buttons/Switcher.svelte';
 	import PageContainer from '$components/PageContainer.svelte';
-	import { showErrorDialog, showNetworkErrorDialog } from '$lib/utils/dialog-helpers';
 
-	/** @type {{name: string, short_description?: string, long_description?: string, download_url: string} | null} */
-	let packageData = $state(null);
-	let versions = $state([]);
-	let loading = $state(true);
+	let { data } = $props();
+	let packageData = $derived(data.pkg);
+	let versions = $derived(data.versions || []);
 	let activeTab = $state('main-info');
-
-	onMount(async () => {
-		try {
-			const response = await fetch(`/api/packages/${$page.params.name}`);
-			if (response.ok) {
-				packageData = await response.json();
-			} else {
-				showErrorDialog('load-package-details-error', 'Error Loading Package', 'Failed to load package details.');
-			}
-
-			// Load versions
-			const versionsResponse = await fetch(`/api/packages/${$page.params.name}/versions`);
-			if (versionsResponse.ok) {
-				versions = await versionsResponse.json();
-			}
-		} catch (err) {
-			showNetworkErrorDialog('load-package-details-network-error', 'loading package details');
-			console.error('Error fetching package:', err);
-		} finally {
-			loading = false;
-		}
-	});
 </script>
 
 <PageContainer containerId="package-details-page-container" pageId="package-details-page" maxWidth="800px">
-	{#if loading}
-		<p>Loading package details...</p>
-	{:else if packageData}
+	{#if packageData}
 		<a class="button " href="/packages">Back to Packages</a>
 		<div class="package-header">
 			<h1>{packageData.name}</h1>

@@ -49,7 +49,7 @@ const swaggerSpec = {
     '/api/versions': {
       get: {
         summary: 'Get version information',
-        description: 'Returns available Cyclone versions and their build numbers',
+        description: 'Returns available Cyclone versions and their routinehub.co/download/[id]',
         responses: {
           200: {
             description: 'Successful response',
@@ -60,7 +60,7 @@ const swaggerSpec = {
                   additionalProperties: { type: 'string' },
                   example: {
                     '0.0.1': '50425',
-                    'latest (2.2.0)': '55349'
+                    'latest': '55349'
                   }
                 }
               }

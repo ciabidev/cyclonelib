@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-vercel';
+import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex } from 'mdsvex';
 
@@ -8,7 +8,7 @@ const config = {
 	preprocess: [vitePreprocess(), mdsvex({ extensions: ['.svx'] }), mdsvex()],
 	kit: {
 		adapter: adapter({
-			// Node.js adapter for full MongoDB support
+			
 		}),
 		alias: {
 			// an alias ending /* will only match

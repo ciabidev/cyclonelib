@@ -3,28 +3,22 @@ import { connectDB, serializeDoc } from '$lib/server/db-utils.js';
 
 
 export async function GET({ url }) {
-	const mongoUri = process.env.MONGO_URI;
-
-	if (!mongoUri) {
-		throw error(500, {
-			message: 'Database configuration missing. MONGO_URI environment variable not set.'
-		});
-	}
-
 	try {
 		const name = url.searchParams.get('name');
 
 		const db = await connectDB();
-		const query = {};
-		if (name) query.name = { $regex: name, $options: 'i' };
+		let query = db.from('packages').select('*').order('created_at', { ascending: false }).limit(100);
 
-    // Add timeout to prevent hanging
-    const docs = await Promise.race([
-      db.collection('packages').find(query).sort({ created_at: -1 }).limit(100).toArray(),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Database query timeout')), 30000)
-      )
-    ]);
+		if (name) {
+			query = query.ilike('name', `%${name}%`);
+		}
+
+		const { data: docs, error: dbError } = await query;
+
+		if (dbError) {
+			console.error('Supabase error:', dbError);
+			throw error(500, { message: 'Database query failed' });
+		}
 
     const result = docs.map(doc => serializeDoc(doc, ['edit_code']));
     return json(result, {
@@ -82,14 +76,6 @@ export async function GET({ url }) {
  */
 export async function POST({ request }) {
   console.log('POST /api/packages called');
-  const mongoUri = process.env.MONGO_URI;
-  console.log('MONGO_URI available:', !!mongoUri);
-
-  if (!mongoUri) {
-    throw error(500, {
-      message: 'Database configuration missing. MONGO_URI environment variable not set.'
-    });
-  }
 
   try {
     const { edit_code, name, short_description, long_description, download_url } = await request.json();
@@ -126,7 +112,17 @@ export async function POST({ request }) {
     const db = await connectDB();
 
     // Check for existing name
-    const existingName = await db.collection('packages').findOne({ name });
+    const { data: existingName, error: checkError } = await db
+      .from('packages')
+      .select('name')
+      .eq('name', name)
+      .single();
+
+    if (checkError && checkError.code !== 'PGRST116') { // PGRST116 is "not found"
+      console.error('Supabase error checking existing name:', checkError);
+      throw error(500, { message: 'Database query failed' });
+    }
+
     if (existingName) {
       throw error(409, { message: 'Package name is already taken' });
     }
@@ -138,10 +134,19 @@ export async function POST({ request }) {
       download_url,
       shortcut_name: shortcutName,
       edit_code: await hashEditCode(edit_code),
-      created_at: new Date()
+      created_at: new Date().toISOString()
     };
-    const result = await db.collection('packages').insertOne(packageDict);
-    const created = await db.collection('packages').findOne({ _id: result.insertedId });
+
+    const { data: created, error: insertError } = await db
+      .from('packages')
+      .insert(packageDict)
+      .select()
+      .single();
+
+    if (insertError) {
+      console.error('Supabase error inserting package:', insertError);
+      throw error(500, { message: 'Failed to create package' });
+    }
 
     return json(serializeDoc(created), {
       status: 201,
@@ -152,7 +157,7 @@ export async function POST({ request }) {
       }
     });
   } catch (err) {
-    if (err.status) throw err; // Re-throw SvelteKit errors
+    if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
     console.error('Database error in POST /api/packages:', err);
     throw error(500, {
       message: 'Failed to create package'
