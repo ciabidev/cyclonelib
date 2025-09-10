@@ -80,7 +80,7 @@
 		linear-gradient(to bottom, rgba(128, 128, 128, 0.05) 1px, transparent 1px);
 	--grid-bg-size: 15px 15px;
 	--border-radius: 12px;
-	font-size: 16px;
+	font-size: 15px;
 	--readable-line-height: 1.8;
 }
 
@@ -317,7 +317,7 @@ img {
 
 @media only screen and (max-width: 600px) {
 	:root {
-		font-size: 15px;
+		font-size: 14px;
 		--navbar-height: var(--mobile-navbar-height);
 	}
 }
@@ -328,7 +328,7 @@ img {
 	}
 
 	:root {
-		font-size: 15px;
+		font-size: 14px;
 		--navbar-height: var(--mobile-navbar-height);
 	}
 }
