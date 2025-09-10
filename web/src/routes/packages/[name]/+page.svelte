@@ -48,8 +48,6 @@
 							<ProjectCard
 								name="Version {version.version_number}"
 								description={version.patch_notes}
-								url={version.download_url}
-								urlshort={version.shortcut_name}
 							>
 							<div class="actions">
 								<a class="button " href="/packages/{packageData.name}/versions/{encodeURIComponent(version.version_number)}/edit">Edit Version</a>
