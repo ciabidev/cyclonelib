@@ -1,2 +1,2 @@
 # cyclone
-https://cyclonelib.vercel.app/
+https://cyclonelib.pages.dev
