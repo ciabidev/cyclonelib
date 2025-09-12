@@ -67,7 +67,7 @@
     @media screen and (max-width: 535px) {
       .navbar-container {
         height: var(--mobile-navbar-height);
-        position: fixed;
+        position: sticky;
       }
     }
 </style>
