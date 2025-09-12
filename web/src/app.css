@@ -142,8 +142,6 @@ h1, h2, h3, h4, h5, h6 {
 /* BASE ELEMENT STYLES */
 
 body {
-	overflow-x: hidden;
-	overflow: none;
 	word-wrap:break-word;
 	font-family:
 		Fira Mono,
@@ -158,8 +156,10 @@ body {
 html,
 body {
     margin: 0;
-    height: 100%;
-    overflow: hidden;
+    height: 100dvh;
+    overflow: auto;
+				display: flex;
+				flex-direction: column;
     overscroll-behavior-y: none;
 }
 
