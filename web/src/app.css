@@ -93,7 +93,8 @@
 html,
 body {
 	margin: 0;
-	height: 100vh;
+	min-height: 100dvh;
+	height: auto;
 	overflow: hidden;
 	overscroll-behavior-y: none;
 }
@@ -142,32 +143,24 @@ h1, h2, h3, h4, h5, h6 {
 
 body {
 	overflow-x: hidden;
-	overflow: hidden;
+	overflow: none;
 	word-wrap:break-word;
-	width: 100vw;
-	height: 100%; /* Use small viewport height for better iOS Safari compatibility */
-	background-size: cover;
 	font-family:
 		Fira Mono,
 		monospace;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	margin: 0;
-	overscroll-behavior: none;
-	position: fixed;
-	padding: 0;
 	opacity: 0;
 	animation: fadeIn 200ms forwards;
 	background: var(--nav-bg); /* for cozy navbar */
-	overflow: hidden;
 }
 
 html,
 body {
-	height: 100%;
-	overflow: hidden;
-	overscroll-behavior: auto;
-	-webkit-overflow-scrolling: touch; /* ✅ iOS elastic scroll */
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior-y: none;
 }
 
 h1,
@@ -243,7 +236,7 @@ pre {
 	background-color: var(--bg-color);
 	border-bottom-left-radius: var(--border-radius);
 	border-bottom-right-radius: var(--border-radius);
-	height: calc(100% - var(--navbar-height) - env(safe-area-inset-bottom));
+	height: calc(100% - var(--navbar-height));
 }
 
 .center-container {

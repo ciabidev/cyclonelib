@@ -18,14 +18,12 @@
   let { data, children }: { data: LayoutData; children: Snippet } = $props();
 </script>
 
-  <Navbar />
 
   <Toasts />
   <DialogHolder />
-  <div class="loaf"> <!-- includes main content of the page only -->
-    {@render children()}
-    
-  </div>
-
+    <div class="loaf"> <!-- includes main content of the page only -->
+      {@render children()}
+    </div>
+    <Navbar />
 
 

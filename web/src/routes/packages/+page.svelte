@@ -25,7 +25,6 @@
 <PageContainer containerId="packages-page-container" pageId="packages-page">
 	<div class="header long-text">
 		<h1>packages</h1>
-		<p>all of the packages can be found here. anonymous</p>
 	</div>
 	<Input placeholder="search packages" bind:value={searchQuery} min_width="100%" Icon={SearchIcon} />
 	<div class="actions">

@@ -34,8 +34,8 @@
 
   
   .navbar-container {
-  	position: fixed;
-  	height: var(--navbar-height);
+  	position: sticky;
+  	height: calc(var(--navbar-height));
   	bottom: 0;
   	width: 100%;
   	z-index: 1005;
@@ -64,16 +64,10 @@
   }
 
 
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 535px) {
       .navbar-container {
         height: var(--mobile-navbar-height);
-      }
-
-    }
-  
-    @media screen and (max-height: 400px) {
-      .navbar-container {
-        height: var(--mobile-navbar-height);
+        position: fixed;
       }
     }
 </style>
