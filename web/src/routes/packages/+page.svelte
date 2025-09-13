@@ -11,14 +11,11 @@
 
 	// Filter packages based on search query
 	let filteredPackages = $derived(
-		searchQuery.trim() === ''
-			? packages
-			: packages.filter(pkg =>
-				pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				pkg.short_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				pkg.long_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				pkg.download_url.toLowerCase().includes(searchQuery.toLowerCase())
-			)
+		searchQuery.trim() === '' ? packages : packages.filter(pkg =>
+			pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			pkg.short_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			pkg.long_description.toLowerCase().includes(searchQuery.toLowerCase())
+		)
 	);
 </script>
 

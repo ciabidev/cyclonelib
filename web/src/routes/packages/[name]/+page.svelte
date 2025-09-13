@@ -13,7 +13,7 @@
 <PageContainer containerId="package-details-page-container" pageId="package-details-page" maxWidth="800px">
 	{#if packageData}
 		<a class="button " href="/packages">Back to Packages</a>
-		<div class="package-header">
+		<div class="package-header long-text">
 			<h1>{packageData.name}</h1>
 		</div>
 
@@ -47,6 +47,8 @@
 						{#each versions as version}
 							<ProjectCard
 								name="Version {version.version_number}"
+								url=""
+								urlshort=""
 								description={version.patch_notes}
 							>
 							<div class="actions">

@@ -79,8 +79,10 @@
 </script>
 
 <PageContainer containerId="create-version-page-container" pageId="create-version-page">
-	<h1>Create Version for {packageName}</h1>
-	<p>Create the first version for your package.</p>
+	<section class="long-text">
+		<h1>Create Version for {packageName}</h1>
+		<p>Create the first version for your package.</p>
+	</section>
 	<a class="button " href="/packages/{packageName}">Back to Package</a>
 
 	<div class="form">
@@ -95,10 +97,10 @@
 				long={true}
 			/>
 		</FormField>
-		<FormField label="Download URL" id="download_url" hint="Must include ?shortcut_name= query parameter (your exact Shortcut Name URL-Encoded). Example: https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7?shortcut_name=Simple%20Base64">
+		<FormField label="Download URL" id="download_url" hint="Must include ?shortcut_name= query parameter (your exact Shortcut Name URL-Encoded). See Packages in the docs for more info.">
 			<Input
 				id="download_url"
-				placeholder="Enter Download URL with ?shortcut_name= parameter"
+				placeholder="Enter Download URL"
 				bind:value={download_url}
 			/>
 		</FormField>

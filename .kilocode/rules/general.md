@@ -9,3 +9,4 @@ Follow these guidelines where applicable.
 - Break your tasks into small steps
 - Keep long term effect in mind
 - Keep your code readable for an intermediate developer
+- Simplicity over complexity. Don't overcomplicate things and be efficient and concise

@@ -10,7 +10,6 @@
 
 	let short_description = $state('');
 	let long_description = $state('');
-	// let download_url = $state(''); // Commented out for versioning system
 	let edit_code = $state('');
 	let loading = $state(false);
 
@@ -36,31 +35,30 @@
 		if (
 			!formattedName ||
 			!trimmedShortDesc ||
-			!trimmedLongDesc ||
 			!trimmedEditCode
 		) {
-			showErrorDialog('create-package-validation-error', 'Validation Error', 'All fields are required');
+			// Validation will be shown via red "Required" text on fields
 			return;
 		}
 
 		loading = true;
 
 		try {
-			const formData = new FormData();
-			formData.append('name', formattedName);
-			formData.append('short_description', trimmedShortDesc);
-			formData.append('long_description', trimmedLongDesc);
-			formData.append('edit_code', trimmedEditCode);
-
-			const response = await fetch('/packages/create', {
+			const response = await fetch('/api/packages', {
 				method: 'POST',
-				body: formData
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					name: formattedName,
+					short_description: trimmedShortDesc,
+					long_description: trimmedLongDesc,
+					edit_code: trimmedEditCode
+				})
 			});
 
 			if (response.ok) {
 				// Store the formatted name before clearing form
 				const packageName = formattedName;
-				showErrorDialog('create-package-success', 'Success', 'Package created successfully!', () => {
+				showErrorDialog('create-package-success', 'success!', 'package created successfully!', () => {
 					// Clear form
 					name = '';
 					short_description = '';
@@ -74,10 +72,10 @@
 				});
 			} else {
 				const data = await response.json();
-				showErrorDialog('create-package-error', 'Error Creating Package', data.error || 'Failed to create package');
+				showErrorDialog('create-package-error', 'error creating package', data.message || 'Failed to create package');
 			}
 		} catch (err) {
-			showErrorDialog('create-package-network-error', 'Network Error', 'a network error occurred while creating the package');
+			showErrorDialog('create-package-network-error', 'network error?', 'a network error occurred while creating the package');
 		} finally {
 			loading = false;
 		}
@@ -85,12 +83,14 @@
 </script>
 
 <PageContainer containerId="create-package-page-container" pageId="create-package-page">
-	<h1>Create Package</h1>
-	<p>Fill in the details to create a new package.</p>
+	<section class="long-text">
+		<h1>Create Package</h1>
+		<p>Fill in the details to create a new package.</p>
+	</section>
 	<a class="button " href="/packages">Back to Packages</a>
 
 	<div class="form">
-		<FormField label="Package Name" id="name">
+		<FormField label="Package Name" id="name" required={true} value={name}>
 			<Input id="name" placeholder="Enter package name" bind:value={name} />
 			{#if formattedName}
 				<small class="small-text" style="color: var(--main-color);">
@@ -98,7 +98,7 @@
 				</small>
 			{/if}
 		</FormField>
-		<FormField label="Short Description" id="short_description">
+		<FormField label="Short Description" id="short_description" required={true} value={short_description}>
 			<Input
 				id="short_description"
 				placeholder="Enter short description (brief summary)"
@@ -113,17 +113,7 @@
 				long={true}
 			/>
 		</FormField>
-		<!-- Download URL field commented out for versioning system -->
-		<!--
-		<FormField label="Download URL" id="download_url" hint="Must include ?shortcut_name= query parameter (your exact Shortcut Name URL-Encoded). Example: https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7?shortcut_name=Simple%20Base64">
-			<Input
-				id="download_url"
-				placeholder="Enter Download URL with ?shortcut_name= parameter"
-				bind:value={download_url}
-			/>
-		</FormField>
-		-->
-		<FormField label="Edit Code" id="edit_code" hint="This is a secret code that is required to manage your package. Save it somewhere safe and don't share it!">
+		<FormField label="Edit Code" id="edit_code" required={true} value={edit_code} hint="This is a secret code that is required to manage your package. Save it somewhere safe and don't share it!">
 			<Input
 				id="edit_code"
 				placeholder="Enter edit code for future modifications"

@@ -10,11 +10,10 @@
 
 	/** @type {{name: string, short_description?: string, long_description?: string, download_url: string} | null} */
 	let packageData = $state(null);
-	let nameParam = $page.params.name;
+	let packageName = $page.params.name;
 	let name = $state('');
 	let short_description = $state('');
 	let long_description = $state('');
-	// let download_url = $state(''); // Commented out for versioning system
 	let edit_code = $state('');
 	let loading = $state(true);
 	let updating = $state(false);
@@ -32,14 +31,13 @@
 
 	onMount(async () => {
 		try {
-			const response = await fetch(`/api/packages/${nameParam}`);
+			const response = await fetch(`/api/packages/${packageName}`);
 			if (response.ok) {
 				packageData = await response.json();
 				if (packageData) {
 					name = packageData.name;
 					short_description = packageData.short_description || '';
 					long_description = packageData.long_description || '';
-					// download_url = packageData.download_url; // Commented out for versioning system
 				}
 			} else {
 				showErrorDialog('load-package-error', 'Error Loading Package', 'Failed to load package details.');
@@ -57,80 +55,24 @@
 		const trimmedName = String(name || '').trim();
 		const trimmedShortDesc = String(short_description || '').trim();
 		const trimmedLongDesc = String(long_description || '').trim();
-		// const trimmedPackageUrl = String(download_url || '').trim(); // Commented out for versioning system
 		const trimmedEditCode = String(edit_code || '').trim();
 
 		// Check for empty fields
-		if (!trimmedName || !trimmedShortDesc || !trimmedLongDesc || /* !trimmedPackageUrl || */ !trimmedEditCode) {
-			showErrorDialog('update-package-validation-error', 'Validation Error', 'All fields are required');
+		if (!trimmedName || !trimmedShortDesc || !trimmedEditCode) {
+			showErrorDialog('update-package-validation-error', 'Validation Error', 'Required fields are missing');
 			return;
 		}
-
-		// Validate download_url contains shortcut_name query parameter
-		// Commented out for versioning system - will be handled in version creation
-		/*
-		let url;
-		try {
-			url = new URL(trimmedPackageUrl);
-		} catch (urlError) {
-			// Clear any existing dialogs first
-			killDialog();
-			// Add a small delay before creating the error dialog to ensure proper dialog management
-			setTimeout(() => {
-				createDialog({
-					id: 'update-package-validation-error',
-					type: 'small',
-					title: 'Validation Error',
-					icon: 'warn-red',
-					bodyText: 'Invalid URL format. Please enter a valid URL.',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
-			}, 200);
-			return;
-		}
-
-		const shortcutName = url.searchParams.get('shortcut_name');
-		if (!shortcutName) {
-			// Clear any existing dialogs first
-			killDialog();
-			// Add a small delay before creating the error dialog to ensure proper dialog management
-			setTimeout(() => {
-				createDialog({
-					id: 'update-package-validation-error',
-					type: 'small',
-					title: 'Validation Error',
-					icon: 'warn-red',
-					bodyText: 'Download URL must include ?shortcut_name= query parameter',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
-			}, 200);
-			return;
-		}
-		*/
 
 		updating = true;
 
 		try {
-			const response = await fetch(`/api/packages/${nameParam}`, {
+			const response = await fetch(`/api/packages/${packageName}`, {
 				method: 'PATCH',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					name: formattedName,
 					short_description: trimmedShortDesc,
 					long_description: trimmedLongDesc,
-					// download_url: trimmedPackageUrl, // Commented out for versioning system
 					edit_code: trimmedEditCode
 				})
 			});
@@ -138,7 +80,7 @@
 			if (response.ok) {
 				showErrorDialog('update-package-success', 'Success', 'Package updated successfully!', () => {
 					setTimeout(() => {
-						goto(`/packages/${nameParam}`);
+						goto(`/packages/${packageName}`);
 					}, 200);
 				});
 			} else {
@@ -156,7 +98,7 @@
 		deleting = true;
 
 		try {
-			const response = await fetch(`/api/packages/${nameParam}`, {
+			const response = await fetch(`/api/packages/${packageName}`, {
 				method: 'DELETE',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
@@ -219,9 +161,11 @@
 </script>
 
 <PageContainer containerId="edit-package-page-container" pageId="edit-package-page">
-	<h1>Edit Package</h1>
-	<p>Modify the package details below.</p>
-	<a class="button " href="/packages/{nameParam}">Back to Package</a>
+	<section class="long-text">
+		<h1>Edit Package</h1>
+		<p>Modify the package details below.</p>
+	</section>
+	<a class="button " href="/packages/{packageName}">Back to Package</a>
 
 	{#if loading}
 		<p>Loading package details...</p>
@@ -241,12 +185,6 @@
 			<FormField label="Long Description" id="long_description">
 				<Input id="long_description" placeholder="Enter detailed description" bind:value={long_description} long={true} />
 			</FormField>
-			<!-- Download URL field commented out for versioning system -->
-			<!--
-			<FormField label="Download URL" id="download_url">
-				<Input id="download_url" placeholder="Enter Download URL with ?shortcut_name= parameter" bind:value={download_url} />
-			</FormField>
-			-->
 			<FormField label="Edit Code" id="edit_code">
 				<Input id="edit_code" placeholder="Enter edit code to confirm changes" bind:value={edit_code} />
 			</FormField>

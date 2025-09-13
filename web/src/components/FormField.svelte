@@ -7,6 +7,10 @@
 	export let hint = '';
 	/** @type {boolean} */
 	export let long = false;
+	/** @type {boolean} */
+	export let required = false;
+	/** @type {string} */
+	export let value = '';
 </script>
 
 <div class="field">
@@ -19,6 +23,9 @@
 	<div class="input-wrapper" class:long>
 		<slot />
 	</div>
+	{#if required && !value.trim()}
+		<small class="required-text">Required</small>
+	{/if}
 </div>
 
 <style>
@@ -44,5 +51,11 @@
 
 	.input-wrapper.long {
 		min-height: 100px;
+	}
+
+	.required-text {
+		color: red;
+		font-size: 0.8rem;
+		margin-top: 0.25rem;
 	}
 </style>

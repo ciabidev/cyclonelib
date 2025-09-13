@@ -95,8 +95,10 @@
 </script>
 
 <PageContainer containerId="edit-version-page-container" pageId="edit-version-page">
-	<h1>Edit Version {versionParam}</h1>
-	<p>Edit the version details below.</p>
+	<section class="long-text">	
+		<h1>Edit Version {versionParam}</h1>
+		<p>Edit the version details below.</p>
+	</section>
 	<a class="button " href="/packages/{packageName}">Back to Package</a>
 
 	{#if loading}
