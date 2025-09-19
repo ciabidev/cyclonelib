@@ -10,26 +10,13 @@
 	let searchQuery = $state('');
 
 	// Filter packages based on search query
-	function normalize(str) {
-  return str
-    .toLowerCase()
-    .replace(/[-_]/g, ' ')   // turn dashes/underscores into spaces
-    .replace(/\s+/g, ' ')    // collapse multiple spaces
-    .trim();
-}
-
-let filteredPackages = $derived(
-  searchQuery.trim() === ''
-    ? packages
-    : packages.filter(pkg => {
-        const query = normalize(searchQuery);
-        return (
-          normalize(pkg.name).includes(query) ||
-          normalize(pkg.short_description).includes(query) ||
-          normalize(pkg.long_description).includes(query)
-        );
-      })
-);
+	let filteredPackages = $derived(
+		searchQuery.trim() === '' ? packages : packages.filter(pkg =>
+			pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			pkg.short_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			pkg.long_description.toLowerCase().includes(searchQuery.toLowerCase())
+		)
+	);
 </script>
 
 <PageContainer containerId="packages-page-container" pageId="packages-page">

@@ -52,3 +52,4 @@ export function showErrorDialog(id, title, message, onContinue = () => {}) {
 	}, 1);
 	killDialog();
 }
+ 

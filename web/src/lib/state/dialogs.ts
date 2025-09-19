@@ -29,7 +29,6 @@
 
 import { writable, type Writable } from "svelte/store";
 import type { DialogInfo } from "$lib/types/dialog";
-import { kill } from "process";
 
 /**
  * DialogManager - Core dialog state management class
