@@ -10,3 +10,4 @@ Follow these guidelines where applicable.
 - Keep long term effect in mind
 - Keep your code readable for an intermediate developer
 - Simplicity over complexity. Don't overcomplicate things and be efficient and concise
+- Whenever you patch something, add a c

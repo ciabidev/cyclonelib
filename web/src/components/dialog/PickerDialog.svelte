@@ -4,9 +4,8 @@
     import type { DialogPickerItem } from "$lib/types/dialog";
 
     import DialogContainer from "$components/dialog/DialogContainer.svelte";
-
     import PickerItem from "$components/dialog/PickerItem.svelte";
-    import DialogButtons from "$components/dialog/DialogButtons.svelte";
+    import { dialogs } from "$lib/state/dialogs";
 
     export let id: string;
     export let items: Optional<DialogPickerItem[]> = undefined;
@@ -14,6 +13,12 @@
     export let dismissable = true;
 
     let close: () => void;
+
+    // Track dialog count to detect if action created a new dialog
+    let currentDialogs: any[] = [];
+    dialogs.subscribe((dialogList: any[]) => {
+        currentDialogs = dialogList;
+    });
 </script>
 
 <DialogContainer {id} {dismissable} bind:close>
@@ -42,7 +47,40 @@
             {/if}
         </div>
         {#if buttons}
-            <DialogButtons {buttons} closeFunc={close} />
+            <div class="button-group">
+                {#each buttons as button}
+                    {#if button.link}
+                        <a
+                            class="button button--link"
+                            class:active={button.main}
+                            href={button.link}
+                        >
+                            {button.text}
+                        </a>
+                    {:else}
+                        <button
+                            class="button  {button.color === 'red' ? 'button--danger' : ''}"
+                            class:active={button.main}
+                            on:click={async () => {
+                                await button.action();
+
+                                // Check if this dialog is still in the dialogs array
+                                // If it was removed (e.g., by killDialog()), don't try to close it
+                                let currentDialogs: any[] = [];
+                                dialogs.subscribe((dialogList: any[]) => currentDialogs = dialogList)();
+
+                                const dialogStillExists = currentDialogs.some((dialog: any) => dialog.id === id);
+
+                                if (dialogStillExists) {
+                                    close();
+                                }
+                            }}
+                        >
+                            {button.text}
+                        </button>
+                    {/if}
+                {/each}
+            </div>
         {/if}
     </div>
 </DialogContainer>

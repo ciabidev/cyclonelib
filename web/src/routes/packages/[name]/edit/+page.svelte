@@ -114,11 +114,9 @@
 				});
 			} else {
 				const data = await response.json();
-				closeDialogAnimated('delete-package-dialog');
 				showErrorDialog('delete-package-error', 'Error Deleting Package', data.message || 'Failed to delete package');
 			}
 		} catch (err) {
-			closeDialogAnimated('delete-package-dialog');
 			showErrorDialog('delete-package-network-error', 'Network Error', 'Network error occurred while deleting package');
 		} finally {
 			deleting = false;
@@ -146,9 +144,9 @@
 					}
 				},
 				{
-					text: 'Delete',
+					text: 'delete',
 					color: 'red',
-					main: true,
+					main: false,
 					action: performDelete
 				}
 			]

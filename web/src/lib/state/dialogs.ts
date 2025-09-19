@@ -29,6 +29,7 @@
 
 import { writable, type Writable } from "svelte/store";
 import type { DialogInfo } from "$lib/types/dialog";
+import { kill } from "process";
 
 /**
  * DialogManager - Core dialog state management class
@@ -64,6 +65,11 @@ class DialogManager {
      *   ]
      * });
      */
+    killDialog() {
+        this.dialogsStore.update(dialogs => dialogs.slice(0, -1));
+    }
+
+
     createDialog(dialog: DialogInfo) {
         this.dialogsStore.update(dialogs => [...dialogs, dialog]);
     }
@@ -72,10 +78,7 @@ class DialogManager {
      * Closes the topmost (most recently opened) dialog
      * This removes the last dialog from the stack
      */
-    killDialog() {
-        this.dialogsStore.update(dialogs => dialogs.slice(0, -1));
-    }
-
+    
     /**
      * Closes a specific dialog with animation by triggering its close function
      * This is used when we want to close a dialog programmatically with animation
