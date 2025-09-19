@@ -15,27 +15,7 @@ export async function load() {
     });
   }
 
-  console.log(`[DEBUG] Raw packages count: ${pkgs?.length || 0}`);
-  // @ts-ignore
-  console.log(`[DEBUG] First few package names: ${pkgs?.slice(0, 5).map(p => p.name).join(', ') || 'none'}`);
-
-  // @ts-ignore
-  const serializedPackages = pkgs?.map(doc => serializeDoc(doc)) || [];
-
-  console.log(`[DEBUG] Serialized packages count: ${serializedPackages?.length || 0}`);
-  // @ts-ignore
-  console.log(`[DEBUG] Serialized package names: ${serializedPackages?.slice(0, 5).map(p => p?.name).join(', ') || 'none'}`);
-
-  // Check for any null/undefined packages after serialization
-  // @ts-ignore
-  const validPackages = serializedPackages.filter(pkg => pkg && pkg.name);
-  console.log(`[DEBUG] Valid packages count: ${validPackages.length}`);
-
-  if (validPackages.length !== serializedPackages.length) {
-    console.warn(`[DEBUG] Some packages were filtered out during serialization. Original: ${serializedPackages.length}, Valid: ${validPackages.length}`);
-  }
-
   return {
-    packages: validPackages
+    packages: pkgs.map(doc => serializeDoc(doc))
   };
 }
