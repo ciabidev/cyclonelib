@@ -9,6 +9,15 @@
 	let packages = $derived(data.packages);
 	let searchQuery = $state('');
 
+	// Debug logging
+	$effect(() => {
+		console.log(`[CLIENT DEBUG] Received ${packages?.length || 0} packages from server`);
+		if (packages?.length > 0) {
+			// @ts-ignore
+			console.log(`[CLIENT DEBUG] Package names: ${packages.slice(0, 5).map(p => p.name).join(', ')}`);
+		}
+	});
+
 	// Filter packages based on search query
 	let filteredPackages = $derived(
 		searchQuery.trim() === '' ? packages : packages.filter(pkg =>
