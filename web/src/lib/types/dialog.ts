@@ -1,3 +1,5 @@
+import type { Emotions } from "./emotions";
+
 export type DialogButton = {
     text: string,
     color?: "red",
@@ -22,7 +24,7 @@ type Dialog = {
 
 export type SmallDialog = Dialog & {
     type: "small",
-    meowbalt?: string,
+    emotion?: Emotions,
     icon?: SmallDialogIcons,
     title?: string,
     bodyText?: string,
