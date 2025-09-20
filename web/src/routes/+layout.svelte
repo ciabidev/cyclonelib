@@ -8,6 +8,24 @@
 	import DialogHolder from '$components/dialog/DialogHolder.svelte';
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
+import { onMount } from "svelte";
+
+  onMount(() => {
+    if (window.visualViewport) {
+      const handler = () => {
+        const keyboardHeight =
+          window.innerHeight - visualViewport.height + visualViewport.offsetTop;
+
+        // Give the page enough bottom padding so the nav stays above the keyboard
+        document.body.style.paddingBottom = keyboardHeight > 0
+          ? keyboardHeight + "px"
+          : "0px";
+      };
+
+      visualViewport.addEventListener("resize", handler);
+      handler(); // run once on mount
+    }
+  });
 
 </script>
 
