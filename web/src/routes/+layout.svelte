@@ -7,26 +7,7 @@
 	import Toasts from '$components/toasts/Toasts.svelte';
 	import DialogHolder from '$components/dialog/DialogHolder.svelte';
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
-
-import { onMount } from "svelte";
-
-  onMount(() => {
-    if (window.visualViewport) {
-      const handler = () => {
-        const keyboardHeight =
-          window.innerHeight - visualViewport.height + visualViewport.offsetTop;
-
-        // Give the page enough bottom padding so the nav stays above the keyboard
-        document.body.style.paddingBottom = keyboardHeight > 0
-          ? keyboardHeight + "px"
-          : "0px";
-      };
-
-      visualViewport.addEventListener("resize", handler);
-      handler(); // run once on mount
-    }
-  });
-
+	
 </script>
 
 <svelte:head>
@@ -36,11 +17,16 @@ import { onMount } from "svelte";
 	<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
 	<meta name="apple-mobile-web-app-title" content="ciabi" />
 	<link rel="manifest" href="/favicon/site.webmanifest" />
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content"
+	/>
 </svelte:head>
 
 <Toasts />
 <DialogHolder />
-<div id="basket"> <!-- acts as a "body" tag that we have more control over. Example: when a mobile user reaches end of scroll. then the page starts scrolling to make typing and scrolling easier -->
+<div id="basket">
+	<!-- acts as a "body" tag that we have more control over. Example: when a mobile user reaches end of scroll. then the page starts scrolling to make typing and scrolling easier -->
 
 	<div id="loaf">
 		<!-- includes main content of the page only -->
@@ -51,25 +37,25 @@ import { onMount } from "svelte";
 </div>
 
 <style>
-  #loaf {
-	/* content of the page */
-	/*border: solid red .3125rem;
+	#loaf {
+		/* content of the page */
+		/*border: solid red .3125rem;
    */
-  
-	overflow-y: auto;
-	width: 100%;
-	background-color: var(--bg-color);
-	border-bottom-left-radius: var(--border-radius);
-	border-bottom-right-radius: var(--border-radius);
-	height: calc(100% - var(--navbar-height));
-}
 
-#basket {
-	height: 100%;
-  width: 100%;
-  overscroll-behavior-y: none;
-	display: flex;
-	flex-direction: column;
-  
-}
+		overflow-y: auto;
+		width: 100%;
+		background-color: var(--bg-color);
+		border-bottom-left-radius: calc(var(--border-radius) * 2);
+		border-bottom-right-radius: calc(var(--border-radius) * 2);
+		height: calc(100% - var(--navbar-height));
+	}
+
+	#basket {
+		height: 100%;
+		width: 100%;
+		overscroll-behavior-y: none;
+		overflow-y: hidden;
+		display: flex;
+		flex-direction: column;
+	}
 </style>

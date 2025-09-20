@@ -21,6 +21,7 @@
     <nav class="navbar-tabs">
       <NavTab name={"about?"} Icon={InfoIcon} path={"/"} />
       <NavTab name={"packages"} Icon={BoxIcon} path={"/packages"} />
+      <NavTab name={"test"} Icon={StarIcon} path={"/test"} />
     </nav>
   </nav>
 
@@ -40,7 +41,7 @@
     justify-content: center;
     align-items: center;
     overflow-y: hidden;
-    position: sticky;
+    position: fixed;
   	z-index: 1005;
   	background-color: var(--nav-bg);
   }
@@ -60,7 +61,6 @@
     @media screen and (max-width: 535px) {
       .navbar {
         height: var(--mobile-navbar-height);
-        position: sticky;
       }
     }
 </style>

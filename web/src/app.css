@@ -125,7 +125,6 @@ body {
 	animation: fadeIn 200ms forwards;
 	height: 100%;
 	width: 100%;
-	margin: 0;
 	background: var(--nav-bg); /* for cozy navbar */;
 	-webkit-animation: fadeIn 200ms forwards;
 }
@@ -134,10 +133,13 @@ html {
 	height: 100dvh;
 	width: 100dvw;
 	min-height: 100dvh;
-	margin: 0;
 	overscroll-behavior-y: none;
 }
 
+html, body {
+	margin: 0;
+	overflow: hidden;
+}
 h1,
 h2 {
 	padding: 6px 0;
