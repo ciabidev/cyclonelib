@@ -33,6 +33,7 @@
 	</div>
 	<!-- render any slotted content-->
 	{@html extra_html}
+	<slot></slot>
 </div>
 
 <style>
