@@ -23,7 +23,7 @@
 	--button-default-hover: color-mix(in srgb, var(--button-default), black 5%);
 	--button-press: #dbdbdb;
 	--button-stroke: rgba(0, 0, 0, 0.06);
-    --button-box-shadow: var(--shadow-main),  0px 0px 0px 1px var(--button-stroke) inset;
+    --button-box-shadow: var(--shadow-main), 0px 0px 0px 1px var(--button-stroke) inset;
 	/* old button-box-shadow: 0 0 0 1px var(--button-stroke) inset; */
 	--switcher-padding: 3.5px;
 	
@@ -37,7 +37,7 @@
 	--gray: #75757e;
 
 	/* Card styles */
-	--card: var(--button);
+	--card: var(--button-default);
 	--card-box-shadow: var(--button-box-shadow);
 	/* Input styles */
 	--input-box-shadow: var(--button-stroke) 0 0 0 1.5px inset;
@@ -57,12 +57,11 @@
 	--icon-size-mobile: 22px;
 	--icon-size-desktop: 25px;
 	--actions-and-stuff-ahh-transition: cubic-bezier(0.68, -0.6, 0.32, 1.6);
-	--content-border-radius: 1rem;
 	--grid-bg:
 		linear-gradient(to right, rgba(128, 128, 128, 0.05) 1px, transparent 1px),
 		linear-gradient(to bottom, rgba(128, 128, 128, 0.05) 1px, transparent 1px);
 	--grid-bg-size: 15px 15px;
-	--border-radius: 12px;
+	--border-radius: 11px;
 	font-size: 15px;
 	--readable-line-height: 1.8;
 }
@@ -87,7 +86,7 @@
 }
 
 *, *::before, *::after {
-    box-sizing: border-box;
+    box-sizing: border-box !important;
 }
 
 ::-webkit-scrollbar {
@@ -397,7 +396,7 @@ button,
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 10px 13px;
+	padding: 9px 13px;
 	gap: 6px;
 	text-decoration: none;
 	border: none;
@@ -407,7 +406,7 @@ button,
 	cursor: pointer;
 	font-weight: 500;
 	transition: all 0.2s ease;
-	border: var(--button-stroke) solid 1px;
+	border: var(--button-stroke) solid 1px;	
 	background-color: var(--button-default);
 	color: var(--text-color);
 	-webkit-transition: all 0.2s ease;
@@ -428,7 +427,7 @@ button,
 	color: var(--bg-color);
 }
 
-button:active:not(.active), .button:active:not(.active) {
+button:active, .button:active {
 	background-color: var(--button-press);
 }
 

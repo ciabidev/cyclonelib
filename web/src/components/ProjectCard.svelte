@@ -7,8 +7,9 @@
 		img = null,
 		banner = null,
 		tiny = null,
-		extra_html = null
+		extra_html = null,
 	} = $props();
+	
 	// @ts-ignore
 	import LinkIcon from '~icons/tabler/external-link';
 	import URLButton from './inputs-and-buttons/URLButton.svelte';
@@ -30,12 +31,8 @@
 			</div>
 		</div>
 	</div>
-	{#if extra_html}
-		{#each extra_html as html}
-			{@html html}
-		{/each}
-	{/if}
-	<slot></slot>
+	<!-- render any slotted content-->
+	{@html extra_html}
 </div>
 
 <style>
@@ -54,7 +51,8 @@
 		align-items: flex-start;
 		min-width: fit-content;
 		transition: all 0.3s var(--actions-and-stuff-ahh-transition);
-		border: 1px solid var(--button-stroke);
+		border: 1px inset var(--popup-stroke);
+		background: var(--bg-color);
 		box-shadow: var(--shadow-main);
 	}
 
