@@ -4,6 +4,8 @@
 	import Input from "$components/inputs-and-buttons/Input.svelte";
 	import ProjectCard from "$components/ProjectCard.svelte";
 	import { showDialog } from "$lib/utils/dialog-helpers";
+	import Page from "../+page.svelte";
+	import PageContainer from "$components/PageContainer.svelte";
 	let testInput = $state('');
 	let active1 = $state(0);
 	let active2 = $state(0);
@@ -14,12 +16,12 @@
 <!--acts as a "body" excluding the navbar -->
 <!-- Page metadata for discord embed. This is a guide to AO Challenger and a list of all commands. The title is About AO Challenger-->
 
-<div class="page-wrapper">
-	<div class="main">
+<PageContainer containerId="test-page-container" pageId="test-page">
 		<section id="test-hero" class="paragraph-text">
-			<h2>Loaf-web Test Page</h2>
+			<h1>Loaf-web Test Page</h1>
 			<p class="paragraph-text">Test page for the Loaf-web layout</p>
 		</section>
+		<h1>Components</h1>
 		<section id="test-dialog">
 			<button class="button " onclick={() => showDialog('test-dialog', 'test dialog', 'this is a test dialog')}>test dialog</button>
 		</section>
@@ -50,8 +52,7 @@
 		<section id="test-input">
 			<Input placeholder="test input with description" bind:value={testInput} description={"your input is: " + testInput} />
 		</section>
-	</div>
-</div>
+	</PageContainer>
 
 <style>
 	.page-wrapper {

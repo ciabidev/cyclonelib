@@ -1,3 +1,5 @@
+<!-- the basic page container used by most pages. Not all pages will have pading or be centered, which is why we cant just apply this to #loaf -->
+
 <script>
 	/** @type {string} */
 	export let containerId = '';
