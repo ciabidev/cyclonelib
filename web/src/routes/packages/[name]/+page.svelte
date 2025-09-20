@@ -13,7 +13,7 @@
 <PageContainer containerId="package-details-page-container" pageId="package-details-page" maxWidth="800px">
 	{#if packageData}
 		<a class="button " href="/packages">Back to Packages</a>
-		<div class="package-header long-text">
+		<div class="package-header paragraph-text">
 			<h1>{packageData.name}</h1>
 		</div>
 
@@ -65,12 +65,12 @@
 				<div class="main-info-tab">
 					<div class="package-content">
 						{#if packageData.short_description}
-							<div class="short-description long-text">
+							<div class="short-description paragraph-text">
 								<strong>Short Description:</strong> {packageData.short_description}
 							</div>
 						{/if}
 						{#if packageData.long_description}
-							<div class="long-description long-text">
+							<div class="long-description paragraph-text">
 								<h1>Detailed Description</h1>
 								<Markdown source={packageData.long_description} />
 							</div>

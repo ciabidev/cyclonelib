@@ -1,6 +1,6 @@
 import { json, error } from '@sveltejs/kit';
 import { connectDB, serializeDoc } from '$lib/server/db-utils.js';
-
+import { hashEditCode } from '$lib/server/db-utils.js';
 export async function GET({ params }) {
 	const { name } = params;
 
@@ -36,7 +36,7 @@ export async function POST({ request, params }) {
 	const { name } = params;
 
 	try {
-		const { version_number, patch_notes, download_url } = await request.json();
+		const { version_number, patch_notes, download_url, edit_code } = await request.json();
 
 		// Validate download_url contains shortcut_name query parameter
 		let url;
@@ -56,7 +56,7 @@ export async function POST({ request, params }) {
 		// Check if package exists
 		const { data: packageDoc, error: packageError } = await db
 			.from('packages')
-			.select('name')
+			.select('name, edit_code')
 			.eq('name', name)
 			.single();
 
@@ -83,6 +83,10 @@ export async function POST({ request, params }) {
 
 		if (existingVersion) {
 			throw error(409, { message: 'Version number already exists for this package' });
+		}
+
+		if (packageDoc.edit_code !== await hashEditCode(edit_code.trim())) {
+			throw error(403, { message: 'Edit code does not match' });
 		}
 
 		const versionDoc = {

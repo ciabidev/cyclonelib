@@ -20,18 +20,18 @@
 </svelte:head>
 
 <div class="page-wrapper">
-	<main class="long-text">
+	<main class="paragraph-text">
 		<a href="https://wheatwhole.github.io">????</a>
 		<URLButton url="https://routinehub.co/shortcut/19577" name="Get Cyclone" img="icons/cyclone.webp" urlshort="routinehub.co/shortcut/19577" />
-		<h2 id="-build-better-and-faster">⏩ Build Better and Faster</h2>
+		<h2 id="-build-better-and-faster">⏩ build better and faser</h2>
 		<p>
 			Cyclone is the ultimate power-up for Apple Shortcuts.<br />Install it once and get a bunch of
-			new actions. Soon you’ll be able to make <strong>Custom Functions</strong> to speed up any shortcut
+			new actions. soon you’ll be able to make <strong>Custom Functions</strong> to speed up any shortcut
 			you create.
 		</p>
 		<p>It’s fully released and updated regularly.<br />💬 Found a bug or got an idea? <a href="https://tally.so/r/mVXylJ">Send it here</a> – we actually read them.
 		</p>
-		<h2 id="-why-cyclone">🌀 Why Cyclone</h2>
+		<h2 id="-why-cyclone">🌀 why cyclone</h2>
 		<p><a href="https://routinehub.co/shortcut/22695">Demo Shortcut</a></p>
 		<ul>
 			<li>

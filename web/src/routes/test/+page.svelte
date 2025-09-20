@@ -3,6 +3,7 @@
 	import { createDialog } from "$lib/state/dialogs";
 	import Input from "$components/inputs-and-buttons/Input.svelte";
 	import ProjectCard from "$components/ProjectCard.svelte";
+	import { showDialog } from "$lib/utils/dialog-helpers";
 	let testInput = $state('');
 	let active1 = $state(0);
 	let active2 = $state(0);
@@ -15,29 +16,24 @@
 
 <div class="page-wrapper">
 	<div class="main">
-		<section id="test-hero" class="long-text">
+		<section id="test-hero" class="paragraph-text">
 			<h2>Loaf-web Test Page</h2>
-			<p class="long-text">Test page for the Loaf-web layout</p>
+			<p class="paragraph-text">Test page for the Loaf-web layout</p>
 		</section>
 		<section id="test-dialog">
-			<button class="button " onclick={() => createDialog({
-				id: 'test-dialog',
-				type: 'small',
-				title: 'Test Dialog',
-				bodyText: 'This is a test dialog from the cobalt-main dialog system!',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => console.log('ok clicked')
-					},
-					{
-						text: 'cancel',
-						main: false,
-						action: () => console.log('cancel clicked')
-					}
-				]
-			})}>Test Dialog</button>
+			<button class="button " onclick={() => showDialog('test-dialog', 'test dialog', 'this is a test dialog')}>test dialog</button>
+		</section>
+		<section id="test-project-card">
+			<ProjectCard
+				name="Test Project"
+				url="https://github.com/wheatwhole/cyclone"
+				urlshort="github.com/wheatwhole/cyclone"
+				description="This is a test project card"
+			>
+				<div class="actions">
+					<button class="button button--primary">Test </button>
+				</div>
+			</ProjectCard>
 		</section>
 		<section id="test-switcher--defualt">
 		<Switcher>

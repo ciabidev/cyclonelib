@@ -40,7 +40,8 @@
 
     .switcher {
         background: var(--button-default);
-        box-shadow: var(--button-box-shadow);
+        border: var(--button-stroke) solid 1px;
+        box-shadow: var(--shadow-main);
         padding: var(--switcher-padding);
         gap: calc(var(--switcher-padding) - 1.5px);
     }
@@ -54,7 +55,9 @@
         /* [base button height] - ([switcher padding] * [padding factor to accommodate for]) */
         height: calc(40px - var(--switcher-padding) * 2);
         border-radius: calc(var(--border-radius) - var(--switcher-padding));
+        border: 1px solid transparent; /* without this the border will flash black when :active */
         box-shadow: none;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
     }
 
     .switcher :global(.button:not(.active, :hover, :active)) {
@@ -62,7 +65,7 @@
     }
 
     .switcher :global(.button:active:not(.active)) {
-        box-shadow: var(--button-box-shadow);
+        border-color: var(--button-stroke);
     }
 
 </style>

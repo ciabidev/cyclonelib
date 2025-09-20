@@ -4,7 +4,6 @@
 	import PageContainer from '$components/PageContainer.svelte';
 	import FormField from '$components/FormField.svelte';
 	import { showErrorDialog } from '$lib/utils/dialog-helpers';
-	import { createDialog } from '$lib/state/dialogs';
 
 	let name = $state('');
 
@@ -83,7 +82,7 @@
 </script>
 
 <PageContainer containerId="create-package-page-container" pageId="create-package-page">
-	<section class="long-text">
+	<section class="paragraph-text">
 		<h1>Create Package</h1>
 		<p>Fill in the details to create a new package.</p>
 	</section>

@@ -17,15 +17,15 @@
 	{#if label}
 		<label for={id}>{label}</label>
 	{/if}
+	{#if required && !value.trim()}
+		<small class="required-text">Required</small>
+	{/if}
 	{#if hint}
 		<p class="hint">{hint}</p>
 	{/if}
 	<div class="input-wrapper" class:long>
 		<slot />
 	</div>
-	{#if required && !value.trim()}
-		<small class="required-text">Required</small>
-	{/if}
 </div>
 
 <style>
@@ -56,6 +56,6 @@
 	.required-text {
 		color: red;
 		font-size: 0.8rem;
-		margin-top: 0.25rem;
+		display: inline-block;
 	}
 </style>

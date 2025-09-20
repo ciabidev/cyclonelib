@@ -74,7 +74,7 @@
     align-items: center;
     min-width: 80px;
     padding: 0 var(--navbar-tab-padding);
-    height: 100%;
+    height: 90%;
     color: var(--navbar-highlight);
     font-size: var(--navbar-font-size);
     opacity: 0.75;
@@ -103,21 +103,10 @@
   }
 }
 
- @media only screen and (max-width: 600px) {
+ @media only screen and (max-width: 535px) {
    a[role="tab"] {
-     padding: 3px 1px;
-   }
-
-   .icon {
-     font-size: var(--icon-size-mobile) !important;
+     height: 85%;
    }
  }
-
- @media only screen and (min-width: 601px) {
-   .icon {
-     font-size: var(--icon-size-desktop) !important;
-   }
- }
-
   
 </style>

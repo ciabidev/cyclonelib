@@ -10,6 +10,7 @@
 	let version_number = $state('');
 	let patch_notes = $state('');
 	let download_url = $state('');
+	let edit_code = $state('');
 	let loading = $state(false);
 
 	// Get package name from URL
@@ -20,10 +21,11 @@
 		const trimmedVersion = String(version_number || '').trim();
 		const trimmedNotes = String(patch_notes || '').trim();
 		const trimmedUrl = String(download_url || '').trim();
+		const trimmedEditCode = String(edit_code || '').trim();
 
 		// Check for empty fields
-		if (!trimmedVersion || !trimmedNotes || !trimmedUrl) {
-			showErrorDialog('create-version-validation-error', 'Validation Error', 'All fields are required');
+		if (!trimmedVersion || !trimmedNotes || !trimmedUrl || !trimmedEditCode) {
+			showErrorDialog('create-version-validation-error', 'Validation Error', 'Missing required fields');
 			return;
 		}
 
@@ -51,7 +53,8 @@
 				body: JSON.stringify({
 					version_number: trimmedVersion,
 					patch_notes: trimmedNotes,
-					download_url: trimmedUrl
+					download_url: trimmedUrl,
+					edit_code: trimmedEditCode
 				})
 			});
 
@@ -79,7 +82,7 @@
 </script>
 
 <PageContainer containerId="create-version-page-container" pageId="create-version-page">
-	<section class="long-text">
+	<section class="paragraph-text">
 		<h1>Create Version for {packageName}</h1>
 		<p>Create the first version for your package.</p>
 	</section>
@@ -103,6 +106,9 @@
 				placeholder="Enter Download URL"
 				bind:value={download_url}
 			/>
+		</FormField>
+		<FormField label="Edit Code" id="edit_code" required={true} value={edit_code}>
+			<Input id="edit_code" placeholder="Enter edit code to confirm changes" bind:value={edit_code} />
 		</FormField>
 		<button class="button button--primary" onclick={submit}
 			>{loading ? 'Creating...' : 'Create Version'}</button

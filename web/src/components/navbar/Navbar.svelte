@@ -16,7 +16,6 @@
 
 </script>
 
-<div class="navbar-container">
   <nav class="navbar">
     <NavbarLogo />
     <nav class="navbar-tabs">
@@ -24,38 +23,32 @@
       <NavTab name={"packages"} Icon={BoxIcon} path={"/packages"} />
     </nav>
   </nav>
-</div>
 
 <style>
-  .navbar, .navbar-tabs, .navbar-container {
+  .navbar, .navbar-tabs {
     display: flex;
     flex-direction: row;    
-  }
-
-  
-  .navbar-container {
-  	position: sticky;
-  	height: calc(var(--navbar-height));
-  	bottom: 0;
-  	width: 100%;
-  	z-index: 1005;
-  	background-color: var(--nav-bg);
   }
 
   .navbar {
     z-index: 100;
     overflow-x: auto;
     width: 100%;
-    overflow-y: hidden;
+    height: 100%;
+    max-height: calc(var(--navbar-height));
+    bottom: 0;
     justify-content: center;
+    align-items: center;
+    overflow-y: hidden;
+    position: sticky;
+  	z-index: 1005;
+  	background-color: var(--nav-bg);
   }
 
   .navbar-tabs {
-    display: flex;
-    flex-direction: row;
-    padding: var(--navbar-inner-padding);
     align-items: center;
     z-index: 1005;
+    height: 100%;
     justify-content: space-evenly;
   }
 
@@ -65,7 +58,7 @@
 
 
     @media screen and (max-width: 535px) {
-      .navbar-container {
+      .navbar {
         height: var(--mobile-navbar-height);
         position: sticky;
       }

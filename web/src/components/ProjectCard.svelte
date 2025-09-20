@@ -26,7 +26,7 @@
 			<div class="card-text">
 				<h2 class="project-name">{name}</h2>
 				<div class="small-text tiny">{tiny}</div>
-				<div class="small-text description long-text">{description}</div>
+				<div class="small-text description paragraph-text">{description}</div>
 			</div>
 		</div>
 	</div>
@@ -54,8 +54,8 @@
 		align-items: flex-start;
 		min-width: fit-content;
 		transition: all 0.3s var(--actions-and-stuff-ahh-transition);
-		box-shadow:
-			var(--card-box-shadow);
+		border: 1px solid var(--button-stroke);
+		box-shadow: var(--shadow-main);
 	}
 
 	.card-content {

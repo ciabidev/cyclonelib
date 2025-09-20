@@ -75,12 +75,12 @@
                         </div>
                     {/if}
                     {#if title}
-                        <h2 class="popup-title" tabindex="-1">{title}</h2>
+                        <h2 class="popup-title">{title}</h2>
                     {/if}
                 </div>
             {/if}
             {#if bodyText}
-                <div class="body-text" tabindex="-1">{bodyText}</div>
+                <div class="body-text">{bodyText}</div>
             {/if}
             {#if bodySubText}
                 <div class="subtext popup-subtext">{bodySubText}</div>

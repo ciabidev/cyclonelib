@@ -6,7 +6,8 @@
 	import PageContainer from '$components/PageContainer.svelte';
 	import FormField from '$components/FormField.svelte';
 	import { showErrorDialog } from '$lib/utils/dialog-helpers';
-
+	import { showDialog } from '$lib/utils/dialog-helpers';
+	
 	let version_number = $state('');
 	let patch_notes = $state('');
 	let download_url = $state('');
@@ -77,7 +78,7 @@
 			});
 
 			if (response.ok) {
-				showErrorDialog('update-version-success', 'Success', 'Version updated successfully!', () => {
+				showDialog('update-version-success', 'Success', 'Version updated successfully!', () => {
 					setTimeout(() => {
 						goto(`/packages/${packageName}`);
 					}, 200);
@@ -95,7 +96,7 @@
 </script>
 
 <PageContainer containerId="edit-version-page-container" pageId="edit-version-page">
-	<section class="long-text">	
+	<section class="paragraph-text">	
 		<h1>Edit Version {versionParam}</h1>
 		<p>Edit the version details below.</p>
 	</section>

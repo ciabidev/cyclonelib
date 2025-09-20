@@ -159,7 +159,7 @@
 </script>
 
 <PageContainer containerId="edit-package-page-container" pageId="edit-package-page">
-	<section class="long-text">
+	<section class="paragraph-text">
 		<h1>Edit Package</h1>
 		<p>Modify the package details below.</p>
 	</section>

@@ -5,7 +5,7 @@
     console.log(html);
 </script>
 
-<div class="markdown long-text">
+<div class="markdown paragraph-text">
     {@html html}
 </div>
 

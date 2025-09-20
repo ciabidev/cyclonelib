@@ -20,7 +20,7 @@
 </script>
 
 <PageContainer containerId="packages-page-container" pageId="packages-page">
-	<div class="header long-text">
+	<div class="header paragraph-text">
 		<h1>packages</h1>
 	</div>
 	<Input placeholder="search packages" bind:value={searchQuery} min_width="100%" Icon={SearchIcon} />
@@ -39,7 +39,7 @@
 				extra_html={[`<a class="button " href="/packages/${pkg.name}">View Package</a>`]}
 			></ProjectCard>
 		{:else}
-			<p class="long-text">No packages found.</p>
+			<p class="paragraph-text">No packages found.</p>
 		{/each}
 	</div>
 </PageContainer>
