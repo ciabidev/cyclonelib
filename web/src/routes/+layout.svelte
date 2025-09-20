@@ -8,26 +8,6 @@
 	import DialogHolder from '$components/dialog/DialogHolder.svelte';
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
-import { onMount } from "svelte";
-
-  onMount(() => {
-    if (window.visualViewport) {
-      visualViewport.addEventListener("resize", () => {
-        const offset = visualViewport.height < window.innerHeight
-          ? window.innerHeight - visualViewport.height
-          : 0;
-
-        document.body.style.paddingBottom = offset + "px";
-      });
-    }
-
-    // optional: scroll focused inputs into view
-    document.querySelectorAll("input, textarea").forEach(el => {
-      el.addEventListener("focus", () => {
-        setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 300);
-      });
-    });
-  });
 
 </script>
 
