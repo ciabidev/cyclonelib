@@ -1,1 +1,1 @@
-export type Emotions = "confused";
+export type Emotions = "confused" | "unamused" | "happy" | "awkward" | "surprised" | "sad" | "angry";

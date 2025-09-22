@@ -27,7 +27,7 @@
     .emotion {
         width: 1em;
         height: 1em;
-        border-radius: var(--border-radius);
+        border-radius: var(--border-radius); 
     }
 
     .emotion.small {

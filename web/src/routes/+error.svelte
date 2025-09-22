@@ -3,6 +3,7 @@
     import Emotion from '$components/misc/Emotion.svelte';
 </script>
 
+<!-- emotions: confused" | "unamused" | "happy" | "awkward" | "surprised" | "sad" | "angry" -->
 {#if page.status === 404}
     <div class="error">
         <Emotion emotion="confused" size="large" />
@@ -11,6 +12,7 @@
     </div>
 {:else}
     <div class="error">
+        <Emotion emotion="awkward" size="large" />
         <h1>error {page.status}</h1>
         <span class="giantahhparagraph">{page.error?.message || 'unknown error'}</span>
     </div>
