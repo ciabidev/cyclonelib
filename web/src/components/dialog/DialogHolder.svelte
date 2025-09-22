@@ -9,8 +9,8 @@
      * Architecture:
      * - Renders all dialogs from the global state stack
      * - Manages backdrop visibility and blur effects
-     * - Supports multiple overlapping dialogs
      * - Handles dialog-specific styling and animations
+     * - Global styles for all dialogs
      *
      * The component is typically rendered once in the root layout and
      * manages all dialog instances throughout the application lifecycle.
@@ -46,7 +46,7 @@
         justify-content: center;
         align-items: center;
         background: none;
-
+        
         max-height: 100%;
         max-width: 100%;
         height: 100%;
@@ -85,7 +85,7 @@
         pointer-events: none;
     }
 
-    #dialog-backdrop, :global(#nojs-dialog-backdrop) {
+    #dialog-backdrop {
         position: absolute;
         height: 100%;
         width: 100%;
@@ -118,8 +118,8 @@
         flex-direction: column;
         align-items: center;
 
-        background: var(--popup-bg);
-        box-shadow: 0 0 0 2px var(--popup-stroke) inset;
+        background: var(--dialog-bg);
+        box-shadow: 0 0 0 2px var(--dialog-stroke) inset;
         border-radius: 29px;
 
         filter: drop-shadow(0 0 40px var(--button));
@@ -158,7 +158,7 @@
                     )
                 )
             ) !important;
-            box-shadow: 0 0 0 2px var(--popup-stroke) inset;
+            box-shadow: 0 0 0 2px var(--dialog-stroke) inset;
         }
     }
 

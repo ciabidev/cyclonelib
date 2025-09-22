@@ -7,7 +7,7 @@
 	import Toasts from '$components/toasts/Toasts.svelte';
 	import DialogHolder from '$components/dialog/DialogHolder.svelte';
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
-	
+
 </script>
 
 <svelte:head>

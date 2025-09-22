@@ -113,7 +113,7 @@ interface DialogInfo {
   id: string;
   type: 'small';
   dismissable?: boolean; // Allow backdrop click to close (default: true)
-  meowbalt?: string; // Special styling for certain dialogs
+  emoticon?: string; // Special styling for certain dialogs
   icon?: SmallDialogIcons; // Visual icon
   title?: string; // Dialog title
   bodyText?: string; // Main content
@@ -137,9 +137,6 @@ interface DialogButton {
 ```
 
 ## Features
-
-### Multiple Dialogs
-The system supports stacking multiple dialogs. New dialogs appear on top of existing ones.
 
 ### Animations
 - Smooth open/close transitions
@@ -207,8 +204,8 @@ The dialog system uses CSS custom properties for theming:
 ```css
 :root {
   --dialog-backdrop: rgba(0, 0, 0, 0.5);
-  --popup-bg: #ffffff;
-  --popup-stroke: rgba(0, 0, 0, 0.1);
+  --dialog-bg: #ffffff;
+  --dialog-stroke: rgba(0, 0, 0, 0.1);
   /* ... more variables */
 }
 ```
@@ -229,9 +226,6 @@ The system has been updated to be compatible with Svelte 5 with the following ch
 1. **Always provide unique IDs** for dialogs to ensure proper stacking
 2. **Use main buttons sparingly** - only one primary action per dialog
 3. **Handle async actions properly** in button callbacks
-4. **Test on mobile devices** for responsive behavior
-5. **Use appropriate colors** for destructive actions (red)
-6. **Keep dialog content concise** for better UX
 
 ## Troubleshooting
 

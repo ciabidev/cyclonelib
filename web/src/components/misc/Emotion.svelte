@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Emotions } from "$lib/types/emotions";
+    import type { Emotions } from "$lib/types/emoticon";
 	import { on } from "events";
     
     type Props = {

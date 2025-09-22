@@ -4,14 +4,12 @@
 
 :root {
 	
-	--nav-hover-bg: #ffffff33;
 	--card-bg: #00000015;
 
 	--code-bg: #1f2228;
 	--code-stroke: #303541;
 	--code-scrollbar: #636569;
 
-	--nav-bg: #000000;
 	--elevated: #e3e3e3; /* for buttons and tags */
 
 	--focus-ring: solid 2px var(---main-color);
@@ -28,10 +26,10 @@
 	--switcher-padding: 3.5px;
 	
 	/* Dialog styles */
-	--dialog-backdrop: rgba(255, 255, 255, 0.5);
+	--dialog-backdrop: rgba(224, 224, 224, 0.5);
 	--dialog-padding: 18px;
-	--popup-bg: var(--bg-color);
-	--popup-stroke: rgba(0, 0, 0, 0.1);
+	--dialog-bg: var(--bg-color);
+	--dialog-stroke: rgba(0, 0, 0, 0.1);
 	--red: var(--color-error);
 	--white: #ffffff;
 	--gray: #75757e;

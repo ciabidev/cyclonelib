@@ -26,7 +26,7 @@
 
 <DialogContainer {id} {dismissable} bind:close>
     <div class="dialog-body popup-body">
-        <div class="meowbalt-container">
+        <div class="emoticon-container">
             <!-- Placeholder for Meowbalt -->
         </div>
 
@@ -106,11 +106,11 @@
         margin: calc(var(--padding) / 2);
     }
 
-    .meowbalt-container {
+    .emoticon-container {
         position: absolute;
         top: -126px;
         right: 0;
-        /* simulate meowbalt being behind the popup */
+        /* simulate emoticon being behind the popup */
         clip-path: inset(0px 0px 14px 0px);
     }
 

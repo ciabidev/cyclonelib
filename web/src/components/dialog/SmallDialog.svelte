@@ -36,7 +36,7 @@
     // Props with defaults
     let {
         id,
-        meowbalt = undefined,
+        emoticon = undefined,
         icon = undefined,
         title = "",
         bodyText = "",
@@ -46,7 +46,7 @@
         leftAligned = false
     }: {
         id: string;
-        meowbalt?: string;
+        emoticon?: string;
         icon?: SmallDialogIcons;
         title?: string;
         bodyText?: string;
@@ -63,7 +63,7 @@
 <DialogContainer {id} {dismissable} bind:close>
     <div
         class="dialog-body small-dialog"
-        class:meowbalt-visible={meowbalt}
+        class:emoticon-visible={emoticon}
         class:align-left={leftAligned}
     >
         <div class="dialog-inner-container">
@@ -113,11 +113,11 @@
         margin: calc(var(--padding) / 2);
     }
 
-    .small-dialog.meowbalt-visible {
+    .small-dialog.emoticon-visible {
         padding-top: calc(var(--padding) * 4);
     }
 
-    .meowbalt-container {
+    .emoticon-container {
         position: absolute;
         top: -120px;
     }

@@ -1,4 +1,4 @@
-import type { Emotions } from "./emotions";
+import type { Emotions } from "./emoticon";
 
 export type DialogButton = {
     text: string,
