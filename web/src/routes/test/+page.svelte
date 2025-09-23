@@ -22,17 +22,23 @@
 		</section>
 		<h1>Components</h1>
 		<section id="test-dialog">
-			<button class="button " onclick={() => smallDialog('small-dialog', 'How Insatiable', 'The more you take, the less you have. You will starve surrounded by gold.', () => {}, "surprised")}>test small Dialog</button>
+			<button class="button " onclick={() => smallDialog('small-dialog', 'How Insatiable', 'The more you take, the less you have. You will starve surrounded by gold.', () => {}, "happy")}>test small Dialog</button>
 		</section>
 		<section id="test-picker-dialog">
 			<button class="button" onclick={() => pickerDialog('picker-dialog', [
 				{ type: 'photo', url: '/emotions/surprised.png' },
+				{ type: 'photo', url: '/emotions/unamused.png' },
+				{ type: 'photo', url: '/emotions/confused.png' },
+				{ type: 'photo', url: '/emotions/angry.png' },
+				{ type: 'photo', url: '/emotions/sad.png' },
+				{ type: 'photo', url: '/emotions/awkward.png' },
 				{ type: 'photo', url: '/emotions/happy.png' },
+				{ type: 'photo', url: '/favicon/favicon-96x96.png' },
 			], [
 				{ text: 'Continue', main: true, action: () => {} }
 			], (item) => {
 				console.log('Selected item:', item);
-				alert(`Selected: ${item.url}`);
+				smallDialog('selected-item', item.url, '');
 			})}>test picker Dialog</button>
 		</section>
 		<section id="test-project-card">

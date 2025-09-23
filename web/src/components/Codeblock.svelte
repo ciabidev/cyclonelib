@@ -85,7 +85,6 @@
 		border: none;
 		border-radius: .25rem;
 		padding: .25rem .5rem;
-		cursor: pointer;
 		border: 1px solid var(--code-stroke);
 		font-size: .9rem;
 		transition: background-color 0.2s;

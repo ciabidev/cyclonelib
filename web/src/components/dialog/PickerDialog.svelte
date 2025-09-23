@@ -30,7 +30,7 @@
         <div class="popup-header">
             <div class="popup-title-container">
                 <!-- Icon would go here -->
-                <h2 class="popup-title" tabindex="-1">
+                <h2 class="popup-title">
                     Select Option
                 </h2>
             </div>
@@ -64,17 +64,7 @@
                             class:active={button.main}
                             on:click={async () => {
                                 await button.action();
-
-                                // Check if this dialog is still in the dialogs array
-                                // If it was removed (e.g., by killDialog()), don't try to close it
-                                let currentDialogs: any[] = [];
-                                dialogs.subscribe((dialogList: any[]) => currentDialogs = dialogList)();
-
-                                const dialogStillExists = currentDialogs.some((dialog: any) => dialog.id === id);
-
-                                if (dialogStillExists) {
-                                    close();
-                                }
+                                close();
                             }}
                         >
                             {button.text}

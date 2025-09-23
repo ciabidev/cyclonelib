@@ -5,14 +5,14 @@ import type { Emotion } from '$lib/types/emoticon';
 /**
  * Creates a standardized error dialog
  */
-export function showErrorDialog(id: string, title: string, message: string, onContinue: () => unknown = () => {}) {
+export function showErrorDialog(id: string, title: string, bodyText: string, onContinue: () => unknown = () => {}) {
 	setTimeout(() => {
 		createDialog({
 			id,
 			type: 'small',
 			title,
 			icon: 'warn-red',
-			bodyText: message,
+			bodyText,
 			buttons: [
 				{
 					text: 'continue',
@@ -28,7 +28,7 @@ export function showErrorDialog(id: string, title: string, message: string, onCo
 /**
  * Creates a basic Small dialog
  */
-export function smallDialog(id: string, title: string, message: string, onContinue: () => unknown = () => {}, emotion?: Emotion) {
+export function smallDialog(id: string, title: string, bodyText: string, onContinue: () => unknown = () => {}, emotion?: Emotion) {
 	setTimeout(() => {
 		createDialog({
 			id,
@@ -36,7 +36,7 @@ export function smallDialog(id: string, title: string, message: string, onContin
 			title,
 			emoticon: emotion,
 			icon: 'warn-red',
-			bodyText: message,
+			bodyText,
 			buttons: [
 				{
 					text: 'continue',

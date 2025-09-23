@@ -33,7 +33,7 @@
         <div class="dialog-inner-container">
             <div class="popup-header">
                 📁
-                <h2 class="popup-title" tabindex="-1">
+                <h2 class="popup-title" >
                     Download Complete
                 </h2>
             </div>
