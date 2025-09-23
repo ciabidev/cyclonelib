@@ -4,9 +4,10 @@
     type Props = {
         item: DialogPickerItem;
         number: number;
+        onSelect?: (item: DialogPickerItem) => void;
     };
 
-    const { item, number }: Props = $props();
+    const { item, number, onSelect }: Props = $props();
 
     const itemType = $derived(item.type ?? "photo");
 
@@ -26,7 +27,9 @@
 <button
     class="picker-item"
     onclick={() => {
-        if (validUrl) {
+        if (onSelect) {
+            onSelect(item);
+        } else if (validUrl) {
             // Handle download here
             console.log('Download:', item.url);
         }

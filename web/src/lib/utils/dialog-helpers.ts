@@ -51,13 +51,14 @@ export function smallDialog(id: string, title: string, message: string, onContin
 /**
  * Creates a Picker dialog
  */
-export function pickerDialog(id: string, items: DialogPickerItem[], buttons: DialogButton[] = [] as DialogButton[]) {
+export function pickerDialog(id: string, items: DialogPickerItem[], buttons: DialogButton[] = [] as DialogButton[], onSelect?: (item: DialogPickerItem) => void) {
 	setTimeout(() => {
 		createDialog({
 			id,
 			type: 'picker',
 			items,
-			buttons
+			buttons,
+			onSelect
 		});
 	}, 1);
 	killDialog();

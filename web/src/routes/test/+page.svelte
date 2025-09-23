@@ -23,12 +23,17 @@
 		<h1>Components</h1>
 		<section id="test-dialog">
 			<button class="button " onclick={() => smallDialog('small-dialog', 'How Insatiable', 'The more you take, the less you have. You will starve surrounded by gold.')}>test small Dialog</button>
+		</section>
+		<section id="test-picker-dialog">
 			<button class="button" onclick={() => pickerDialog('picker-dialog', [
 				{ type: 'photo', url: '/emotions/surprised.png' },
 				{ type: 'photo', url: '/emotions/happy.png' },
 			], [
 				{ text: 'Continue', main: true, action: () => {} }
-			])}>test picker Dialog</button>
+			], (item) => {
+				console.log('Selected item:', item);
+				alert(`Selected: ${item.url}`);
+			})}>test picker Dialog</button>
 		</section>
 		<section id="test-project-card">
 			<ProjectCard
@@ -50,8 +55,9 @@
 		</section>
 		<section id="test-switcher--big">
 		<Switcher description="This is a description on a big switcher!" full>
-			<button class="button " class:active={active2 === 0} onclick={() => active2 = 0}>eight</button>
-			<button class="button " class:active={active2 === 1} onclick={() => active2 = 1}>nine</button>
+			<button class="button" class:active={active2 === 0} onclick={() => active2 = 0}>eight</button>
+			<button class="button" class:active={active2 === 1} onclick={() => active2 = 1}>nine</button>
+			<button class:active={active2 === 2} onclick={() => active2 = 2}><img src="/emotions/surprised.png" alt="surprised"  /></button>
 		</Switcher>
 		</section>
 		<section id="test-input">

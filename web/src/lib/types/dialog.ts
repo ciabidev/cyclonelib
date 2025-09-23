@@ -37,6 +37,7 @@ export type PickerDialog = Dialog & {
     type: "picker",
     items?: DialogPickerItem[],
     buttons?: DialogButton[],
+    onSelect?: (item: DialogPickerItem) => void,
 };
 
 export type DialogInfo = SmallDialog | PickerDialog;

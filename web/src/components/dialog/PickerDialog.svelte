@@ -10,6 +10,7 @@
     export let id: string;
     export let items: Optional<DialogPickerItem[]> = undefined;
     export let buttons: Optional<DialogButton[]> = undefined;
+    export let onSelect: Optional<(item: DialogPickerItem) => void> = undefined;
     export let dismissable = true;
 
     let close: () => void = () => {};
@@ -41,7 +42,7 @@
             {#if items}
                 {#each items as item, i}
                     {#if item?.url}
-                        <PickerItem {item} number={i + 1} />
+                        <PickerItem {item} number={i + 1} {onSelect} />
                     {/if}
                 {/each}
             {/if}
@@ -103,7 +104,7 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 3px;
-        max-width: calc(var(--picker-item-area) * 4);
+        width: 95%;
     }
 
     .popup-title-container {
