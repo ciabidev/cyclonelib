@@ -1,9 +1,8 @@
 <script lang="ts">
-    import type { Emotions } from "$lib/types/emoticon";
-	import { on } from "events";
-    
+    import type { Emotion } from "$lib/types/emoticon";
+
     type Props = {
-        emotion: Emotions;
+        emotion: Emotion;
         size?: "small" | "medium" | "large";
     }
 
@@ -31,17 +30,17 @@
     }
 
     .emotion.small {
-        width: 4rem;
-        height: 4rem;
-    }
-
-    .emotion.medium {
         width: 8rem;
         height: 8rem;
     }
 
+    .emotion.medium {
+        width: 12rem;
+        height: 12rem;
+    }
+
     .emotion.large {
-        width: 15rem;
-        height: 15rem;
+        width: 16rem;
+        height: 16rem;
     }
 </style>

@@ -1,6 +1,6 @@
 import { createDialog, killDialog } from '$lib/state/dialogs';
 import type { DialogPickerItem, DialogButton } from '$lib/types/dialog';
-
+import type { Emotion } from '$lib/types/emoticon';
 
 /**
  * Creates a standardized error dialog
@@ -28,12 +28,13 @@ export function showErrorDialog(id: string, title: string, message: string, onCo
 /**
  * Creates a basic Small dialog
  */
-export function smallDialog(id: string, title: string, message: string, onContinue: () => unknown = () => {}) {
+export function smallDialog(id: string, title: string, message: string, onContinue: () => unknown = () => {}, emotion?: Emotion) {
 	setTimeout(() => {
 		createDialog({
 			id,
 			type: 'small',
 			title,
+			emoticon: emotion,
 			icon: 'warn-red',
 			bodyText: message,
 			buttons: [

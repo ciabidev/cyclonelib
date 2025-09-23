@@ -1,4 +1,4 @@
-import type { Emotions } from "./emoticon";
+import type { Emotion } from "$lib/types/emoticon";
 
 export type DialogButton = {
     text: string,
@@ -24,7 +24,7 @@ type Dialog = {
 
 export type SmallDialog = Dialog & {
     type: "small",
-    emoticon?: Emotions,
+    emoticon?: Emotion,
     icon?: SmallDialogIcons,
     title?: string,
     bodyText?: string,

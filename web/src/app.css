@@ -417,7 +417,13 @@ button,
 /* dont mix up the :active and .active classes. they are different */
 /* :active - buttons that are currently pressed	*/
 /* .active - buttons that are currently active (such as when a tab is active) */
-
+button > img, .button > img {
+	border-radius: var(--border-radius);
+	-webkit-border-radius: var(--border-radius);
+	-moz-border-radius: var(--border-radius);
+	-ms-border-radius: var(--border-radius);
+	-o-border-radius: var(--border-radius);
+}
 .button:hover, button:hover {
     background-color: var(--button-default-hover); /* Darkens by 20% */
 }

@@ -1,6 +1,6 @@
 <script>
     import { page } from '$app/state';
-    import Emotion from '$components/misc/Emotion.svelte';
+    import Emotion from '$components/misc/Emoticon.svelte';
 </script>
 
 <!-- emotions: confused" | "unamused" | "happy" | "awkward" | "surprised" | "sad" | "angry" -->

@@ -32,7 +32,9 @@
     import type { DialogButton, SmallDialogIcons } from "$lib/types/dialog";
     import DialogContainer from "$components/dialog/DialogContainer.svelte";
     import DialogButtons from "$components/dialog/DialogButtons.svelte";
-
+    import type { Emotion } from "$lib/types/emoticon";
+    import Emoticon from "$components/misc/Emoticon.svelte";
+    
     // Props with defaults
     let {
         id,
@@ -46,7 +48,7 @@
         leftAligned = false
     }: {
         id: string;
-        emoticon?: string;
+        emoticon?: Emotion;
         icon?: SmallDialogIcons;
         title?: string;
         bodyText?: string;
@@ -66,7 +68,16 @@
         class:emoticon-visible={emoticon}
         class:align-left={leftAligned}
     >
+            {#if emoticon}
+                <div class="emoticon-container">
+                    <Emoticon
+                        emotion={emoticon}
+                        size="medium"
+                    />
+                </div>
+            {/if}
         <div class="dialog-inner-container">
+
             {#if title || icon}
                 <div class="popup-header">
                     {#if icon === "warn-red"}
@@ -119,7 +130,7 @@
 
     .emoticon-container {
         position: absolute;
-        top: -120px;
+        top: -50%;
     }
 
     .popup-title {
