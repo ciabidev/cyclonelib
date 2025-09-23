@@ -101,7 +101,7 @@
 
     .popup-body {
         max-width: 340px;
-        width: calc(100% - var(--padding) - var(--dialog-padding) * 2);
+        width: calc(100% - var(--padding) - var(--popup-padding) * 2);
         max-height: 70%;
         margin: calc(var(--padding) / 2);
     }

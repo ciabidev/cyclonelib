@@ -27,9 +27,9 @@
 	
 	/* Dialog styles */
 	--dialog-backdrop: rgba(224, 224, 224, 0.5);
-	--dialog-padding: 18px;
-	--dialog-bg: var(--bg-color);
-	--dialog-stroke: rgba(0, 0, 0, 0.1);
+	--popup-padding: 18px;
+	--popup-bg: var(--bg-color);
+	--popup-stroke: rgba(0, 0, 0, 0.1);
 	--red: var(--color-error);
 	--white: #ffffff;
 	--gray: #75757e;

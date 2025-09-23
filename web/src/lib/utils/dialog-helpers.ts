@@ -1,14 +1,11 @@
 import { createDialog, killDialog } from '$lib/state/dialogs';
+import type { DialogPickerItem, DialogButton } from '$lib/types/dialog';
 
 
 /**
  * Creates a standardized error dialog
- * @param {string} id - Dialog ID
- * @param {string} title - Dialog title
- * @param {string} message - Error message
- * @param {Function} [onContinue] - Optional callback for continue button
  */
-export function showErrorDialog(id, title, message, onContinue = () => {}) {
+export function showErrorDialog(id: string, title: string, message: string, onContinue: () => unknown = () => {}) {
 	setTimeout(() => {
 		createDialog({
 			id,
@@ -30,12 +27,8 @@ export function showErrorDialog(id, title, message, onContinue = () => {}) {
 
 /**
  * Creates a basic Small dialog
- * @param {string} id - Dialog ID
- * @param {string} title - Dialog title
- * @param {string} message - Dialog content
- * @param {Function} [onContinue] - Optional callback for continue button
  */
-export function showDialog(id, title, message, onContinue = () => {}) {
+export function smallDialog(id: string, title: string, message: string, onContinue: () => unknown = () => {}) {
 	setTimeout(() => {
 		createDialog({
 			id,
@@ -50,6 +43,21 @@ export function showDialog(id, title, message, onContinue = () => {}) {
 					action: onContinue
 				}
 			]
+		});
+	}, 1);
+	killDialog();
+}
+
+/**
+ * Creates a Picker dialog
+ */
+export function pickerDialog(id: string, items: DialogPickerItem[], buttons: DialogButton[] = [] as DialogButton[]) {
+	setTimeout(() => {
+		createDialog({
+			id,
+			type: 'picker',
+			items,
+			buttons
 		});
 	}, 1);
 	killDialog();

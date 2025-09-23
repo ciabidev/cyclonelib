@@ -204,8 +204,8 @@ The dialog system uses CSS custom properties for theming:
 ```css
 :root {
   --dialog-backdrop: rgba(0, 0, 0, 0.5);
-  --dialog-bg: #ffffff;
-  --dialog-stroke: rgba(0, 0, 0, 0.1);
+  --popup-bg: #ffffff;
+  --popup-stroke: rgba(0, 0, 0, 0.1);
   /* ... more variables */
 }
 ```

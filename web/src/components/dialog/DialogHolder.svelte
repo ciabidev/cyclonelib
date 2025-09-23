@@ -18,6 +18,8 @@
 
     import { dialogs } from "$lib/state/dialogs";
     import SmallDialog from "$components/dialog/SmallDialog.svelte";
+    import PickerDialog from "$components/dialog/PickerDialog.svelte";
+    import SavingDialog from "$components/dialog/SavingDialog.svelte";
     import type { DialogInfo } from "$lib/types/dialog";
 
     // Subscribe to dialogs store
@@ -32,9 +34,15 @@
 
 <div id="dialog-holder">
     {#each currentDialogs as dialog}
-        {#if dialog.type === "small"}
-            <SmallDialog {...dialog} />
-        {/if}
+        {#each $dialogs as dialog}
+            {#if dialog.type === "small"}
+                <SmallDialog {...dialog} />
+            {:else if dialog.type === "picker"}
+                <PickerDialog {...dialog} />
+            {:else if dialog.type === "saving"}
+                <SavingDialog {...dialog} />
+            {/if}
+    {/each}
     {/each}
     <div id="dialog-backdrop" class:visible={backdropVisible}></div>
 </div>
@@ -112,19 +120,19 @@
     }
 
     :global(.dialog-body) {
-        --dialog-padding: 18px;
+        --popup-padding: 18px;
 
         display: flex;
         flex-direction: column;
         align-items: center;
 
-        background: var(--dialog-bg);
-        box-shadow: 0 0 0 2px var(--dialog-stroke) inset;
+        background: var(--popup-bg);
+        box-shadow: 0 0 0 2px var(--popup-stroke) inset;
         border-radius: 29px;
 
         filter: drop-shadow(0 0 40px var(--button));
 
-        padding: var(--dialog-padding);
+        padding: var(--popup-padding);
 
         position: relative;
         will-change: transform, opacity, filter;
@@ -158,7 +166,7 @@
                     )
                 )
             ) !important;
-            box-shadow: 0 0 0 2px var(--dialog-stroke) inset;
+            box-shadow: 0 0 0 2px var(--popup-stroke) inset;
         }
     }
 

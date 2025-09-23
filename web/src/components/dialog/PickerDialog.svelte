@@ -12,7 +12,7 @@
     export let buttons: Optional<DialogButton[]> = undefined;
     export let dismissable = true;
 
-    let close: () => void;
+    let close: () => void = () => {};
 
     // Track dialog count to detect if action created a new dialog
     let currentDialogs: any[] = [];

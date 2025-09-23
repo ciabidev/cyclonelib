@@ -24,7 +24,7 @@ type Dialog = {
 
 export type SmallDialog = Dialog & {
     type: "small",
-    emotion?: Emotions,
+    emoticon?: Emotions,
     icon?: SmallDialogIcons,
     title?: string,
     bodyText?: string,
@@ -33,4 +33,11 @@ export type SmallDialog = Dialog & {
     leftAligned?: boolean,
 };
 
-export type DialogInfo = SmallDialog;
+export type PickerDialog = Dialog & {
+    type: "picker",
+    items?: DialogPickerItem[],
+    buttons?: DialogButton[],
+};
+
+export type DialogInfo = SmallDialog | PickerDialog;
+

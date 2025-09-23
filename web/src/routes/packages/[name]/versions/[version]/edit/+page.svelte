@@ -6,7 +6,7 @@
 	import PageContainer from '$components/PageContainer.svelte';
 	import FormField from '$components/FormField.svelte';
 	import { showErrorDialog } from '$lib/utils/dialog-helpers';
-	import { showDialog } from '$lib/utils/dialog-helpers';
+	import { smallDialog } from '$lib/utils/dialog-helpers';
 	
 	let version_number = $state('');
 	let patch_notes = $state('');
@@ -78,7 +78,7 @@
 			});
 
 			if (response.ok) {
-				showDialog('update-version-success', 'Success', 'Version updated successfully!', () => {
+				smallDialog('update-version-success', 'Success', 'Version updated successfully!', () => {
 					setTimeout(() => {
 						goto(`/packages/${packageName}`);
 					}, 200);

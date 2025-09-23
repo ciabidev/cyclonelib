@@ -1,11 +1,10 @@
 <script lang="ts">
 	import Switcher from "$components/inputs-and-buttons/Switcher.svelte";
-	import { createDialog } from "$lib/state/dialogs";
 	import Input from "$components/inputs-and-buttons/Input.svelte";
 	import ProjectCard from "$components/ProjectCard.svelte";
-	import { showDialog } from "$lib/utils/dialog-helpers";
-	import Page from "../+page.svelte";
+	import { pickerDialog, smallDialog } from "$lib/utils/dialog-helpers.ts";
 	import PageContainer from "$components/PageContainer.svelte";
+	import Codeblock from "$components/Codeblock.svelte";
 	let testInput = $state('');
 	let active1 = $state(0);
 	let active2 = $state(0);
@@ -23,7 +22,13 @@
 		</section>
 		<h1>Components</h1>
 		<section id="test-dialog">
-			<button class="button " onclick={() => showDialog('test-dialog', 'test dialog', 'this is a test dialog')}>test dialog</button>
+			<button class="button " onclick={() => smallDialog('small-dialog', 'How Insatiable', 'The more you take, the less you have. You will starve surrounded by gold.')}>test small Dialog</button>
+			<button class="button" onclick={() => pickerDialog('picker-dialog', [
+				{ type: 'photo', url: '/emotions/surprised.png' },
+				{ type: 'photo', url: '/emotions/happy.png' },
+			], [
+				{ text: 'Continue', main: true, action: () => {} }
+			])}>test picker Dialog</button>
 		</section>
 		<section id="test-project-card">
 			<ProjectCard
@@ -51,6 +56,9 @@
 		</section>
 		<section id="test-input">
 			<Input placeholder="test input with description" bind:value={testInput} description={"your input is: " + testInput} />
+		</section>
+		<section id="code-block">
+			<Codeblock code={"console.log('hello world')"} language="js" />
 		</section>
 	</PageContainer>
 
