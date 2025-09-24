@@ -54,7 +54,7 @@ export async function POST({ request }) {
     });
   } 
   
-  catch (err: error) {
+  catch (err) {
     if (err.status) throw err;
     throw error(500, {
       message: 'Failed to create package'
