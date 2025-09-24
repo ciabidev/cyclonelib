@@ -46,7 +46,7 @@
 				img=""
 				banner=""
 			>
-				<a class="button" href="/packages/${pkg.name}">View Package</a>
+				<a class="button" href="/packages/{pkg.name}">View Package</a>
 			</ProjectCard>
 		{:else}
 			<p class="paragraph-text">No packages found.</p>
