@@ -10,14 +10,15 @@
     const { item, number, onSelect }: Props = $props();
 
     const itemType = $derived(item.type ?? "photo");
-    const hasImage = $derived(itemType !== "string");
 
     let imageLoaded = $state(false);
 
     let validUrl = false;
     try {
-        new URL(item.url);
-        validUrl = true;
+        if (item.url) {
+            new URL(item.url);
+            validUrl = true;
+        }
     } catch {}
 
     const loaded = () => {
@@ -46,21 +47,20 @@
         {/if}
     </div>
 
-    {#if itemType != "string"}
-        <img
+    <img
         class="picker-image"
         src={item.thumb ?? item.url}
         class:loading={!imageLoaded}
         class:video-thumbnail={["video", "gif"].includes(itemType)}
         onload={loaded}
         alt="{itemType} {number}"
-        />
-    {/if}
-    <div class="picker-text" class:absolute={hasImage}>
-        {item.text ?? item.url}
+    />
+    {#if item.text}
+    <div class="picker-text absolute">
+        {item.text}
     </div>
-
-    {#if !imageLoaded && itemType != "string"}
+    {/if}
+    {#if !imageLoaded}
         <div class="skeleton"></div>
     {/if}
 </button>
@@ -74,6 +74,7 @@
         flex-direction: column;
         box-shadow: none;
         border-radius: calc(var(--border-radius) / 2 + 2px);
+        overflow: hidden;
     }
 
     .picker-item:focus-visible::after {
@@ -145,5 +146,21 @@
 
         pointer-events: none;
         font-size: 12px;
+    }
+
+    .picker-text {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        color: var(--white);
+        padding: 4px 6px;
+        font-size: 12px;
+        text-align: center;
+        z-index: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 </style>
