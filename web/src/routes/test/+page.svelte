@@ -5,6 +5,11 @@
 	import { pickerDialog, smallDialog } from "$lib/utils/dialog-helpers";
 	import PageContainer from "$components/PageContainer.svelte";
 	import Codeblock from "$components/Codeblock.svelte";
+	import Navbar from "$components/navbar/Navbar.svelte";
+	import NavTab from "$components/navbar/NavTab.svelte";
+	import InfoIcon from "~icons/basil/info-rect-outline"; 
+	import StarIcon from "~icons/basil/star-outline";
+	import BoxIcon from '~icons/basil/box-outline';
 	let testInput = $state('');
 	let active1 = $state(0);
 	let active2 = $state(0);
@@ -71,6 +76,13 @@
 		</section>
 		<section id="code-block">
 			<Codeblock code={"console.log('hello world')"} language="js" />
+		</section>
+		<section>
+			<Navbar test={true}>
+				<NavTab name={"about?"} Icon={InfoIcon} path={"/"} />
+				<NavTab name={"packages"} Icon={BoxIcon} path={"/packages"} />
+				<NavTab name={"test"} Icon={StarIcon} path={"/test"} />
+			</Navbar>
 		</section>
 	</PageContainer>
 

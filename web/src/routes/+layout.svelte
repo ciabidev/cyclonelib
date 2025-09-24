@@ -7,6 +7,14 @@
 	import Toasts from '$components/toasts/Toasts.svelte';
 	import DialogHolder from '$components/dialog/DialogHolder.svelte';
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
+	import NavTab from '$components/navbar/NavTab.svelte';
+	  import InfoIcon from "~icons/basil/info-rect-outline"; /* using Unplugin icons we can load icons at meowbalt speeds! */
+  // @ts-ignore (she aint even know it) (WHY DID I WRITE THIS WITHOUT KNOWING WHAT IT MEANT...)
+  import StarIcon from "~icons/basil/star-outline";
+  import BoxIcon from '~icons/basil/box-outline';
+  import MoonIcon from '~icons/basil/moon-outline';
+  import SunIcon from '~icons/basil/sun-outline';
+  import FluentEmojiFlatIceCream from '~icons/fluent-emoji-flat/ice-cream';
 
 </script>
 
@@ -33,7 +41,12 @@
 		{@render children()}
 	</div>
 
-	<Navbar />
+	<Navbar>
+	  <NavTab name={"about?"} Icon={InfoIcon} path={"/"} />
+      <NavTab name={"packages"} Icon={BoxIcon} path={"/packages"} />
+      <NavTab name={"test"} Icon={StarIcon} path={"/test"} />
+	</Navbar>
+	
 </div>
 
 <style>

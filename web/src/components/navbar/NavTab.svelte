@@ -1,5 +1,6 @@
 <script lang="ts">
-  let { Icon, path, name } = $props();
+
+  let { Icon = null, path, name } = $props();
   import { fly } from "svelte/transition";
   import { page } from "$app/state";
 
@@ -31,7 +32,7 @@
         console.log("tab does not exist");
       }
       if (!isTabCurrentPage) {
-        console.log("tab path is not the same as the current page; not");
+        console.log("tab path is not the same as the current page");
       }
     }
   });

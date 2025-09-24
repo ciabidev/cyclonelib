@@ -102,10 +102,6 @@ a {
 	-webkit-touch-callout: none;
 }
 
-svg,
-img {
-	pointer-events: none;
-}
 /* TEXT STYLES FROM COBALT-MAIN */
 
 h1, h2, h3, h4, h5, h6 {
@@ -164,13 +160,6 @@ a:not(:has(img)):not(.button) {
 a {
 	-webkit-tap-highlight-color: transparent;
 	-ms-touch-action: manipulation;
-}
-
-img {
-	user-select: none;
-	-webkit-user-select: none; /* Safari / iOS */
-	-ms-user-select: none;
-	pointer-events: none;
 }
 
 code {

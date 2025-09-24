@@ -27,7 +27,7 @@
 <DialogContainer {id} {dismissable} bind:close>
     <div class="dialog-body popup-body">
         <div class="emoticon-container">
-            <!-- Placeholder for Meowbalt -->
+            <!-- Placeholder for Emoticon -->
         </div>
 
         <div class="dialog-inner-container">
