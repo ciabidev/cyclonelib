@@ -12,8 +12,9 @@ export type DialogButton = {
 export type SmallDialogIcons = "warn-red";
 
 export type DialogPickerItem = {
-    type?: "photo" | "video" | "gif",
-    url: string,
+    type?: "photo" | "video" | "gif" | "string",
+    text?: string,
+    url?: string,
     thumb?: string,
 };
 

@@ -10,6 +10,7 @@
     const { item, number, onSelect }: Props = $props();
 
     const itemType = $derived(item.type ?? "photo");
+    const hasImage = $derived(itemType !== "string");
 
     let imageLoaded = $state(false);
 
@@ -45,15 +46,21 @@
         {/if}
     </div>
 
-    <img
+    {#if itemType != "string"}
+        <img
         class="picker-image"
         src={item.thumb ?? item.url}
         class:loading={!imageLoaded}
         class:video-thumbnail={["video", "gif"].includes(itemType)}
         onload={loaded}
         alt="{itemType} {number}"
-    />
-    {#if !imageLoaded}
+        />
+    {/if}
+    <div class="picker-text" class:absolute={hasImage}>
+        {item.text ?? item.url}
+    </div>
+
+    {#if !imageLoaded && itemType != "string"}
         <div class="skeleton"></div>
     {/if}
 </button>
@@ -63,6 +70,8 @@
         position: relative;
         background: none;
         padding: 0;
+        display: flex;
+        flex-direction: column;
         box-shadow: none;
         border-radius: calc(var(--border-radius) / 2 + 2px);
     }
@@ -71,7 +80,6 @@
         content: "";
         width: 100%;
         height: 100%;
-        position: absolute;
         outline: 2px solid var(--main-color);
         outline-offset: 2px;
         border-radius: inherit;
@@ -86,10 +94,6 @@
 
         object-fit: cover;
         border-radius: inherit;
-
-        position: absolute;
-        z-index: 2;
-
         opacity: 1;
         transition: opacity 0.2s;
     }

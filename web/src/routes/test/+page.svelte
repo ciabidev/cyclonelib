@@ -1,4 +1,5 @@
 <script lang="ts">
+
 	import Switcher from "$components/inputs-and-buttons/Switcher.svelte";
 	import Input from "$components/inputs-and-buttons/Input.svelte";
 	import ProjectCard from "$components/ProjectCard.svelte";
@@ -38,7 +39,7 @@
 				{ type: 'photo', url: '/emotions/sad.png' },
 				{ type: 'photo', url: '/emotions/awkward.png' },
 				{ type: 'photo', url: '/emotions/happy.png' },
-				{ type: 'photo', url: '/favicon/favicon-96x96.png' },
+				{ type: 'photo', url: '/favicon/favicon-96x96.png', text: "test" },
 			], [
 				{ text: 'Continue', main: true, action: () => {} }
 			], (item) => {
