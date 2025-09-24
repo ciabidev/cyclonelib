@@ -1,6 +1,5 @@
 import { json, error } from '@sveltejs/kit';
 import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
-import type { RequestHandler } from './$types.js';
 
 /**
  * GET /api/packages/[name]
@@ -24,7 +23,7 @@ import type { RequestHandler } from './$types.js';
  * @throws {404} If package not found
  * @throws {500} If database connection fails
  */
-export const GET: RequestHandler = async ({ params }) => {
+export async function GET({ params }) {
   const { name } = params;
 
   try {
@@ -50,14 +49,14 @@ export const GET: RequestHandler = async ({ params }) => {
         'Access-Control-Allow-Headers': 'Content-Type',
       }
     });
-  } catch (err: any) {
-    if (err.status) throw err; // Re-throw SvelteKit errors
+  } catch (err) {
+    if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
     console.error('Database error in GET /api/packages/[name]:', err);
     throw error(500, {
       message: 'Failed to retrieve package'
     });
   }
-};
+}
 
 /**
  * PATCH /api/packages/[name]
@@ -96,7 +95,7 @@ export const GET: RequestHandler = async ({ params }) => {
  * @throws {400} If download_url validation fails
  * @throws {500} If database connection fails
  */
-export const PATCH: RequestHandler = async ({ request, params }) => {
+export async function PATCH({ request, params }) {
   const { name } = params;
 
   try {
@@ -121,7 +120,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
       throw error(403, { message: 'Edit code does not match' });
     }
 
-    const updateFields: Record<string, any> = {};
+    const updateFields = {};
     if (newName !== undefined && newName !== existingPackage.name) {
       // Validate package name format
       if (!/^[a-z0-9-]+$/.test(newName)) {
@@ -194,14 +193,14 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
         'Access-Control-Allow-Headers': 'Content-Type',
       }
     });
-  } catch (err: any) {
-    if (err.status) throw err; // Re-throw SvelteKit errors
+  } catch (err) {
+    if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
     console.error('Database error in PATCH /api/packages/[name]:', err);
     throw error(500, {
       message: 'Failed to update package'
     });
   }
-};
+}
 
 /**
  * DELETE /api/packages/[name]
@@ -230,7 +229,7 @@ export const PATCH: RequestHandler = async ({ request, params }) => {
  * @throws {403} If edit code does not match
  * @throws {500} If database connection fails
  */
-export const DELETE: RequestHandler = async ({ request, params }) => {
+export async function DELETE({ request, params }) {
   const { name } = params;
 
   try {
@@ -272,14 +271,14 @@ export const DELETE: RequestHandler = async ({ request, params }) => {
         'Access-Control-Allow-Headers': 'Content-Type',
       }
     });
-  } catch (err: any) {
-    if (err.status) throw err; // Re-throw SvelteKit errors
+  } catch (err) {
+    if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
     console.error('Database error in DELETE /api/packages/[name]:', err);
     throw error(500, {
       message: 'Failed to delete package'
     });
   }
-};
+}
 
 export async function OPTIONS() {
   return new Response(null, {

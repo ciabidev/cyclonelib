@@ -16,12 +16,6 @@
     let close: () => void;
 
     let copied = false;
-
-    $: if (copied) {
-        setTimeout(() => {
-            copied = false;
-        }, 1500);
-    }
 </script>
 
 <DialogContainer {id} {dismissable} bind:close>
@@ -81,6 +75,7 @@
                 },
             ]}
             closeFunc={close}
+            dialogId={id}
         />
     </div>
 </DialogContainer>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import ProjectCard from '$components/ProjectCard.svelte'; /* the Cyclone website is forked from Ciabi's website, and I run both the Ciabi and Cyclone website. Old names may still be used. */
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import PageContainer from '$components/PageContainer.svelte';
@@ -11,11 +11,14 @@
 
 	// Filter packages based on search query
 	let filteredPackages = $derived(
-		searchQuery.trim() === '' ? packages : packages.filter(pkg =>
-			pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			pkg.short_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			pkg.long_description.toLowerCase().includes(searchQuery.toLowerCase())
-		)
+		searchQuery.trim() === ''
+			? packages
+			: packages.filter(
+					(pkg:any) =>
+						pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+						pkg.short_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+						pkg.long_description.toLowerCase().includes(searchQuery.toLowerCase())
+				)
 	);
 </script>
 
@@ -23,12 +26,18 @@
 	<div class="header paragraph-text">
 		<h1>packages</h1>
 	</div>
-	<Input placeholder="search packages" bind:value={searchQuery} min_width="100%" Icon={SearchIcon} />
+	<Input
+		placeholder="search packages"
+		bind:value={searchQuery}
+		min_width="100%"
+		Icon={SearchIcon}
+	/>
 	<div class="actions">
 		<a class="button button--primary" href="/packages/create">Create Package</a>
 	</div>
 	<div class="packages">
 		{#each filteredPackages as pkg}
+			<!-- "package" is reserved here-->
 			<ProjectCard
 				name={pkg.name}
 				url=""
@@ -36,8 +45,9 @@
 				description={pkg.short_description}
 				img=""
 				banner=""
-				extra_html={[`<a class="button " href="/packages/${pkg.name}">View Package</a>`]}
-			></ProjectCard>
+			>
+				<a class="button" href="/packages/${pkg.name}">View Package</a>
+			</ProjectCard>
 		{:else}
 			<p class="paragraph-text">No packages found.</p>
 		{/each}
@@ -70,5 +80,3 @@
 		}
 	}
 </style>
-
-

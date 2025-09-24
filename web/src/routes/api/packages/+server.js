@@ -52,9 +52,10 @@ export async function POST({ request }) {
         'Access-Control-Allow-Headers': 'Content-Type',
       }
     });
-  } catch (err) {
+  } 
+  
+  catch (err: error) {
     if (err.status) throw err;
-    console.error('Database error in POST /api/packages:', err);
     throw error(500, {
       message: 'Failed to create package'
     });

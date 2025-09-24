@@ -8,13 +8,17 @@
 	let packageData = $derived(data.pkg);
 	let versions = $derived(data.versions || []);
 	let activeTab = $state('main-info');
+	let name = $state('name');
+	let short_description = $state('short_description');
+	let long_description = $state('long_description');
+
 </script>
 
 <PageContainer containerId="package-details-page-container" pageId="package-details-page" maxWidth="800px">
 	{#if packageData}
 		<a class="button " href="/packages">Back to Packages</a>
 		<div class="package-header paragraph-text">
-			<h1>{packageData.name}</h1>
+			<h1>{name}</h1>
 		</div>
 
 		<Switcher full={true}>
@@ -40,7 +44,7 @@
 					<div class="versions-header">
 						<h2>Versions</h2>
 						<div class="actions">
-							<a class="button button--primary" href="/packages/{packageData.name}/versions/create">Create Version</a>
+							<a class="button button--primary" href="/packages/{name}/versions/create">Create Version</a>
 						</div>
 					</div>
 					<div class="versions-list">
@@ -52,31 +56,31 @@
 								description={version.patch_notes}
 							>
 							<div class="actions">
-								<a class="button " href="/packages/{packageData.name}/versions/{encodeURIComponent(version.version_number)}/edit">Edit Version</a>
+								<a class="button " href="/packages/{name}/versions/{encodeURIComponent(version.version_number)}/edit">Edit Version</a>
 								<a class="button button--primary" href={version.download_url}>Download Shortcut</a>
 							</div>
 						</ProjectCard>
 						{:else}
-							<p>No versions found. <a href="/packages/{packageData.name}/versions/create">Create the first version</a></p>
+							<p>No versions found. <a href="/packages/{name}/versions/create">Create the first version</a></p>
 						{/each}
 					</div>
 				</div>
 			{:else if activeTab === 'main-info'}
 				<div class="main-info-tab">
 					<div class="package-content">
-						{#if packageData.short_description}
+						{#if short_description}
 							<div class="short-description paragraph-text">
-								<strong>Short Description:</strong> {packageData.short_description}
+								<strong>Short Description:</strong> {short_description}
 							</div>
 						{/if}
-						{#if packageData.long_description}
+						{#if long_description}
 							<div class="long-description paragraph-text">
 								<h1>Detailed Description</h1>
-								<Markdown source={packageData.long_description} />
+								<Markdown source={long_description} />
 							</div>
 						{/if}
 						<div class="actions">
-							<a class="button button--primary" href="/packages/{packageData.name}/edit">Edit Package</a>
+							<a class="button button--primary" href="/packages/{name}/edit">Edit Package</a>
 						</div>
 					</div>
 				</div>

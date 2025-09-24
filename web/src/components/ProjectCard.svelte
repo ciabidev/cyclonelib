@@ -7,7 +7,6 @@
 		img = null,
 		banner = null,
 		tiny = null,
-		extra_html = null,
 	} = $props();
 	
 	// @ts-ignore
@@ -32,7 +31,6 @@
 		</div>
 	</div>
 	<!-- render any slotted content-->
-	{@html extra_html}
 	<slot></slot>
 </div>
 

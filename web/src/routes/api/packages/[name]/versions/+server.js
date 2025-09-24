@@ -1,6 +1,5 @@
 import { json, error } from '@sveltejs/kit';
-import { connectDB, serializeDoc } from '$lib/server/db-utils.js';
-import { hashEditCode } from '$lib/server/db-utils.js';
+import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
 export async function GET({ params }) {
 	const { name } = params;
 
