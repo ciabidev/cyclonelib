@@ -5,8 +5,7 @@
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import PageContainer from '$components/PageContainer.svelte';
 	import FormField from '$components/FormField.svelte';
-	import { showErrorDialog } from '$lib/utils/dialog-helpers';
-	import { smallDialog } from '$lib/utils/dialog-helpers';
+	import { createDialog } from '$lib/state/dialogs';
 	
 	let version_number = $state('');
 	let patch_notes = $state('');
@@ -28,10 +27,36 @@
 				patch_notes = versionData.patch_notes;
 				download_url = versionData.download_url;
 			} else {
-				showErrorDialog('load-version-error', 'Error Loading Version', 'Failed to load version details.');
+				createDialog({
+					id: 'load-version-error',
+					type: 'small',
+					title: 'Error Loading Version',
+					icon: 'warn-red',
+					bodyText: 'Failed to load version details.',
+					buttons: [
+						{
+							text: 'continue',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
 			}
 		} catch (err) {
-			showErrorDialog('load-version-network-error', 'Error Loading Version', 'An error occurred while loading version details.');
+			createDialog({
+				id: 'load-version-network-error',
+				type: 'small',
+				title: 'Error Loading Version',
+				icon: 'warn-red',
+				bodyText: 'An error occurred while loading version details.',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			console.error('Error fetching version:', err);
 		} finally {
 			loading = false;
@@ -45,7 +70,20 @@
 		const trimmedEditCode = String(edit_code || '').trim();
 
 		if (!trimmedVersion || !trimmedNotes || !trimmedUrl || !trimmedEditCode) {
-			showErrorDialog('update-version-validation-error', 'Validation Error', 'All fields are required');
+			createDialog({
+				id: 'update-version-validation-error',
+				type: 'small',
+				title: 'Validation Error',
+				icon: 'warn-red',
+				bodyText: 'All fields are required',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			return;
 		}
 
@@ -53,13 +91,39 @@
 		try {
 			url = new URL(trimmedUrl);
 		} catch (urlError) {
-			showErrorDialog('update-version-validation-error', 'Validation Error', 'Invalid URL format. Please enter a valid URL.');
+			createDialog({
+				id: 'update-version-validation-error',
+				type: 'small',
+				title: 'Validation Error',
+				icon: 'warn-red',
+				bodyText: 'Invalid URL format. Please enter a valid URL.',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			return;
 		}
 
 		const shortcutName = url.searchParams.get('shortcut_name');
 		if (!shortcutName) {
-			showErrorDialog('update-version-validation-error', 'Validation Error', 'Download URL must include ?shortcut_name= query parameter');
+			createDialog({
+				id: 'update-version-validation-error',
+				type: 'small',
+				title: 'Validation Error',
+				icon: 'warn-red',
+				bodyText: 'Download URL must include ?shortcut_name= query parameter',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			return;
 		}
 
@@ -78,17 +142,56 @@
 			});
 
 			if (response.ok) {
-				smallDialog('update-version-success', 'Success', 'Version updated successfully!', () => {
-					setTimeout(() => {
-						goto(`/packages/${packageName}`);
-					}, 200);
+				createDialog({
+					id: 'update-version-success',
+					type: 'small',
+					title: 'Success',
+					icon: 'warn-red',
+					bodyText: 'Version updated successfully!',
+					buttons: [
+						{
+							text: 'continue',
+							main: true,
+							action: () => {
+								setTimeout(() => {
+									goto(`/packages/${packageName}`);
+								}, 200);
+							}
+						}
+					]
 				});
 			} else {
 				const data = await response.json();
-				showErrorDialog('update-version-error', 'Error Updating Version', data.message || 'Failed to update version');
+				createDialog({
+					id: 'update-version-error',
+					type: 'small',
+					title: 'Error Updating Version',
+					icon: 'warn-red',
+					bodyText: data.message || 'Failed to update version',
+					buttons: [
+						{
+							text: 'continue',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
 			}
 		} catch (err) {
-			showErrorDialog('update-version-network-error', 'Network Error', 'A network error occurred while updating the version');
+			createDialog({
+				id: 'update-version-network-error',
+				type: 'small',
+				title: 'Network Error',
+				icon: 'warn-red',
+				bodyText: 'A network error occurred while updating the version',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 		} finally {
 			updating = false;
 		}

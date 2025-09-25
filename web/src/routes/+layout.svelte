@@ -4,17 +4,13 @@
 	import LoveNote from '$components/LoveNote.svelte';
 	import Navbar from '$components/navbar/Navbar.svelte';
 	import type { Snippet } from 'svelte';
-	import Toasts from '$components/toasts/Toasts.svelte';
 	import DialogHolder from '$components/dialog/DialogHolder.svelte';
-	let { data, children }: { data: LayoutData; children: Snippet } = $props();
+	let {  children }: { children: Snippet } = $props();
 	import NavTab from '$components/navbar/NavTab.svelte';
 	  import InfoIcon from "~icons/basil/info-rect-outline"; /* using Unplugin icons we can load icons at meowbalt speeds! */
   // @ts-ignore (she aint even know it) (WHY DID I WRITE THIS WITHOUT KNOWING WHAT IT MEANT...)
   import StarIcon from "~icons/basil/star-outline";
   import BoxIcon from '~icons/basil/box-outline';
-  import MoonIcon from '~icons/basil/moon-outline';
-  import SunIcon from '~icons/basil/sun-outline';
-  import FluentEmojiFlatIceCream from '~icons/fluent-emoji-flat/ice-cream';
 
 </script>
 
@@ -31,7 +27,6 @@
 	/>
 </svelte:head>
 
-<Toasts />
 <DialogHolder />
 <div id="basket">
 	<!-- acts as a "body" tag that we have more control over. Example: when a mobile user reaches end of scroll. then the page starts scrolling to make typing and scrolling easier -->

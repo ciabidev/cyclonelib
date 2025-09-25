@@ -48,54 +48,25 @@ class DialogManager {
         this.dialogsStore.set([]);
     }
 
-    /**
-     * Creates and displays a new dialog
-     *
-     * @param dialog - Complete dialog configuration object
-     * @example
-     * dialogManager.createDialog({
-     *   id: 'confirm-delete',
-     *   type: 'small',
-     *   title: 'Delete Item',
-     *   bodyText: 'Are you sure you want to delete this item?',
-     *   buttons: [
-     *     { text: 'cancel', action: () => {} },
-     *     { text: 'Delete', main: true, action: () => deleteItem() }
-     *   ]
-     * });
-     */
-    killDialog() {
+    async killDialog() {
         this.dialogsStore.update(dialogs => dialogs.slice(0, -1));
     }
 
 
-    createDialog(dialog: DialogInfo) {
-        this.dialogsStore.update(dialogs => [...dialogs, dialog]);
-    }
-
-    /**
-     * Closes the topmost (most recently opened) dialog
-     * This removes the last dialog from the stack
-     */
-    
-    /**
-     * Closes a specific dialog with animation by triggering its close function
-     * This is used when we want to close a dialog programmatically with animation
-     */
-    closeDialogAnimated(dialogId: string) {
-        // Dispatch a custom event that the DialogContainer can listen for
-        const event = new CustomEvent('close-dialog-animated', {
-            detail: { dialogId }
-        });
-        window.dispatchEvent(event);
-    }
 
     /**
      * Closes all currently active dialogs
      * Useful for cleanup or when navigating away from a page
-     */
-    clearAll() {
+     * Currently unused until we add multi dialog support
+     **/
+    
+    async clearAll() {
         this.dialogsStore.set([]);
+    }
+
+    async createDialog(dialog: DialogInfo) {
+        this.clearAll()
+        this.dialogsStore.update(dialogs => [...dialogs, dialog]);
     }
 
     /**
@@ -109,11 +80,7 @@ class DialogManager {
 // Create a singleton instance for global dialog management
 export const dialogManager = new DialogManager();
 
-// Convenience functions for backward compatibility and easier usage
-/**
- * Creates and displays a new dialog
- * @param dialog - Dialog configuration object
- */
+
 export function createDialog(dialog: DialogInfo) {
     dialogManager.createDialog(dialog);
 }
@@ -123,14 +90,6 @@ export function createDialog(dialog: DialogInfo) {
  */
 export function killDialog() {
     dialogManager.killDialog();
-}
-
-/**
- * Closes a specific dialog with animation
- * @param dialogId - The ID of the dialog to close
- */
-export function closeDialogAnimated(dialogId: string) {
-    dialogManager.closeDialogAnimated(dialogId);
 }
 
 // Reactive exports for component usage

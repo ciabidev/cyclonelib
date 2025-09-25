@@ -5,8 +5,7 @@
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import PageContainer from '$components/PageContainer.svelte';
 	import FormField from '$components/FormField.svelte';
-	import { showErrorDialog } from '$lib/utils/dialog-helpers';
-	import { createDialog, closeDialogAnimated } from '$lib/state/dialogs';
+	import { createDialog } from '$lib/state/dialogs';
 
 	/** @type {{name: string, short_description?: string, long_description?: string, download_url: string} | null} */
 	let packageData = $state(null);
@@ -40,10 +39,36 @@
 					long_description = packageData.long_description || '';
 				}
 			} else {
-				showErrorDialog('load-package-error', 'Error Loading Package', 'Failed to load package details.');
+				createDialog({
+					id: 'load-package-error',
+					type: 'small',
+					title: 'Error Loading Package',
+					icon: 'warn-red',
+					bodyText: 'Failed to load package details.',
+					buttons: [
+						{
+							text: 'continue',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
 			}
 		} catch (err) {
-			showErrorDialog('load-package-network-error', 'Error Loading Package', 'An error occurred while loading package details.');
+			createDialog({
+				id: 'load-package-network-error',
+				type: 'small',
+				title: 'Error Loading Package',
+				icon: 'warn-red',
+				bodyText: 'An error occurred while loading package details.',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			console.error('Error fetching package:', err);
 		} finally {
 			loading = false;
@@ -59,7 +84,20 @@
 
 		// Check for empty fields
 		if (!trimmedName || !trimmedShortDesc || !trimmedEditCode) {
-			showErrorDialog('update-package-validation-error', 'Validation Error', 'Required fields are missing');
+			createDialog({
+				id: 'update-package-validation-error',
+				type: 'small',
+				title: 'Validation Error',
+				icon: 'warn-red',
+				bodyText: 'Required fields are missing',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			return;
 		}
 
@@ -78,17 +116,56 @@
 			});
 
 			if (response.ok) {
-				showErrorDialog('update-package-success', 'Success', 'Package updated successfully!', () => {
-					setTimeout(() => {
-						goto(`/packages/${packageName}`);
-					}, 200);
+				createDialog({
+					id: 'update-package-success',
+					type: 'small',
+					title: 'Success',
+					icon: 'warn-red',
+					bodyText: 'Package updated successfully!',
+					buttons: [
+						{
+							text: 'continue',
+							main: true,
+							action: () => {
+								setTimeout(() => {
+									goto(`/packages/${packageName}`);
+								}, 200);
+							}
+						}
+					]
 				});
 			} else {
 				const data = await response.json();
-				showErrorDialog('update-package-error', 'Error Updating Package', data.message || 'Failed to update package');
+				createDialog({
+					id: 'update-package-error',
+					type: 'small',
+					title: 'Error Updating Package',
+					icon: 'warn-red',
+					bodyText: data.message || 'Failed to update package',
+					buttons: [
+						{
+							text: 'continue',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
 			}
 		} catch (err) {
-			showErrorDialog('update-package-network-error', 'Network Error', 'Network error occurred while updating package');
+			createDialog({
+				id: 'update-package-network-error',
+				type: 'small',
+				title: 'Network Error',
+				icon: 'warn-red',
+				bodyText: 'Network error occurred while updating package',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 		} finally {
 			updating = false;
 		}
@@ -107,17 +184,56 @@
 			});
 
 			if (response.ok) {
-				showErrorDialog('delete-package-success', 'Success', 'Package deleted successfully!', () => {
-					setTimeout(() => {
-						goto('/packages');
-					}, 200);
+				createDialog({
+					id: 'delete-package-success',
+					type: 'small',
+					title: 'Success',
+					icon: 'warn-red',
+					bodyText: 'Package deleted successfully!',
+					buttons: [
+						{
+							text: 'continue',
+							main: true,
+							action: () => {
+								setTimeout(() => {
+									goto('/packages');
+								}, 200);
+							}
+						}
+					]
 				});
 			} else {
 				const data = await response.json();
-				showErrorDialog('delete-package-error', 'Error Deleting Package', data.message || 'Failed to delete package');
+				createDialog({
+					id: 'delete-package-error',
+					type: 'small',
+					title: 'Error Deleting Package',
+					icon: 'warn-red',
+					bodyText: data.message || 'Failed to delete package',
+					buttons: [
+						{
+							text: 'continue',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
 			}
 		} catch (err) {
-			showErrorDialog('delete-package-network-error', 'Network Error', 'Network error occurred while deleting package');
+			createDialog({
+				id: 'delete-package-network-error',
+				type: 'small',
+				title: 'Network Error',
+				icon: 'warn-red',
+				bodyText: 'Network error occurred while deleting package',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 		} finally {
 			deleting = false;
 		}
@@ -125,7 +241,20 @@
 
 	function showDeleteDialog() {
 		if (!edit_code) {
-			showErrorDialog('delete-package-edit-code-error', 'Edit Code Required', 'Edit code is required to delete this package');
+			createDialog({
+				id: 'delete-package-edit-code-error',
+				type: 'small',
+				title: 'Edit Code Required',
+				icon: 'warn-red',
+				bodyText: 'Edit code is required to delete this package',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 			return;
 		}
 

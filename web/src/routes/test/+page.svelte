@@ -3,12 +3,12 @@
 	import Switcher from "$components/inputs-and-buttons/Switcher.svelte";
 	import Input from "$components/inputs-and-buttons/Input.svelte";
 	import ProjectCard from "$components/ProjectCard.svelte";
-	import { pickerDialog, smallDialog } from "$lib/utils/dialog-helpers";
+	import { createDialog } from "$lib/state/dialogs";
 	import PageContainer from "$components/PageContainer.svelte";
 	import Codeblock from "$components/Codeblock.svelte";
 	import Navbar from "$components/navbar/Navbar.svelte";
 	import NavTab from "$components/navbar/NavTab.svelte";
-	import InfoIcon from "~icons/basil/info-rect-outline"; 
+	import InfoIcon from "~icons/basil/info-rect-outline";
 	import StarIcon from "~icons/basil/star-outline";
 	import BoxIcon from '~icons/basil/box-outline';
 	let testInput = $state('');
@@ -28,23 +28,54 @@
 		</section>
 		<h1>Components</h1>
 		<section id="test-dialog">
-			<button class="button " onclick={() => smallDialog('small-dialog', 'How Insatiable', 'The more you take, the less you have. You will starve surrounded by gold.', () => {}, "happy")}>test small Dialog</button>
+			<button class="button " onclick={() => createDialog({
+				id: 'small-dialog',
+				type: 'small',
+				title: 'How Insatiable',
+				bodyText: 'The more you take, the less you have. You will starve surrounded by gold.',
+				emoticon: 'happy',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			})}>test small Dialog</button>
 		</section>
 		<section id="test-picker-dialog">
-			<button class="button" onclick={() => pickerDialog('picker-dialog', [
-				{ type: 'photo', url: '/emotions/surprised.png' },
-				{ type: 'photo', url: '/emotions/unamused.png' },
-				{ type: 'photo', url: '/emotions/confused.png' },
-				{ type: 'photo', url: '/emotions/angry.png' },
-				{ type: 'photo', url: '/emotions/sad.png' },
-				{ type: 'photo', url: '/emotions/awkward.png' },
-				{ type: 'photo', url: '/emotions/happy.png' },
-				{ type: 'photo', url: '/favicon/favicon-96x96.png', text: "test" },
-			], [
-				{ text: 'Continue', main: true, action: () => {} }
-			], (item) => {
-				console.log('Selected item:', item);
-				smallDialog('selected-item', item.url, '');
+			<button class="button" onclick={() => createDialog({
+				id: 'picker-dialog',
+				type: 'picker',
+				items: [
+					{ type: 'photo', url: '/emotions/surprised.png' },
+					{ type: 'photo', url: '/emotions/unamused.png' },
+					{ type: 'photo', url: '/emotions/confused.png' },
+					{ type: 'photo', url: '/emotions/angry.png' },
+					{ type: 'photo', url: '/emotions/sad.png' },
+					{ type: 'photo', url: '/emotions/awkward.png' },
+					{ type: 'photo', url: '/emotions/happy.png' },
+					{ type: 'photo', url: '/favicon/favicon-96x96.png', text: "test" },
+				],
+				buttons: [
+					{ text: 'Continue', main: true, action: () => {} }
+				],
+				onSelect: (item) => {
+					console.log('Selected item:', item);
+					createDialog({
+						id: 'selected-item',
+						type: 'small',
+						title: item.text ?? item.url,
+						bodyText: '',
+						buttons: [
+							{
+								text: 'continue',
+								main: true,
+								action: () => {}
+							}
+						]
+					});
+				}
 			})}>test picker Dialog</button>
 		</section>
 		<section id="test-project-card">

@@ -42,7 +42,7 @@
             {:else if dialog.type === "saving"}
                 <SavingDialog {...dialog} />
             {/if}
-    {/each}
+        {/each}
     {/each}
     <div id="dialog-backdrop" class:visible={backdropVisible}></div>
 </div>
@@ -87,9 +87,10 @@
         z-index: 100000;
 
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-
+        gap: 20px;
         pointer-events: none;
     }
 

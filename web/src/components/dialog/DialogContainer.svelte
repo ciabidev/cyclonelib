@@ -37,23 +37,6 @@
     let dialogParent: HTMLDialogElement;
     let open = $state(false);
     let closing = $state(false);
-
-    // Listen for animated close events
-    $effect(() => {
-        const handleCloseAnimated = (event: Event) => {
-            const customEvent = event as CustomEvent;
-            if (customEvent.detail.dialogId === id) {
-                closeDialog();
-            }
-        };
-
-        window.addEventListener('close-dialog-animated', handleCloseAnimated);
-
-        return () => {
-            window.removeEventListener('close-dialog-animated', handleCloseAnimated);
-        };
-    });
-
     /**
      * Closes the dialog with animation
      */
@@ -64,7 +47,6 @@
 
             // Wait 150ms for the closing animation to finish
             setTimeout(() => {
-                // Check if dialog parent is still present
                 if (dialogParent) {
                     dialogParent.close();
                     killDialog();

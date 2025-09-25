@@ -3,7 +3,7 @@
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import PageContainer from '$components/PageContainer.svelte';
 	import FormField from '$components/FormField.svelte';
-	import { showErrorDialog } from '$lib/utils/dialog-helpers';
+	import { createDialog } from '$lib/state/dialogs';
 
 	let name = $state('');
 
@@ -57,24 +57,63 @@
 			if (response.ok) {
 				// Store the formatted name before clearing form
 				const packageName = formattedName;
-				showErrorDialog('create-package-success', 'success!', 'package created successfully!', () => {
-					// Clear form
-					name = '';
-					short_description = '';
-					long_description = '';
-					edit_code = '';
-					// Small delay to allow dialog to close properly before navigation
-					setTimeout(() => {
-						// Redirect to version creation for the new package
-						goto(`/packages/${packageName}/versions/create`);
-					}, 200);
+				createDialog({
+					id: 'create-package-success',
+					type: 'small',
+					title: 'success!',
+					icon: 'warn-red',
+					bodyText: 'package created successfully!',
+					buttons: [
+						{
+							text: 'continue',
+							main: true,
+							action: () => {
+								// Clear form
+								name = '';
+								short_description = '';
+								long_description = '';
+								edit_code = '';
+								// Small delay to allow dialog to close properly before navigation
+								setTimeout(() => {
+									// Redirect to version creation for the new package
+									goto(`/packages/${packageName}/versions/create`);
+								}, 200);
+							}
+						}
+					]
 				});
 			} else {
 				const data = await response.json();
-				showErrorDialog('create-package-error', 'error creating package', data.message || 'Failed to create package');
+				createDialog({
+					id: 'create-package-error',
+					type: 'small',
+					title: 'error creating package',
+					icon: 'warn-red',
+					bodyText: data.message || 'Failed to create package',
+					buttons: [
+						{
+							text: 'continue',
+							main: true,
+							action: () => {}
+						}
+					]
+				});
 			}
 		} catch (err) {
-			showErrorDialog('create-package-network-error', 'network error?', 'a network error occurred while creating the package');
+			createDialog({
+				id: 'create-package-network-error',
+				type: 'small',
+				title: 'network error?',
+				icon: 'warn-red',
+				bodyText: 'a network error occurred while creating the package',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 		} finally {
 			loading = false;
 		}
