@@ -10,8 +10,7 @@
 	} = $props();
 	
 	// @ts-ignore
-	import LinkIcon from '~icons/tabler/external-link';
-	import URLButton from './inputs-and-buttons/URLButton.svelte';
+	import URLButton from '$components/inputs-and-buttons/URLButton.svelte';
 </script>
 
 <div class="card-wrapper">
