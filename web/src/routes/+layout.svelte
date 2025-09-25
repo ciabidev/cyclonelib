@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import type { LayoutData } from './$types';
-	import LoveNote from '$components/LoveNote.svelte';
+	import LoveNote from '$components/misc/LoveNote.svelte';
 	import Navbar from '$components/navbar/Navbar.svelte';
 	import type { Snippet } from 'svelte';
 	import DialogHolder from '$components/dialog/DialogHolder.svelte';

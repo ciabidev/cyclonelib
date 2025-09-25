@@ -1,7 +1,7 @@
 <script lang="ts">
-	import ProjectCard from '$components/ProjectCard.svelte'; /* the Cyclone website is forked from Ciabi's website, and I run both the Ciabi and Cyclone website. Old names may still be used. */
+	import ProjectCard from '$components/misc/ProjectCard.svelte'; /* the Cyclone website is forked from Ciabi's website, and I run both the Ciabi and Cyclone website. Old names may still be used. */
 	import Input from '$components/inputs-and-buttons/Input.svelte';
-	import PageContainer from '$components/PageContainer.svelte';
+	import PageContainer from '$components/misc/PageContainer.svelte';
 	// @ts-ignore
 	import SearchIcon from '~icons/streamline-flex/magnifying-glass-remix';
 

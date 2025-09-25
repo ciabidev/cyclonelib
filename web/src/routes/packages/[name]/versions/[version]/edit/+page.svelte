@@ -3,8 +3,8 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
-	import PageContainer from '$components/PageContainer.svelte';
-	import FormField from '$components/FormField.svelte';
+	import PageContainer from '$components/misc/PageContainer.svelte';
+	import FormField from '$components/misc/FormField.svelte';
 	import { createDialog } from '$lib/state/dialogs';
 	
 	let version_number = $state('');

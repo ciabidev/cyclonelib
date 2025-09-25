@@ -2,10 +2,10 @@
 
 	import Switcher from "$components/inputs-and-buttons/Switcher.svelte";
 	import Input from "$components/inputs-and-buttons/Input.svelte";
-	import ProjectCard from "$components/ProjectCard.svelte";
+	import ProjectCard from "$components/misc/ProjectCard.svelte";
 	import { createDialog } from "$lib/state/dialogs";
-	import PageContainer from "$components/PageContainer.svelte";
-	import Codeblock from "$components/Codeblock.svelte";
+	import PageContainer from "$components/misc/PageContainer.svelte";
+	import Codeblock from "$components/misc/Codeblock.svelte";
 	import Navbar from "$components/navbar/Navbar.svelte";
 	import NavTab from "$components/navbar/NavTab.svelte";
 	import InfoIcon from "~icons/basil/info-rect-outline";

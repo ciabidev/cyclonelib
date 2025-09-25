@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Markdown from '$components/Markdown.svelte';
-	import ProjectCard from '$components/ProjectCard.svelte';
+	import Markdown from '$components/misc/Markdown.svelte';
+	import ProjectCard from '$components/misc/ProjectCard.svelte';
 	import Switcher from '$components/inputs-and-buttons/Switcher.svelte';
-	import PageContainer from '$components/PageContainer.svelte';
+	import PageContainer from '$components/misc/PageContainer.svelte';
 	import type { Package } from '$lib/types/api';
 	let { data } = $props();
 
