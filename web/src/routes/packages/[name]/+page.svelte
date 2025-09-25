@@ -1,16 +1,17 @@
-<script>
+<script lang="ts">
 	import Markdown from '$components/Markdown.svelte';
 	import ProjectCard from '$components/ProjectCard.svelte';
 	import Switcher from '$components/inputs-and-buttons/Switcher.svelte';
 	import PageContainer from '$components/PageContainer.svelte';
-
+	import type { Package } from '$lib/types/api';
 	let { data } = $props();
-	let packageData = $derived(data.pkg);
+
+	let packageData: Package | null = $derived(data.pkg as Package | null);
 	let versions = $derived(data.versions || []);
 	let activeTab = $state('main-info');
-	let name = $state('name');
-	let short_description = $state('short_description');
-	let long_description = $state('long_description');
+	let name = $derived(packageData?.name || '');
+	let short_description = $derived(packageData?.short_description || '');
+	let long_description = $derived(packageData?.long_description || '');
 
 </script>
 
