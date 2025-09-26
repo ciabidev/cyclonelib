@@ -72,7 +72,7 @@
     </a>
 {:else}
     <button
-        class="button  {button.color === 'red' ? 'button--danger' : ''}"
+        class="button {button.color === 'red' ? 'button--danger' : ''}"
         class:active={button.main}
         {disabled}
         onclick={async () => {
@@ -98,6 +98,5 @@
 
     button {
         width: 100%;
-        transition: 0.2s opacity;
     }
 </style>

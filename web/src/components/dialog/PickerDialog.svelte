@@ -1,224 +1,194 @@
 <script lang="ts">
-    import type { Optional } from "$lib/types/generic";
-    import type { DialogButton } from "$lib/types/dialog";
-    import type { DialogPickerItem } from "$lib/types/dialog";
+	import type { Optional } from '$lib/types/generic';
+	import type { DialogButton } from '$lib/types/dialog';
+	import type { DialogPickerItem } from '$lib/types/dialog';
 
-    import DialogContainer from "$components/dialog/DialogContainer.svelte";
-    import PickerItem from "$components/dialog/PickerItem.svelte";
-    import { dialogs } from "$lib/state/dialogs";
+	import DialogContainer from '$components/dialog/DialogContainer.svelte';
+	import PickerItem from '$components/dialog/PickerItem.svelte';
+	import { dialogs } from '$lib/state/dialogs';
+	import DialogButtons from './DialogButtons.svelte';
+	export let id: string;
+	export let items: Optional<DialogPickerItem[]> = undefined;
+	export let buttons: Optional<DialogButton[]> = undefined;
+	export let onSelect: Optional<(item: DialogPickerItem) => void> = undefined;
+	export let dismissable = true;
 
-    export let id: string;
-    export let items: Optional<DialogPickerItem[]> = undefined;
-    export let buttons: Optional<DialogButton[]> = undefined;
-    export let onSelect: Optional<(item: DialogPickerItem) => void> = undefined;
-    export let dismissable = true;
+	let close: () => void = () => {};
 
-    let close: () => void = () => {};
-
-    // Track dialog count to detect if action created a new dialog
-    let currentDialogs: any[] = [];
-    dialogs.subscribe((dialogList: any[]) => {
-        currentDialogs = dialogList;
-    });
+	// Track dialog count to detect if action created a new dialog
+	let currentDialogs: any[] = [];
+	dialogs.subscribe((dialogList: any[]) => {
+		currentDialogs = dialogList;
+	});
 </script>
 
 <DialogContainer {id} {dismissable} bind:close>
-    <div
-        class="dialog-body picker-dialog"
-        class:three-columns={items && items.length <= 3}
-    >
-        <div class="popup-header">
-            <div class="popup-title-container">
-                <!-- Icon would go here -->
-                <h2 class="popup-title">
-                    Select Option
-                </h2>
-            </div>
-            <div class="subtext popup-description">
-                Choose from the available options below
-            </div>
-        </div>
-        <div class="picker-body">
-            {#if items}
-                {#each items as item, i}
-                    {#if item?.url}
-                        <PickerItem {item} number={i + 1} {onSelect} />
-                    {/if}
-                {/each}
-            {/if}
-        </div>
-        {#if buttons}
-            <div class="button-group">
-                {#each buttons as button}
-                    {#if button.link}
-                        <a
-                            class="button button--link"
-                            class:active={button.main}
-                            href={button.link}
-                        >
-                            {button.text}
-                        </a>
-                    {:else}
-                        <button
-                            class="button  {button.color === 'red' ? 'button--danger' : ''}"
-                            class:active={button.main}
-                            onclick={async () => {
-                                await button.action();
-                                close();
-                            }}
-                        >
-                            {button.text}
-                        </button>
-                    {/if}
-                {/each}
-            </div>
-        {/if}
-    </div>
+	<div class="dialog-body picker-dialog" class:three-columns={items && items.length <= 3}>
+			<div class="popup-header">
+				<div class="popup-title-container">
+					<!-- Icon would go here -->
+					<h2 class="popup-title">Select Option</h2>
+				</div>
+				<div class="subtext popup-description">Choose from the available options below</div>
+			</div>
+			<div class="picker-body">
+				{#if items}
+					{#each items as item, i}
+						{#if item?.url}
+							<PickerItem {item} number={i + 1} {onSelect} />
+						{/if}
+					{/each}
+				{/if}
+			</div>
+			{#if buttons}
+				<DialogButtons {buttons} closeFunc={close} dialogId={id} />
+			{/if}
+		</div>
 </DialogContainer>
 
 <style>
-    .picker-dialog {
-        --picker-item-size: 120px;
-        --picker-item-gap: 4px;
-        --picker-item-area: calc(var(--picker-item-size) + var(--picker-item-gap));
+	.picker-dialog {
+		--picker-item-size: 120px;
+		--picker-item-gap: 4px;
+		--picker-item-area: calc(var(--picker-item-size) + var(--picker-item-gap));
 
-        gap: var(--padding);
-        max-height: calc(
-            90% - env(safe-area-inset-bottom) - env(safe-area-inset-top)
-        );
-        width: auto;
-    }
+		gap: var(--padding);
+		max-height: calc(90% - env(safe-area-inset-bottom) - env(safe-area-inset-top));
+		width: auto;
+	}
 
-    .popup-header {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 3px;
-        width: 95%;
-    }
 
-    .popup-title-container {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: calc(var(--padding) / 2);
-        color: var(--text-color);
-    }
 
-    .popup-title {
-        font-size: 18px;
-        line-height: 1.1;
-    }
+	.popup-header {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 3px;
+		width: 95%;
+	}
 
-    .popup-description {
-        font-size: 13px;
-        padding: 0;
-    }
+	.popup-title-container {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: calc(var(--padding) / 2);
+		color: var(--text-color);
+	}
 
-    .picker-body {
-        overflow-y: scroll;
-        display: grid;
-        justify-items: center;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        gap: var(--picker-item-gap);
-    }
+	.popup-title {
+		font-size: 18px;
+		line-height: 1.1;
+	}
 
-    .three-columns .picker-body {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
+	.popup-description {
+		font-size: 13px;
+		padding: 0;
+	}
 
-    .three-columns .popup-header {
-        max-width: calc(var(--picker-item-area) * 3);
-    }
+	.picker-body {
+		overflow-y: scroll;
+		display: grid;
+		justify-items: center;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+		gap: var(--picker-item-gap);
+	}
 
-    :global(.picker-item) {
-        width: var(--picker-item-size);
-        height: var(--picker-item-size);
-    }
+	.three-columns .picker-body {
+		grid-template-columns: 1fr 1fr 1fr;
+	}
 
-    @media screen and (max-width: 535px) {
-        .picker-body {
-            grid-template-columns: 1fr 1fr 1fr;
-        }
+	.three-columns .popup-header {
+		max-width: calc(var(--picker-item-area) * 3);
+	}
 
-        .popup-header {
-            max-width: calc(var(--picker-item-area) * 3);
-        }
-    }
+	:global(.picker-item) {
+		width: var(--picker-item-size);
+		height: var(--picker-item-size);
+	}
 
-    @media screen and (max-width: 410px) {
-        .picker-dialog {
-            --picker-item-size: 118px;
-        }
-    }
+	@media screen and (max-width: 535px) {
+		.picker-body {
+			grid-template-columns: 1fr 1fr 1fr;
+		}
 
-    @media screen and (max-width: 405px) {
-        .picker-dialog {
-            --picker-item-size: 116px;
-        }
-    }
+		.popup-header {
+			max-width: calc(var(--picker-item-area) * 3);
+		}
+	}
 
-    @media screen and (max-width: 398px) {
-        .picker-dialog {
-            --picker-item-size: 115px;
-        }
-    }
+	@media screen and (max-width: 410px) {
+		.picker-dialog {
+			--picker-item-size: 118px;
+		}
+	}
 
-    @media screen and (max-width: 388px) {
-        .picker-dialog {
-            --picker-item-size: 110px;
-        }
-    }
+	@media screen and (max-width: 405px) {
+		.picker-dialog {
+			--picker-item-size: 116px;
+		}
+	}
 
-    @media screen and (max-width: 378px) {
-        .picker-dialog {
-            --picker-item-size: 105px;
-        }
-    }
+	@media screen and (max-width: 398px) {
+		.picker-dialog {
+			--picker-item-size: 115px;
+		}
+	}
 
-    @media screen and (max-width: 365px) {
-        .picker-dialog {
-            --picker-item-size: 100px;
-        }
-    }
+	@media screen and (max-width: 388px) {
+		.picker-dialog {
+			--picker-item-size: 110px;
+		}
+	}
 
-    @media screen and (max-width: 352px) {
-        .picker-dialog {
-            --picker-item-size: 95px;
-        }
-    }
+	@media screen and (max-width: 378px) {
+		.picker-dialog {
+			--picker-item-size: 105px;
+		}
+	}
 
-    @media screen and (max-width: 334px) {
-        .picker-dialog {
-            --picker-item-size: 130px;
-        }
+	@media screen and (max-width: 365px) {
+		.picker-dialog {
+			--picker-item-size: 100px;
+		}
+	}
 
-        .picker-body,
-        .three-columns .picker-body {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
+	@media screen and (max-width: 352px) {
+		.picker-dialog {
+			--picker-item-size: 95px;
+		}
+	}
 
-    @media screen and (max-width: 300px) {
-        .picker-dialog {
-            --picker-item-size: 120px;
-        }
-    }
+	@media screen and (max-width: 334px) {
+		.picker-dialog {
+			--picker-item-size: 130px;
+		}
 
-    @media screen and (max-width: 280px) {
-        .picker-dialog {
-            --picker-item-size: 110px;
-        }
-    }
+		.picker-body,
+		.three-columns .picker-body {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
 
-    @media screen and (max-width: 255px) {
-        .picker-dialog {
-            --picker-item-size: 140px;
-        }
+	@media screen and (max-width: 300px) {
+		.picker-dialog {
+			--picker-item-size: 120px;
+		}
+	}
 
-        .picker-body,
-        .three-columns .picker-body {
-            grid-template-columns: 1fr;
-        }
-    }
+	@media screen and (max-width: 280px) {
+		.picker-dialog {
+			--picker-item-size: 110px;
+		}
+	}
+
+	@media screen and (max-width: 255px) {
+		.picker-dialog {
+			--picker-item-size: 140px;
+		}
+
+		.picker-body,
+		.three-columns .picker-body {
+			grid-template-columns: 1fr;
+		}
+	}
 </style>

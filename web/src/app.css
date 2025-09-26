@@ -493,11 +493,6 @@ button:hover, .button:hover {
 	background-color: var(--button-elevated-press);
 } */
 
-.button.active:hover {
-	background-color: var(--dark-main-color);
-	color: var(--bg-color);
-}
-
 a:not(:has(img)):not(.button):not(.url-button):not[role="tab"]:hover {
 	filter: brightness(1.25);
 	-webkit-filter: brightness(1.25);
