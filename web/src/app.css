@@ -97,7 +97,7 @@
 }
 
 a {
-	color: var(--sub-color);
+	color: var(--sub-color) !important;
 	text-underline-offset: 3px;
 	-webkit-touch-callout: none;
 }
