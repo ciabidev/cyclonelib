@@ -19,7 +19,7 @@
 <div
     id="dialog-backdrop-close"
     aria-hidden="true"
-    on:click={() => closeFunc()}
+    onclick={() => closeFunc()}
 ></div>
 
 <style>

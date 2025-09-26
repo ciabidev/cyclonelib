@@ -6,7 +6,7 @@
     <button
         id="tutorial-button"
         class="button button--elevated"
-        on:click={() => {
+        onclick={() => {
             tutorialExpanded = !tutorialExpanded;
         }}
     >

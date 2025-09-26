@@ -75,7 +75,7 @@
         class="button  {button.color === 'red' ? 'button--danger' : ''}"
         class:active={button.main}
         {disabled}
-        on:click={async () => {
+        onclick={async () => {
             await button.action();
 
             // Check if this dialog is still in the dialogs array

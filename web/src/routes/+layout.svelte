@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../app.css';
+import '../app.css';
 	import type { LayoutData } from './$types';
 	import LoveNote from '$components/misc/LoveNote.svelte';
 	import Navbar from '$components/navbar/Navbar.svelte';
@@ -11,6 +11,16 @@
   // @ts-ignore (she aint even know it) (WHY DID I WRITE THIS WITHOUT KNOWING WHAT IT MEANT...)
   import StarIcon from "~icons/basil/star-outline";
   import BoxIcon from '~icons/basil/box-outline';
+  import FlavorPickerButton from '$components/navbar/FlavorPickerButton.svelte';
+
+  import { flavor } from '$lib/state/flavors';
+  import { onMount } from 'svelte';
+
+  flavor.subscribe((value) => {
+    if (typeof document !== 'undefined' && value) {
+		document.documentElement.setAttribute('data-flavor', value);
+	}
+  });
 
 </script>
 
@@ -27,8 +37,8 @@
 	/>
 </svelte:head>
 
-<DialogHolder />
 <div id="basket">
+	<DialogHolder />
 	<!-- acts as a "body" tag that we have more control over. Example: when a mobile user reaches end of scroll. then the page starts scrolling to make typing and scrolling easier -->
 
 	<div id="loaf">
@@ -40,6 +50,7 @@
 	  <NavTab name={"about?"} Icon={InfoIcon} path={"/"} />
       <NavTab name={"packages"} Icon={BoxIcon} path={"/packages"} />
       <NavTab name={"test"} Icon={StarIcon} path={"/test"} />
+	  <FlavorPickerButton />
 	</Navbar>
 	
 </div>
