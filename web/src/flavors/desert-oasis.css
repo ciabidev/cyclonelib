@@ -18,5 +18,5 @@
 
 	--nav-hover-bg: #fed7aa33;
 	--nav-bg: #ffffff;
-	--navbar-highlight: #000000;
+	--navbar-highlight: var(--sub-color);
 }

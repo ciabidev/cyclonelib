@@ -96,6 +96,7 @@
     background: var(--sub-color);
     opacity: 1;
     cursor: default;
+    color: var(--nav-bg);
   }
 
 @media not all and (hover: none) {

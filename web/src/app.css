@@ -96,12 +96,6 @@
 	background: var(--secondary);
 }
 
-a {
-	color: var(--sub-color) !important;
-	text-underline-offset: 3px;
-	-webkit-touch-callout: none;
-}
-
 /* TEXT STYLES FROM COBALT-MAIN */
 
 h1, h2, h3, h4, h5, h6 {
@@ -147,7 +141,7 @@ p {
 
 a:not(:has(img)):not(.button) {
 	text-decoration-thickness: 5px;
-	color: var(--main-color);
+	color: var(--sub-color);
 	transition: all 0.2s ease-in-out;
 	text-decoration-skip-ink: none;
 	background-color: transparent;
