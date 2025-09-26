@@ -2,6 +2,7 @@
     import type { Flavor } from "$lib/types/flavor";
 	import { createDialog } from "$lib/state/dialogs";
 	import { flavor } from "$lib/state/flavors";
+	let picker
 </script>
 
 <button class="flavor-picker-button" onclick={() => createDialog({
@@ -12,19 +13,9 @@
 					{ type: 'photo', url: '/emotions/surprised.png', text: 'desert-oasis'}
 				],
 				onSelect: (item) => {
-					createDialog({
-						id: 'selected-item',
-						type: 'small',
-						title: item.text,
-						bodyText: '',
-						buttons: [
-							{
-								text: 'continue',
-								main: true,
-								action: () => {}
-							}
-						]
-					});
+					if (item.text) {
+						flavor.set(item.text);
+					}
 				}
 })}>🍨</button>
 
@@ -32,6 +23,7 @@
 .flavor-picker-button {
 	color: white;
 	background: none;
+	
 }
 
 .flavor-picker-button:hover {

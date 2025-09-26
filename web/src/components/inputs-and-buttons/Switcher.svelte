@@ -57,7 +57,6 @@
         border-radius: calc(var(--border-radius) - var(--switcher-padding));
         border: 1px solid transparent; /* without this the border will flash black when :active */
         box-shadow: none;
-        transition: background-color 0.2s ease, border-color 0.2s ease;
     }
 
     .switcher :global(.button:not(.active, :hover, :active)) {

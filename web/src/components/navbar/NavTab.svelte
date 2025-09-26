@@ -93,7 +93,7 @@
 
   a[role="tab"].active {
     animation: 0.3s afterClick cubic-bezier(0.33, 1, 0.68, 1);
-    background: var(--main-color);
+    background: var(--sub-color);
     opacity: 1;
     cursor: default;
   }

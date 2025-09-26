@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+Mono:wght@100..900&display=swap&family=Poppins:wght@400;500;600;700&display=swap');
 @import './flavors/rain.css';
-
+@import './flavors/desert-oasis.css';
 
 :root {
 	
@@ -18,8 +18,8 @@
 	--shadow-main: rgba(0, 0, 0, 0.06) 0px 0px 10px 0px;
 	/* Button styles */	
 	--button-default: var(--sub-alt-color);
-	--button-default-hover: color-mix(in srgb, var(--button-default), black 5%);
-	--button-press: #dbdbdb;
+	--button-hover-filter: brightness(90%);
+	--button-press-filter: brightness(80%);
 	--button-stroke: rgba(0, 0, 0, 0.06);
     --button-box-shadow: var(--shadow-main), 0px 0px 0px 1px var(--button-stroke) inset;
 	/* old button-box-shadow: 0 0 0 1px var(--button-stroke) inset; */
@@ -45,7 +45,7 @@
 	--mobile-navbar-height: calc(64px + env(safe-area-inset-bottom));
 	--navbar-inner-padding: 4px;
 	--navbar-tab-padding: 10px;
-	--navbar-highlight: #ffffff;
+
 	--padding: 15px;
 
 	/* Mobile navbar */
@@ -97,7 +97,7 @@
 }
 
 a {
-	color: inherit;
+	color: var(--sub-color);
 	text-underline-offset: 3px;
 	-webkit-touch-callout: none;
 }
@@ -394,14 +394,14 @@ button,
 	text-align: center;
 	cursor: pointer;
 	font-weight: 500;
-	transition: all 0.2s ease;
-	border: var(--button-stroke) solid 1px;	
+	transition: all 0.2s ease, border-color 0.2s ease;
+	border: var(--button-stroke) solid 1px;
 	background-color: var(--button-default);
 	color: var(--text-color);
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
+	-webkit-transition: all 0.2s ease, border-color 0.2s ease;
+	-moz-transition: all 0.2s ease, border-color 0.2s ease;
+	-ms-transition: all 0.2s ease, border-color 0.2s ease;
+	-o-transition: all 0.2s ease, border-color 0.2s ease;
 }
 /* dont mix up the :active and .active classes. they are different */
 /* :active - buttons that are currently pressed	*/
@@ -413,9 +413,6 @@ button > img, .button > img {
 	-ms-border-radius: var(--border-radius);
 	-o-border-radius: var(--border-radius);
 }
-.button:hover, button:hover {
-    background-color: var(--button-default-hover); /* Darkens by 20% */
-}
 
 .button.active, button.active {
 	background-color: var(--main-color);
@@ -423,7 +420,8 @@ button > img, .button > img {
 }
 
 button:active, .button:active {
-	background-color: var(--button-press);
+	filter: var(--button-press-filter);
+	-webkit-filter: var(--button-press-filter);
 }
 
 button:disabled, .button:disabled {
@@ -431,6 +429,10 @@ button:disabled, .button:disabled {
 	cursor: default;
 }
 
+button:hover, .button:hover {
+	filter: var(--button-hover-filter);
+	-webkit-filter: var(--button-hover-filter);
+}
 
 /* Button Variants */
 .button--primary {
@@ -460,9 +462,9 @@ button:disabled, .button:disabled {
 	text-decoration: underline;
 }
 
-/* Button States */
+/* Old Button States */
 
-.button--primary:hover {
+/* .button--primary:hover {
 	background: var(--dark-main-color);
 }
 
@@ -476,9 +478,9 @@ button:disabled, .button:disabled {
 
 .button--elevated:hover {
 	background-color: var(--button-elevated-hover);
-}
+} */
 
-.button--primary:active {
+/* .button--primary:active {
 	background: var(--dark-main-color);
 	filter: brightness(0.9);
 }
@@ -495,7 +497,7 @@ button:disabled, .button:disabled {
 
 .button--elevated:active {
 	background-color: var(--button-elevated-press);
-}
+} */
 
 .button.active:hover {
 	background-color: var(--dark-main-color);

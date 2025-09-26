@@ -1,0 +1,22 @@
+/* asked ai to create a theme honestly dont like it will change it a bit */
+
+[data-flavor="desert-oasis"] {
+    --bg-color: #fffaee; /* warm sandy background */
+	--text-color: #2d3748;
+	--main-color: #95b643; 
+	--sub-color: #5090e2; 
+	--sub-alt-color: #eddebc; 
+
+	--color-success: #16a34a;
+	--color-warning: #ca8a04;
+	--color-error: #dc2626;
+
+	--dark-main-color: #b45309;
+	--dark-color-success: #15803d;
+	--dark-color-warning: #a16207;
+	--dark-color-error: #b91c1c; /* we use filters for darkening now */
+
+	--nav-hover-bg: #fed7aa33;
+	--nav-bg: #ffffff;
+	--navbar-highlight: #000000;
+}

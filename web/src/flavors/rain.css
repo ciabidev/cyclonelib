@@ -1,8 +1,8 @@
-[data-theme="rain"] {
+:root {
     --bg-color: #ffffff; /* dark: #1e272e */
 	--text-color: #282828;
 	--main-color: #4871e0; /* main accent you'll see everywhere */
-	--sub-color: #000000; /* main color's brother, you'll see this on links and smaller stuff; half the time */
+	--sub-color: #4871e0; /* main color's brother, you'll see this on links and smaller stuff; half the time */
 	--sub-alt-color: #f4f4f4; /* for stuff like default buttons and cards */
 
 	--color-success: #40d672;
@@ -12,8 +12,9 @@
 	--dark-main-color: #3c5ebb;
 	--dark-color-success: #36b661;
 	--dark-color-warning: #dfbc32;
-	--dark-color-error: #d32f42;
+	--dark-color-error: #d32f42; /* we use filters for darkening now */
 
 	--nav-hover-bg: #ffffff33;
 	--nav-bg: #000000;
+	--navbar-highlight: #ffffff;
 }

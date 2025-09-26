@@ -1,7 +1,6 @@
 <script lang="ts">
 import '../app.css';
-	import type { LayoutData } from './$types';
-	import LoveNote from '$components/misc/LoveNote.svelte';
+
 	import Navbar from '$components/navbar/Navbar.svelte';
 	import type { Snippet } from 'svelte';
 	import DialogHolder from '$components/dialog/DialogHolder.svelte';
@@ -11,10 +10,9 @@ import '../app.css';
   // @ts-ignore (she aint even know it) (WHY DID I WRITE THIS WITHOUT KNOWING WHAT IT MEANT...)
   import StarIcon from "~icons/basil/star-outline";
   import BoxIcon from '~icons/basil/box-outline';
-  import FlavorPickerButton from '$components/navbar/FlavorPickerButton.svelte';
+  import FlavorPickerButton from '$components/navbar/FlavorPicker.svelte';
 
   import { flavor } from '$lib/state/flavors';
-  import { onMount } from 'svelte';
 
   flavor.subscribe((value) => {
     if (typeof document !== 'undefined' && value) {
