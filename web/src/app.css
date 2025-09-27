@@ -21,7 +21,7 @@
 	--button-hover-filter: brightness(90%);
 	--button-press-filter: brightness(80%);
 	--button-stroke: rgba(0, 0, 0, 0.06);
-    --button-box-shadow: var(--shadow-main), 0px 0px 0px 1px var(--button-stroke) inset;
+    --button-box-shadow: var(--shadow-main), 0px 0px 0px 1px var(--button-stroke); /* for elevated buttons */
 	/* old button-box-shadow: 0 0 0 1px var(--button-stroke) inset; */
 	--switcher-padding: 3.5px;
 	

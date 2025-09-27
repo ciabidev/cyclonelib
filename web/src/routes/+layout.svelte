@@ -10,9 +10,9 @@ import '../app.css';
   // @ts-ignore (she aint even know it) (WHY DID I WRITE THIS WITHOUT KNOWING WHAT IT MEANT...)
   import StarIcon from "~icons/basil/star-outline";
   import BoxIcon from '~icons/basil/box-outline';
-  import FlavorPickerButton from '$components/navbar/FlavorPicker.svelte';
 
   import { flavor } from '$lib/state/flavors';
+  import FlavorPicker from '$components/navbar/FlavorPicker.svelte';
 
   flavor.subscribe((value) => {
     if (typeof document !== 'undefined' && value) {
@@ -35,9 +35,10 @@ import '../app.css';
 	/>
 </svelte:head>
 
-<div id="basket">
-	<DialogHolder />
 	<!-- acts as a "body" tag that we have more control over. Example: when a mobile user reaches end of scroll. then the page starts scrolling to make typing and scrolling easier -->
+<div id="basket">
+	<FlavorPicker />
+	<DialogHolder />
 
 	<div id="loaf">
 		<!-- includes main content of the page only -->
@@ -48,7 +49,6 @@ import '../app.css';
 	  <NavTab name={"about?"} Icon={InfoIcon} path={"/"} />
       <NavTab name={"packages"} Icon={BoxIcon} path={"/packages"} />
       <NavTab name={"test"} Icon={StarIcon} path={"/test"} />
-	  <FlavorPickerButton />
 	</Navbar>
 	
 </div>

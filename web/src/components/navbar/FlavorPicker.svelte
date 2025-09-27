@@ -1,34 +1,39 @@
-<script lang="ts">
-    import type { Flavor } from "$lib/types/flavor";
-	import { createDialog, killDialog } from "$lib/state/dialogs";
-	import { flavor } from "$lib/state/flavors";
-	
+<script>
+	import { flavor } from '$lib/state/flavors';
+    import PopoverContainer from '$components/misc/PopoverContainer.svelte';
+    import FlavorPickerButton from '$components/navbar/FlavorPickerButton.svelte';
+    import { flavorPickerVisible } from '$lib/state/flavor-picker-visibility';
+	import Carousel from '$components/inputs-and-buttons/Carousel.svelte';
 </script>
 
-<button class="flavor-picker-button" onclick={() => createDialog({
-	
-				id: 'flavor-picker-dialog',
-				type: 'picker',
-				items: [
-					{ type: 'photo', url: 'https://i.pinimg.com/736x/37/c5/df/37c5dffd7ea7b2cdf169bf5e7ed6128d.jpg', text: 'rain' },
-					{ type: 'photo', url: 'https://i.pinimg.com/736x/de/c7/85/dec785b10068f4f95ad4a30de0a78fbd.jpg', text: 'desert-oasis'}
-				],
-				onSelect: (item) => {
-					if (item.text) {
-						flavor.set(item.text);
-						killDialog();
-					}
-				}
-})}>🍨</button>
+<div id="flavor-picker">
+    <FlavorPickerButton /> 
+    <PopoverContainer expanded={$flavorPickerVisible} id="flavor-picker-popover">
+        <Carousel items={$flavor.flavors} current={$flavor} visibleItems={3}>
+            <div slot="item" let:item let:index>
+                <div class="item">
+                    <button class="flavor-button" on:click={() => $flavor.set(item)}>
+                        {item.name}
+                    </button>
+                </div>
+            </div>
+        </Carousel>
+    </PopoverContainer>
+    
+</div>
 
 <style>
-.flavor-picker-button {
-	color: white;
-	background: none;
-	
-}
-
-.flavor-picker-button:hover {
-	background: none;
-}
+      #flavor-picker {
+        --holder-padding: 12px;
+        position: absolute;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: end;
+        gap: 5px;
+        pointer-events: none;
+        padding: var(--holder-padding);
+        width: calc(100% - var(--holder-padding) * 2);
+    }
 </style>
