@@ -30,6 +30,7 @@
 	--popup-padding: 18px;
 	--popup-bg: var(--bg-color);
 	--popup-stroke: rgba(0, 0, 0, 0.1);
+	--popover-glow: var(--button-stroke);
 	--red: var(--color-error);
 	--white: #ffffff;
 	--gray: #75757e;

@@ -15,6 +15,15 @@
 	let active1 = $state(0);
 	let active2 = $state(0);
 
+	import Carousel from "$components/inputs-and-buttons/Carousel.svelte";
+	import { flavors } from "$lib/types/flavor";
+	let flavor_items = flavors.map(flavor => {
+		return {
+			title: flavor,
+			description: "",
+			image: "/flavor_icons/" + flavor + ".png"
+		}
+	});
 </script>
 
 <!--bottom navbar-->
@@ -115,6 +124,9 @@
 				<NavTab name={"packages"} Icon={BoxIcon} path={"/packages"} />
 				<NavTab name={"test"} Icon={StarIcon} path={"/test"} />
 			</Navbar>
+		</section>
+		<section>
+        	<Carousel id="test-carousel" items={flavor_items}></Carousel>
 		</section>
 	</PageContainer>
 

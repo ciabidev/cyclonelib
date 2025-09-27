@@ -1,23 +1,25 @@
 <script>
 	import { flavor } from '$lib/state/flavors';
+    import { flavors } from '$lib/types/flavor';
+
     import PopoverContainer from '$components/misc/PopoverContainer.svelte';
     import FlavorPickerButton from '$components/navbar/FlavorPickerButton.svelte';
     import { flavorPickerVisible } from '$lib/state/flavor-picker-visibility';
-	import Carousel from '$components/inputs-and-buttons/Carousel.svelte';
+	import CarouselContainer from '$components/inputs-and-buttons/CarouselContainer.svelte';
+    
+    let flavor_items = flavors.map(flavor => {
+        return {
+            title: flavor,
+            description: "",
+            image: "/flavor_icons/" + flavor + ".png"
+        }
+    });
 </script>
 
 <div id="flavor-picker">
     <FlavorPickerButton /> 
     <PopoverContainer expanded={$flavorPickerVisible} id="flavor-picker-popover">
-        <Carousel items={$flavor.flavors} current={$flavor} visibleItems={3}>
-            <div slot="item" let:item let:index>
-                <div class="item">
-                    <button class="flavor-button" on:click={() => $flavor.set(item)}>
-                        {item.name}
-                    </button>
-                </div>
-            </div>
-        </Carousel>
+        <CarouselContainer id="flavor-picker-carousel" items={flavor_items}></CarouselContainer>
     </PopoverContainer>
     
 </div>
@@ -34,6 +36,5 @@
         gap: 5px;
         pointer-events: none;
         padding: var(--holder-padding);
-        width: calc(100% - var(--holder-padding) * 2);
     }
 </style>

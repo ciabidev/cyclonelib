@@ -10,7 +10,7 @@
 
 <style>
     .popover-container {
-        padding: 16px;
+        padding: 0;
         padding-bottom: 0;
         background: var(--bg-color);
         border-radius: calc(var(--border-radius) * 2);
