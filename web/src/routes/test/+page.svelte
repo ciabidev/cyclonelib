@@ -15,12 +15,14 @@
 	let active1 = $state(0);
 	let active2 = $state(0);
 
-	import Carousel from "$components/inputs-and-buttons/Carousel.svelte";
+	import CarouselContainer from "$components/inputs-and-buttons/CarouselContainer.svelte";
 	import { flavors } from "$lib/types/flavor";
+	import { flavor_descriptions } from "$lib/types/flavor";
+	
 	let flavor_items = flavors.map(flavor => {
 		return {
 			title: flavor,
-			description: "",
+            description: flavor_descriptions[flavor],
 			image: "/flavor_icons/" + flavor + ".png"
 		}
 	});
@@ -118,15 +120,15 @@
 		<section id="code-block">
 			<Codeblock code={"console.log('hello world')"} language="js" />
 		</section>
-		<section>
+		<section id="navbar">
 			<Navbar test={true}>
 				<NavTab name={"about?"} Icon={InfoIcon} path={"/"} />
 				<NavTab name={"packages"} Icon={BoxIcon} path={"/packages"} />
 				<NavTab name={"test"} Icon={StarIcon} path={"/test"} />
 			</Navbar>
 		</section>
-		<section>
-        	<Carousel id="test-carousel" items={flavor_items}></Carousel>
+		<section id="carousel">
+        	<CarouselContainer id="flavor-picker-carousel" items={flavor_items}></CarouselContainer>
 		</section>
 	</PageContainer>
 

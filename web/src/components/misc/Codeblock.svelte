@@ -91,7 +91,7 @@
 		display: flex;
 		align-items: center;
 		gap: .25rem;
-		z-index: 5;
+		z-index: 2;
 	}
 
 	.icon {

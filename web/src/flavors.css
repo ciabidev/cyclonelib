@@ -1,0 +1,57 @@
+/* asked ai to create a theme honestly dont like it will change it a bit */
+
+:root, [data-flavor="rain"] {
+    --bg-color: #ffffff; /* dark: #1e272e */
+	--text-color: #282828;
+	--main-color: #4273fa; /* main accent you'll see everywhere */
+	--sub-color: #455fa8; /* main color's brother, you'll see this on links and smaller stuff; half the time */
+	--sub-alt-color: #eaeef5; /* for stuff like default buttons and cards */
+
+	--color-success: #40d672;
+	--color-warning: #ffd63a;
+	--color-error: #f7374f;
+
+	/* --dark-main-color: #3c5ebb;
+	--dark-color-success: #36b661;
+	--dark-color-warning: #dfbc32;
+	--dark-color-error: #d32f42; we use filters for darkening now */
+
+	--nav-hover-bg: #ffffff33;
+	--nav-bg: #f4f4f4;
+	--navbar-highlight: var(--sub-color);
+}
+
+
+[data-flavor="desert-oasis"] {
+    --bg-color: #fffaee; /* warm sandy background */
+	--text-color: #2d3748;
+	--main-color: #95b643; 
+	--sub-color: #2b63ff; 
+	--sub-alt-color: #ecd8a6; 
+
+	--color-success: #16a34a;
+	--color-warning: #ca8a04;
+	--color-error: #dc2626;
+
+	--nav-hover-bg: #fed7aa33;
+	--nav-bg: #ffffff;
+	--navbar-highlight: var(--sub-color);
+}
+/* NOT a copy of cobalt.tools theme... */
+
+[data-flavor="manga"] {
+    --bg-color: #ffffff;
+    --text-color: #111111;
+    --main-color: #e63946;
+    --sub-color: #000000;
+    --sub-alt-color: #f4f4f4;
+
+	--color-success: #40d672;
+	--color-warning: #ffd63a;
+	--color-error: #f7374f;
+
+    --nav-hover-bg: #00000033;
+    --nav-bg: var(--sub-alt-color);
+    --navbar-highlight: #000000;
+}
+

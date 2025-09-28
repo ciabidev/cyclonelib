@@ -1,5 +1,6 @@
 <script lang="ts">
 import '../app.css';
+import '../flavors.css';
 
 	import Navbar from '$components/navbar/Navbar.svelte';
 	import type { Snippet } from 'svelte';

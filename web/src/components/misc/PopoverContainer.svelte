@@ -1,18 +1,30 @@
-<script>
+<script lang="ts">
     import { flavorPickerVisible } from "$lib/state/flavor-picker-visibility";
-    let { expanded, id } = $props();
+    let { expanded, id, title, description }: { expanded: boolean; id: string; title?: string; description?: string } = $props();
 </script>
 
 <div {id} class="popover-container" aria-hidden={!expanded} class:expanded>
+    <div class="popover-header">
+        {#if title}
+            <h3>{title}</h3>
+        {/if}
+        {#if description}
+            <div class="popover-description">{description}</div>
+        {/if}
+    </div>
     <slot></slot>
     
 </div>
 
 <style>
+    .popover-header {
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--padding) / 2);
+    }
     .popover-container {
-        padding: 0;
-        padding-bottom: 0;
-        background: var(--bg-color);
+        padding: var(--padding);
+        background: var(--popover-bg);
         border-radius: calc(var(--border-radius) * 2);
         box-shadow: var(--button-box-shadow);
         display: flex;
@@ -21,12 +33,11 @@
         filter: drop-shadow(0 0 8px var(--popover-glow))
             drop-shadow(0 0 10px var(--popover-glow));
         position: relative;
-        padding: var(--padding);
         gap: 6px;
         top: 6px;
-        z-index: 2;
-
+        z-index: 10;
         opacity: 0;
+        max-width: calc(100vw - var(--padding)); /* never wider than viewport minus a little padding */
         transform: scale(0);
         transform-origin: top right;
         transition:

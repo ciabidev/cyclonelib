@@ -27,7 +27,7 @@
     justify-content: center;
     align-items: center;
     overflow-y: hidden;
-  	z-index: 1005;
+  	z-index: 1;
   	background-color: var(--nav-bg);
   }
 
@@ -44,7 +44,7 @@
   }
 
   .navbar > * {
-    z-index: 1505;
+    z-index: 2;
   }
 
 

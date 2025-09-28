@@ -1,60 +1,68 @@
 <script lang="ts">
-	type Item = {
-		title: string;
-		description: string;
-		image: string;
+	import type { CarouselItemType } from '$lib/types/carousel';
+
+	let {
+		item,
+		isActive,
+		onSelect,
+	}: { item: CarouselItemType; isActive: boolean; onSelect?: (item: CarouselItemType) => void } = $props();
+
+	let thisItem: HTMLElement;
+
+	const scrollToTab = (ele: HTMLElement) => {
+		if (ele) {
+			console.log('ele exists');
+			ele.scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+				inline: 'center'
+			});
+		}
 	};
-	let { item, isActive, onSelect, scrollToTab }: { item: Item; isActive: boolean; onSelect: () => void; scrollToTab: (ele: HTMLElement) => void } = $props();
-	let buttonElement: HTMLButtonElement;
+
+	$effect(() => {
+		/* scroll to tab whenever the item is active */
+		if (isActive) {
+			scrollToTab(thisItem);
+		}
+	});
 </script>
 
-<button
-	class="carousel-item"
-	class:active={isActive}
-	bind:this={buttonElement}
-	onclick={() => {
-		onSelect();
-		scrollToTab(buttonElement);
-	}}
->
-	<div class="carousel-item-text">
-		<h3>{item.title}</h3>
-		{#if item.description}
-			<p>{item.description}</p>
-		{/if}
-	</div>
+<button class="carousel-item" class:active={isActive} bind:this={thisItem} onclick={() => onSelect?.(item)}>
+	<div class="title">{item.title}</div>
 	<img src={item.image} alt={item.title} />
+	{#if item.description}
+		<div class="subtext">{item.description}</div>
+	{/if}
 </button>
 
 <style>
+
 	.carousel-item {
 		display: flex;
 		flex-direction: column;
+		  flex: 0 0 auto;      /* don’t shrink the item completely */
 
 		gap: calc(var(--padding) / 2);
-        z-index: 10;
+		z-index: 10;
+		background: none;
+		max-width: 130px;
+		color: var(--text-color);
 	}
 
 	.carousel-item img {
-		min-width: 230px;
-		min-height: 230px;
-        max-width: 230px;
-        max-height: 230px;
+		width: 100%;
+		height: 100%;
+		max-width: 130px; /* force exact width */
+		max-height: 130px; /* force exact height */
+		flex-shrink: 0;
+		aspect-ratio: 1/1;
 		object-fit: cover;
 		border-radius: var(--border-radius);
 	}
-
-	.carousel-item-text {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: calc(var(--padding) / 2);
-	}
-
-
 	.carousel-item.active {
-		transform: scale(1.3);
-        z-index: 20;
+		transform: scale(1.1);
+		z-index: 20;
 	}
 
 	.carousel-item.active img {
