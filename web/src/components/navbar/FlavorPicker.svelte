@@ -22,7 +22,7 @@
     <PopoverContainer expanded={$flavorPickerVisible} id="flavor-picker-popover" title="flavors" description="pick your favorite">
         <CarouselContainer onSelect={(item) => {
             flavor.set(item.title);
-        } } id="flavor-picker-carousel" items={flavor_items}></CarouselContainer>
+        } } id="flavor-picker-carousel" items={flavor_items} defaultSelected={flavors.indexOf($flavor)}></CarouselContainer>
     </PopoverContainer>
     
 </div>

@@ -8,10 +8,11 @@
 	let {
 		id,
 		items,
-		onSelect
-	}: { id: string; items: CarouselItemType[]; onSelect?: (item: CarouselItemType) => void } =
+		onSelect,
+		defaultSelected = 0
+	}: { id: string; items: CarouselItemType[]; onSelect?: (item: CarouselItemType) => void; defaultSelected?: number } =
 		$props();
-	let activeItem = $state(0);
+	let activeItem = $state(defaultSelected);
 	let carousel: HTMLElement;
 
 	let showLeftScroll = $state(false);
