@@ -49,9 +49,9 @@
 		align-items: flex-start;
 		min-width: fit-content;
 		transition: all 0.3s var(--actions-and-stuff-ahh-transition);
-		border: 1px inset var(--popup-stroke);
+		border: 1.5px inset var(--popup-stroke);
 		background: var(--bg-color);
-		box-shadow: var(--shadow-main);
+		box-shadow: var(--button-box-shadow);
 	}
 
 	.card-content {

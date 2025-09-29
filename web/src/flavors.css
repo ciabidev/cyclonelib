@@ -3,6 +3,7 @@
 :root, [data-flavor="rain"] {
     --bg-color: #ffffff; /* dark: #1e272e */
 	--text-color: #282828;
+	--secondary-text-color: #ffffff; /* text on the main color */ 
 	--main-color: #4273fa; /* main accent you'll see everywhere */
 	--sub-color: #455fa8; /* main color's brother, you'll see this on links and smaller stuff; half the time */
 	--sub-alt-color: #eaeef5; /* for stuff like default buttons and cards */
@@ -19,12 +20,16 @@
 	--nav-hover-bg: #ffffff33;
 	--nav-bg: #f4f4f4;
 	--navbar-highlight: var(--sub-color);
+	--navbar-active-highlight: #ffffff;
 }
 
 
 [data-flavor="desert-oasis"] {
     --bg-color: #fffaee; /* warm sandy background */
+
 	--text-color: #2d3748;
+	--secondary-text-color: #ffffff; 
+
 	--main-color: #95b643; 
 	--sub-color: #2b63ff; 
 	--sub-alt-color: #ecd8a6; 
@@ -36,12 +41,16 @@
 	--nav-hover-bg: #fed7aa33;
 	--nav-bg: #ffffff;
 	--navbar-highlight: var(--sub-color);
+	--navbar-active-highlight: #000000;
 }
 /* NOT a copy of cobalt.tools theme... */
 
 [data-flavor="manga"] {
     --bg-color: #ffffff;
+
     --text-color: #111111;
+	--secondary-text-color: #ffffff; /* text on the main color */
+
     --main-color: #e63946;
     --sub-color: #000000;
     --sub-alt-color: #f4f4f4;
@@ -52,14 +61,19 @@
 
     --nav-hover-bg: #00000033;
     --nav-bg: var(--sub-alt-color);
-    --navbar-highlight: #000000;
+    --navbar-highlight: var(--sub-color);
+	--navbar-active-highlight: #ffffff;
 }
+
 
 [data-flavor="fire-nation"] {
     --bg-color: #2b1a1a;        /* deep ember brown, softer than pure black */
+
     --text-color: #fcefe3;      /* cream parchment */
+	--secondary-text-color: #ffffff; /* text on the main color */ 
+
     --main-color: #d6453d;      /* softer fire red */
-    --sub-color: #b23a48;       /* muted crimson */
+    --sub-color: #EDB308;       /* muted crimson */
     --sub-alt-color: #442626;   /* warm dark background */
 
     --color-success: #f4b860;   /* golden flame */
@@ -68,5 +82,26 @@
 
     --nav-hover-bg: #d6453d33;  /* gentle red glow */
     --nav-bg: var(--sub-alt-color);
-    --navbar-highlight: #f4b860; /* golden accent */
+    --navbar-highlight: var(--sub-color);
+	--navbar-active-highlight: #000000;
+}
+
+[data-flavor="earth"] {
+    --bg-color: #ffffff;
+
+    --text-color: #000000;
+	--secondary-text-color: #ffffff; /* text on the main color */ 
+	
+    --main-color: #38885c;
+    --sub-color: #43af73;
+	--sub-alt-color: #faeed7; /* for stuff like default buttons and cards */
+
+	--color-success: #40d672;
+	--color-warning: #ffd63a;
+	--color-error: #f7374f;
+
+    --nav-hover-bg: #00000033;
+    --nav-bg: #000000;
+    --navbar-highlight: #ffffff;
+	--navbar-active-highlight: #ffffff;
 }

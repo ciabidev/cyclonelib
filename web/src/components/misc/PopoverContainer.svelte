@@ -3,8 +3,8 @@
     let { expanded, id, title, description }: { expanded: boolean; id: string; title?: string; description?: string } = $props();
 </script>
 
-<div {id} class="popover-container" aria-hidden={!expanded} class:expanded>
-    <div class="popover-header">
+<div id={id + "-popover"} class="popover-container" aria-hidden={!expanded} class:expanded>
+    <div id={id + "-header"} class="popover-header">
         {#if title}
             <h3>{title}</h3>
         {/if}
@@ -17,16 +17,19 @@
 </div>
 
 <style>
+    
+
     .popover-header {
         display: flex;
         flex-direction: column;
         gap: calc(var(--padding) / 2);
     }
+
     .popover-container {
         padding: var(--padding);
         background: var(--popover-bg);
         border-radius: calc(var(--border-radius) * 2);
-        box-shadow: var(--button-box-shadow);
+        border: var(--button-stroke) solid 1px;
         display: flex;
         flex-direction: column;
         border-radius: 18px;
@@ -37,7 +40,6 @@
         top: 6px;
         z-index: 10;
         opacity: 0;
-        max-width: calc(100vw - var(--padding)); /* never wider than viewport minus a little padding */
         transform: scale(0);
         transform-origin: top right;
         transition:
@@ -47,6 +49,7 @@
         will-change: transform, opacity;
 
         pointer-events: all;
+        max-width: 100%;
     }
 
     .popover-container.expanded {

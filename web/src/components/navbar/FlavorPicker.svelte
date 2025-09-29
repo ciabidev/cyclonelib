@@ -19,7 +19,7 @@
 
 <div id="flavor-picker">
     <FlavorPickerButton /> 
-    <PopoverContainer expanded={$flavorPickerVisible} id="flavor-picker-popover" title="flavors" description="pick your favorite">
+    <PopoverContainer expanded={$flavorPickerVisible} id="flavor-picker" title="flavors" description="pick your favorite">
         <CarouselContainer onSelect={(item) => {
             flavor.set(item.title);
         } } id="flavor-picker-carousel" items={flavor_items} defaultSelected={flavors.indexOf($flavor)}></CarouselContainer>
@@ -40,5 +40,10 @@
         z-index: 10;
         pointer-events: none;
         padding: var(--holder-padding);
+        width: 100%;
+    }
+
+    :global(#flavor-picker-popover) {
+        max-width: 600px;
     }
 </style>

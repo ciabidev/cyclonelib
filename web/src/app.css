@@ -9,9 +9,9 @@
 
 [data-flavor-type="light"] {
 	--button-stroke: rgba(0, 0, 0, 0.05);
-	--popup-stroke: rgba(0, 0, 0, 0.8);
+	--popup-stroke: rgba(0, 0, 0, 0.08);
 	--popover-glow: var(--button-stroke);
-	--popup-bg: 
+	--popup-bg: #ffffff;
 }
 
 :root {
@@ -414,16 +414,16 @@ button,
 /* :active - buttons that are currently pressed	*/
 /* .active - buttons that are currently active (such as when a tab is active) */
 button > img, .button > img {
-	border-radius: var(--border-radius);
-	-webkit-border-radius: var(--border-radius);
-	-moz-border-radius: var(--border-radius);
-	-ms-border-radius: var(--border-radius);
-	-o-border-radius: var(--border-radius); 
+	border-radius: calc(var(--border-radius) - 2px);
+	-webkit-border-radius: calc(var(--border-radius) - 2px);
+	-moz-border-radius: calc(var(--border-radius) - 2px);
+	-ms-border-radius: calc(var(--border-radius) - 2px);
+	-o-border-radius: calc(var(--border-radius) - 2px);
 }
 
 .button.active, button.active {
 	background-color: var(--main-color);
-	color: var(--bg-color);
+ 	color: var(--secondary-text-color);
 }
 
 button:active, .button:active {
@@ -445,17 +445,17 @@ button:hover, .button:hover {
 /* Button Variants */
 .button--primary {
 	background: var(--main-color);
-	color: white;
+	color: var(--secondary-text-color);
 }
 
 .button--success {
 	background: var(--color-success);
-	color: white;
+	color: var(--secondary-text-color);
 }
 
 .button--danger {
 	background: var(--color-error);
-	color: white;
+	color: var(--secondary-text-color);
 }
 
 .button--elevated {

@@ -20,6 +20,9 @@
 
 	onMount(() => {
 		updateScrollState();
+		const handleResize = () => updateScrollState();
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
 	});
 
 	// update arrow visibility when scrolling
@@ -27,7 +30,7 @@
 		const maxPos = carousel.scrollWidth - carousel.clientWidth;
 
 		showLeftScroll = carousel.scrollLeft > 1;
-		showRightScroll = carousel.scrollLeft < maxPos - 1;
+		showRightScroll = carousel.scrollLeft < maxPos;
 	};
 
 	const scroll = (direction: 'left' | 'right') => {
@@ -59,7 +62,7 @@
 	</div>
 	<div class="carousel-arrows">
 		<button
-			class="carousel-arrow-left"
+			class="carousel-arrow left"
 			onclick={() => scroll('left')}
 			class:hidden={!showLeftScroll}
 			aria-disabled={activeItem === 0}
@@ -68,7 +71,7 @@
 			<LeftArrow class="icon" />
 		</button>
 		<button
-			class="carousel-arrow-right"
+			class="carousel-arrow right"
 			onclick={() => scroll('right')}
 			class:hidden={!showRightScroll}
 			aria-disabled={activeItem === items.length - 1}
@@ -82,13 +85,14 @@
 <style>
 	.carousel {
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
 		flex-wrap: nowrap;
 		position: relative;
 		width: 100%;
 		/* SO ITEMS DONT GET CUT OFF AT BEGINNING DAMN THIS TOOK LONG */
 		justify-content: flex-start;
 		/* */
+		
 	}
 
 	.carousel-items {
@@ -128,23 +132,37 @@
 		color: var(--text-color);
 	}
 
-	.carousel-arrows > * {
-		position: absolute;
-		transform: translateY(-50%);
+	.carousel-arrows {
 		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 2.5rem;
-		height: 2.5rem;
+        flex-direction: row;
+        align-items: center;
+        position: absolute;
+        pointer-events: none;
+        width: 100%;
+        height: 100%;
+        z-index: 4;
+        overflow: hidden;
+        transition: opacity 0.2s;
+	}
+
+	.carousel-arrow {
+		position: absolute;
+        pointer-events: all;
+        color: var(--text-color);
 		background: var(--bg-color);
 		border-radius: 50%;
-		cursor: pointer;
-	}
-	.carousel-arrow-left {
+        padding: 12px;
+		
+        &.hidden {
+            visibility: hidden;
+        }
+    }
+
+	.carousel-arrow.left {
 		left: 10px;
 	}
 
-	.carousel-arrow-right {
+	.carousel-arrow.right {
 		right: 10px;
 	}
 </style>
