@@ -13,11 +13,18 @@ import '../flavors.css';
   import BoxIcon from '~icons/basil/box-outline';
 
   import { flavor } from '$lib/state/flavors';
+  import type { Flavor } from '$lib/types/flavor';
+  import { dark_flavors } from '$lib/types/flavor';
   import FlavorPicker from '$components/navbar/FlavorPicker.svelte';
 
   flavor.subscribe((value) => {
     if (typeof document !== 'undefined' && value) {
 		document.documentElement.setAttribute('data-flavor', value);
+		if (dark_flavors.includes(value as Flavor)) {
+			document.documentElement.setAttribute('data-flavor-type', 'dark');
+		} else {
+			document.documentElement.setAttribute('data-flavor-type', 'light');
+		}
 	}
   });
 

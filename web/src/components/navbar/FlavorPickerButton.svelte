@@ -17,7 +17,7 @@
 	padding: 7px;
 	border-radius: 30px;
 
-	filter: drop-shadow(0 0 3px #dadada);
+	filter: drop-shadow(0 0 1px #dadada);
 
 	transition:
 		background-color 0.2s,
@@ -36,8 +36,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 30px;
-		height: 30px;
+		width: 25px;
+		height: 25px;
 		background: var(--sub-alt-color);
 		border-radius: 50%;
 		transition: all 0.2s;

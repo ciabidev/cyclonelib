@@ -1,33 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+Mono:wght@100..900&display=swap&family=Poppins:wght@400;500;600;700&display=swap');
 
+[data-flavor-type="dark"] {
+	--button-stroke: rgba(200, 200, 200, 0.05);
+	--popup-stroke: rgba(255, 255, 255, 0.08);
+	--popover-glow: rgba(135, 135, 135, 0.12);
+	--popup-bg: #191919;
+}
+
+[data-flavor-type="light"] {
+	--button-stroke: rgba(0, 0, 0, 0.05);
+	--popup-stroke: rgba(0, 0, 0, 0.8);
+	--popover-glow: var(--button-stroke);
+	--popup-bg: 
+}
+
 :root {
 	
-	--card-bg: #00000015;
-
 	--code-bg: #1f2228;
-	--code-stroke: #303541;
 	--code-scrollbar: #636569;
+	--code-stroke: #303541;
 
 	--elevated: #e3e3e3; /* for buttons and tags */
 
 	--focus-ring: solid 2px var(---main-color);
 	--focus-ring-offset: -2px;
 
-	--shadow-main: rgba(0, 0, 0, 0.06) 0px 0px 10px 0px;
 	/* Button styles */	
+	--shadow-main: var(--button-stroke) 0px 0px 10px 0px;
 	--button-default: var(--sub-alt-color);
 	--button-hover-filter: brightness(90%);
 	--button-press-filter: brightness(80%);
-	--button-stroke: rgba(0, 0, 0, 0.06);
     --button-box-shadow: var(--shadow-main), 0px 0px 0px 1px var(--button-stroke); /* for elevated buttons */
 	/* old button-box-shadow: 0 0 0 1px var(--button-stroke) inset; */
 	--switcher-padding: 3.5px;
 	
 	/* Dialog styles */
-	--dialog-backdrop: rgba(224, 224, 224, 0.5);
+	--dialog-backdrop: #e0e0e080;
 	--popup-padding: 18px;
-	--popup-bg: var(--bg-color);
-	--popup-stroke: rgba(0, 0, 0, 0.1);
 	--red: var(--color-error);
 	--white: #ffffff;
 	--gray: #75757e;
@@ -64,6 +73,7 @@
 	font-size: 15px;
 	--readable-line-height: 1.8;
 }
+
 
 @keyframes fadeIn {
 	to {

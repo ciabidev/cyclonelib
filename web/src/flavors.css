@@ -55,3 +55,18 @@
     --navbar-highlight: #000000;
 }
 
+[data-flavor="fire-nation"] {
+    --bg-color: #2b1a1a;        /* deep ember brown, softer than pure black */
+    --text-color: #fcefe3;      /* cream parchment */
+    --main-color: #d6453d;      /* softer fire red */
+    --sub-color: #b23a48;       /* muted crimson */
+    --sub-alt-color: #442626;   /* warm dark background */
+
+    --color-success: #f4b860;   /* golden flame */
+    --color-warning: #ff914d;   /* glowing orange */
+    --color-error: #e84a5f;     /* pinkish red — less aggressive */
+
+    --nav-hover-bg: #d6453d33;  /* gentle red glow */
+    --nav-bg: var(--sub-alt-color);
+    --navbar-highlight: #f4b860; /* golden accent */
+}
