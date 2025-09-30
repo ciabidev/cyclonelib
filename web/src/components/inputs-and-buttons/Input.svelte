@@ -39,7 +39,7 @@
 	{/if}
 <style>
 	.input-wrapper {
-		box-shadow: var(--input-box-shadow);
+		border: var(--popup-stroke) 2px solid;
 		border-radius: var(--border-radius);
 		width: var(--width);
 		min-width: var(--min-width);
@@ -53,7 +53,7 @@
 	}
 
 	.input-wrapper.focused {
-		box-shadow: #000 0 0 0 1.5px inset;
+		border: var(--text-color) 2px solid;
 	}
 
 	.input {
@@ -64,6 +64,7 @@
 		background: none;
 		outline: none;
 		resize: none;
+		color: var(--text-color);
 	}
 
 	@media (pointer: none), (pointer: coarse) {

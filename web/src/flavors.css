@@ -17,10 +17,10 @@
 	--dark-color-warning: #dfbc32;
 	--dark-color-error: #d32f42; we use filters for darkening now */
 
-	--nav-hover-bg: #ffffff33;
+	--nav-hover-bg: #00000033;
 	--nav-bg: #f4f4f4;
-	--navbar-highlight: var(--sub-color);
-	--navbar-active-highlight: #ffffff;
+	--nav-highlight: var(--sub-color);
+	--nav-active-highlight: #ffffff;
 }
 
 
@@ -40,8 +40,8 @@
 
 	--nav-hover-bg: #fed7aa33;
 	--nav-bg: #ffffff;
-	--navbar-highlight: var(--sub-color);
-	--navbar-active-highlight: #000000;
+	--nav-highlight: var(--sub-color);
+	--nav-active-highlight: #000000;
 }
 /* NOT a copy of cobalt.tools theme... */
 
@@ -61,8 +61,8 @@
 
     --nav-hover-bg: #00000033;
     --nav-bg: var(--sub-alt-color);
-    --navbar-highlight: var(--sub-color);
-	--navbar-active-highlight: #ffffff;
+    --nav-highlight: var(--sub-color);
+	--nav-active-highlight: #ffffff;
 }
 
 
@@ -82,8 +82,8 @@
 
     --nav-hover-bg: #d6453d33;  /* gentle red glow */
     --nav-bg: var(--sub-alt-color);
-    --navbar-highlight: var(--sub-color);
-	--navbar-active-highlight: #000000;
+    --nav-highlight: var(--sub-color);
+	--nav-active-highlight: #000000;
 }
 
 [data-flavor="earth"] {
@@ -102,6 +102,6 @@
 
     --nav-hover-bg: #00000033;
     --nav-bg: #000000;
-    --navbar-highlight: #ffffff;
-	--navbar-active-highlight: #ffffff;
+    --nav-highlight: #ffffff;
+	--nav-active-highlight: #ffffff;
 }

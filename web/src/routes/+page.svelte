@@ -23,7 +23,7 @@
 	<main class="paragraph-text">
 		<a href="https://wheatwhole.github.io">????</a>
 		<URLButton url="https://routinehub.co/shortcut/19577" name="Get Cyclone" img="icons/cyclone.webp" urlshort="routinehub.co/shortcut/19577" />
-		<h2 id="-build-better-and-faster">⏩ build better and faser</h2>
+		<h2 id="-build-better-and-faster">⏩ build better and faster</h2>
 		<p>
 			Cyclone is the ultimate power-up for Apple Shortcuts.<br />Install it once and get a bunch of
 			new actions. soon you’ll be able to make <strong>Custom Functions</strong> to speed up any shortcut
@@ -57,7 +57,7 @@
 				⚡ <strong>Fast Performance</strong> – loads in under 2 seconds and only runs what’s needed
 			</li>
 		</ul>
-		<h2 id="-coming-soon">🔮 Coming Soon</h2>
+		<h2 id="-coming-soon">🔮 coming soon</h2>
 		<ul>
 			<li>
 				🌸 <strong>AI Actions</strong> – free, private AI tools via
@@ -76,7 +76,7 @@
 			<a href="https://discord.com/invite/UYgGdEwGsK">Discord</a> to see what others are building or
 			share your own shortcuts (13+ only).
 		</p>
-		<h2 id="-support-cyclone-for-free">💖 Support Cyclone for Free</h2>
+		<h2 id="-support-cyclone-for-free">💖 support cyclone for <i>free</i></h2>
 		<p>
 			Leave a ❤️ on our <a href="https://routinehub.co/shortcut/19577">RoutineHub page</a> or add this
 			badge to your shortcut’s description:

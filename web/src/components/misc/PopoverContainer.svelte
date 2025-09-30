@@ -49,7 +49,7 @@
         will-change: transform, opacity;
 
         pointer-events: all;
-        max-width: 100%;
+        width: 100%;
     }
 
     .popover-container.expanded {

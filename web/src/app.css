@@ -1,19 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+Mono:wght@100..900&display=swap&family=Poppins:wght@400;500;600;700&display=swap');
 
-[data-flavor-type="dark"] {
-	--button-stroke: rgba(200, 200, 200, 0.05);
-	--popup-stroke: rgba(255, 255, 255, 0.08);
-	--popover-glow: rgba(135, 135, 135, 0.12);
-	--popup-bg: #191919;
-}
-
-[data-flavor-type="light"] {
-	--button-stroke: rgba(0, 0, 0, 0.05);
-	--popup-stroke: rgba(0, 0, 0, 0.08);
-	--popover-glow: var(--button-stroke);
-	--popup-bg: #ffffff;
-}
-
 :root {
 	
 	--code-bg: #1f2228;
@@ -22,8 +8,7 @@
 
 	--elevated: #e3e3e3; /* for buttons and tags */
 
-	--focus-ring: solid 2px var(---main-color);
-	--focus-ring-offset: -2px;
+	--focus-ring: var(---main-color);
 
 	/* Button styles */	
 	--shadow-main: var(--button-stroke) 0px 0px 10px 0px;
@@ -35,7 +20,7 @@
 	--switcher-padding: 3.5px;
 	
 	/* Dialog styles */
-	--dialog-backdrop: #e0e0e080;
+    --dialog-backdrop: #ffffff4d;
 	--popup-padding: 18px;
 	--red: var(--color-error);
 	--white: #ffffff;
@@ -65,7 +50,8 @@
 	--icon-size-mobile: 22px;
 	--icon-size-desktop: 25px;
 	--actions-and-stuff-ahh-transition: cubic-bezier(0.68, -0.6, 0.32, 1.6);
-	--grid-bg:
+	
+	--grid-bg: 
 		linear-gradient(to right, rgba(128, 128, 128, 0.05) 1px, transparent 1px),
 		linear-gradient(to bottom, rgba(128, 128, 128, 0.05) 1px, transparent 1px);
 	--grid-bg-size: 15px 15px;
@@ -73,6 +59,22 @@
 	font-size: 15px;
 	--readable-line-height: 1.8;
 }
+
+:root, [data-flavor-type="light"] {
+	--button-stroke: rgba(0, 0, 0, 0.05);
+	--popup-stroke: rgba(0, 0, 0, 0.08);
+	--popover-glow: rgba(0, 0, 0, 0.05);
+	--popup-bg: var(--bg-color);
+}
+
+[data-flavor-type="dark"] {
+	--button-stroke: rgba(200, 200, 200, 0.05);
+	--popup-stroke: rgba(255, 255, 255, 0.08);
+	--popover-glow: rgba(135, 135, 135, 0.12);
+	--popup-bg: var(--bg-color);
+}
+
+
 
 
 @keyframes fadeIn {
@@ -320,6 +322,10 @@ img {
 	margin-block-end: -0.3rem;
 }
 
+[data-flavor-type="dark"] .paragraph-text h1, [data-flavor-type="dark"] .paragraph-text h2, [data-flavor-type="dark"] .paragraph-text h3 {
+	border-color: #ffffff3a;
+}
+
 .paragraph-text img {
 	border-radius: 6px;
 }
@@ -515,8 +521,10 @@ a:not(:has(img)):not(.button):not(.url-button):not[role="tab"]:hover {
 button:focus-visible,
 a:focus-visible,
 select:focus-visible {
-	outline: var(--focus-ring);
-	outline-offset: var(--focus-ring-offset);
+	outline-color: var(--main-color);
+	outline-offset: 2px;
+	outline-style: solid;
+	outline-width: 2px;
 }
 
 .hidden {

@@ -76,7 +76,7 @@
     min-width: 80px;
     padding: 0 var(--navbar-tab-padding);
     height: 90%;
-    color: var(--navbar-highlight);
+    color: var(--nav-highlight);
     font-size: var(--navbar-font-size);
     opacity: 0.75;
     text-decoration: none;
@@ -96,7 +96,7 @@
     background: var(--sub-color);
     opacity: 1;
     cursor: default;
-    color: var(--navbar-active-highlight);
+    color: var(--nav-active-highlight);
   }
 
 @media not all and (hover: none) {
