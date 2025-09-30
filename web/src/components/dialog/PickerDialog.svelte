@@ -1,19 +1,26 @@
 <script lang="ts">
-	import type { Optional } from '$lib/types/generic';
 	import type { DialogButton } from '$lib/types/dialog';
 	import type { DialogPickerItem } from '$lib/types/dialog';
 
 	import DialogContainer from '$components/dialog/DialogContainer.svelte';
 	import PickerItem from '$components/dialog/PickerItem.svelte';
-	import { dialog } from '$lib/state/dialogs';
 	import DialogButtons from './DialogButtons.svelte';
-	export let id: string;
-	export let items: Optional<DialogPickerItem[]> = undefined;
-	export let buttons: Optional<DialogButton[]> = undefined;
-	export let onSelect: Optional<(item: DialogPickerItem) => void> = undefined;
-	export let dismissable = true;
 
-	let close: () => void = () => {};
+	let {
+		id,
+		items = undefined,
+		buttons = undefined,
+		onSelect = undefined,
+		dismissable = true
+	}: {
+		id: string;
+		items?: DialogPickerItem[];
+		buttons?: DialogButton[];
+		onSelect?: (item: DialogPickerItem) => void;
+		dismissable?: boolean;
+	} = $props();
+
+	let close: () => void = $state(() => {});
 
 </script>
 

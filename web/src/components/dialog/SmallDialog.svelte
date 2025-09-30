@@ -59,23 +59,24 @@
     } = $props();
 
     // Reference to close function from DialogContainer
-    let close: () => void = () => {};
+	let close: () => void = $state(() => {});
 </script>
 
 <DialogContainer {id} {dismissable} bind:close>
+
     <div
         class="dialog-body small-dialog"
         class:emoticon-visible={emoticon}
         class:align-left={leftAligned}
     >
-            {#if emoticon}
-                <div class="emoticon-container">
-                    <Emoticon
-                        emotion={emoticon}
-                        size="medium"
-                    />
-                </div>
-            {/if}
+        {#if emoticon}
+            <div class="emoticon-container">
+                <Emoticon
+                    emotion={emoticon}
+                    size="medium"
+                />
+            </div>
+        {/if}
         <div class="dialog-inner-container">
 
             {#if title || icon}
@@ -102,7 +103,6 @@
         {/if}
     </div>
 </DialogContainer>
-
 <style>
     .small-dialog,
     .dialog-inner-container {
@@ -116,21 +116,17 @@
         gap: 8px;
     }
 
+    .emoticon-container {
+        position: absolute;
+        bottom: 100%;
+    }
+
     .small-dialog {
         text-align: center;
         max-width: 340px;
         width: calc(100% - var(--padding) - var(--popup-padding) * 2);
         max-height: 85%;
         margin: calc(var(--padding) / 2);
-    }
-
-    .small-dialog.emoticon-visible {
-        padding-top: calc(var(--padding) * 4);
-    }
-
-    .emoticon-container {
-        position: absolute;
-        top: -50%;
     }
 
     .popup-title {
