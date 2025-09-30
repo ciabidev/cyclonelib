@@ -19,9 +19,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: web
-        run: |
-          rm -rf node_modules
-          npm ci
+        run: npm ci
 
       - name: Build
         working-directory: web
