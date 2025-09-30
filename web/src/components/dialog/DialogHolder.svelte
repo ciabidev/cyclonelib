@@ -16,34 +16,31 @@
      * manages all dialog instances throughout the application lifecycle.
      */
 
-    import { dialogs } from "$lib/state/dialogs";
+    import { dialog } from "$lib/state/dialogs";
     import SmallDialog from "$components/dialog/SmallDialog.svelte";
     import PickerDialog from "$components/dialog/PickerDialog.svelte";
-    import SavingDialog from "$components/dialog/SavingDialog.svelte";
     import type { DialogInfo } from "$lib/types/dialog";
 
-    // Subscribe to dialogs store
-    let currentDialogs: DialogInfo[] = [];
-    dialogs.subscribe((dialogList: DialogInfo[]) => {
-        currentDialogs = dialogList;
+    // Subscribe to single dialog store
+    let currentDialog: DialogInfo | null = null;
+    dialog.subscribe((d: DialogInfo | null) => {
+        currentDialog = d;
     });
 
-    // Show backdrop when there are active dialogs
-    $: backdropVisible = currentDialogs.length > 0;
+    // Show backdrop when there is an active dialog
+    $: backdropVisible = !!currentDialog;
 </script>
 
 <div id="dialog-holder">
-    {#each currentDialogs as dialog}
-        {#each $dialogs as dialog}
-            {#if dialog.type === "small"}
-                <SmallDialog {...dialog} />
-            {:else if dialog.type === "picker"}
-                <PickerDialog {...dialog} />
-            {:else if dialog.type === "saving"}
-                <SavingDialog {...dialog} />
+    {#if currentDialog}
+        {#key currentDialog.id}
+            {#if currentDialog.type === "small"}
+                <SmallDialog {...currentDialog} />
+            {:else if currentDialog.type === "picker"}
+                <PickerDialog {...currentDialog} />
             {/if}
-        {/each}
-    {/each}
+        {/key}
+    {/if}
     <div id="dialog-backdrop" class:visible={backdropVisible}></div>
 </div>
 

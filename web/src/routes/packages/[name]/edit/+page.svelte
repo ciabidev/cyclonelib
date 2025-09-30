@@ -172,71 +172,70 @@
 	}
 
 	async function performDelete() {
-		deleting = true;
+		   deleting = true;
 
-		try {
-			const response = await fetch(`/api/packages/${packageName}`, {
-				method: 'DELETE',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					edit_code
-				})
-			});
+		   try {
+			   const response = await fetch(`/api/packages/${packageName}`, {
+				   method: 'DELETE',
+				   headers: { 'Content-Type': 'application/json' },
+				   body: JSON.stringify({
+					   edit_code
+				   })
+			   });
 
-			if (response.ok) {
-				createDialog({
-					id: 'delete-package-success',
-					type: 'small',
-					title: 'Success',
-					icon: 'warn-red',
-					bodyText: 'Package deleted successfully!',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {
-								setTimeout(() => {
-									goto('/packages');
-								}, 200);
-							}
-						}
-					]
-				});
-			} else {
-				const data = await response.json();
-				createDialog({
-					id: 'delete-package-error',
-					type: 'small',
-					title: 'Error Deleting Package',
-					icon: 'warn-red',
-					bodyText: data.message || 'Failed to delete package',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () => {}
-						}
-					]
-				});
-			}
-		} catch (err) {
-			createDialog({
-				id: 'delete-package-network-error',
-				type: 'small',
-				title: 'Network Error',
-				icon: 'warn-red',
-				bodyText: 'Network error occurred while deleting package',
-				buttons: [
-					{
-						text: 'continue',
-						main: true,
-						action: () => {}
-					}
-				]
-			});
-		} finally {
-			deleting = false;
-		}
+			   if (response.ok) {
+				   createDialog({
+					   id: 'delete-package-success',
+					   type: 'small',
+					   title: 'Success',
+					   icon: 'warn-red',
+					   bodyText: 'Package deleted successfully!',
+					   buttons: [
+						   {
+							   text: 'continue',
+							   main: true,
+							   action: () => {
+								   setTimeout(() => {
+									   goto('/packages');
+								   }, 200);
+								   deleting = false;
+							   }
+						   }
+					   ]
+				   });
+			   } else {
+				   const data = await response.json();
+				   createDialog({
+					   id: 'delete-package-error',
+					   type: 'small',
+					   title: 'Error Deleting Package',
+					   icon: 'warn-red',
+					   bodyText: data.message || 'Failed to delete package',
+					   buttons: [
+						   {
+							   text: 'continue',
+							   main: true,
+							   action: () => { deleting = false; }
+						   }
+					   ]
+				   });
+			   }
+		   } catch (err) {
+			   createDialog({
+				   id: 'delete-package-network-error',
+				   type: 'small',
+				   title: 'Network Error',
+				   icon: 'warn-red',
+				   bodyText: 'Network error occurred while deleting package',
+				   buttons: [
+					   {
+						   text: 'continue',
+						   main: true,
+						   action: () => { deleting = false; }
+					   }
+				   ]
+			   });
+		   }
 	}
 
 	function showDeleteDialog() {

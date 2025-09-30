@@ -60,7 +60,7 @@
 									emoticon: 'happy',
 									buttons: [
 										{
-											text: 'continue',
+											text: 'conte',
 											main: true,
 											action: () => {}
 										}

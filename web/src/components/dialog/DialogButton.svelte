@@ -21,23 +21,16 @@
      */
 
     import type { DialogButton } from "$lib/types/dialog";
-    import { dialogs } from "$lib/state/dialogs";
+    import { dialog } from "$lib/state/dialogs";
 
     // Props
     let { button, closeFunc, dialogId }: { button: DialogButton; closeFunc: () => void; dialogId: string } = $props();
 
-    // Track dialog count to detect if action created a new dialog
-    let currentDialogs: any[] = [];
-    dialogs.subscribe((dialogList: any[]) => {
-        currentDialogs = dialogList;
+    // Track current dialog id for action/close logic
+    let currentDialogId: string | null = null;
+    dialog.subscribe((d: any) => {
+        currentDialogId = d && d.id ? d.id : null;
     });
-
-    // Get current dialogs directly from store
-    function getCurrentDialogCount() {
-        let count = 0;
-        dialogs.subscribe((dialogList: any[]) => count = dialogList.length)();
-        return count;
-    }
 
     // State for timeout functionality
     let disabled = $state(false);
@@ -77,17 +70,7 @@
         {disabled}
         onclick={async () => {
             await button.action();
-
-            // Check if this dialog is still in the dialogs array
-            // If it was removed (e.g., by killDialog()), don't try to close it
-            let currentDialogs: any[] = [];
-            dialogs.subscribe((dialogList: any[]) => currentDialogs = dialogList)();
-
-            const dialogStillExists = currentDialogs.some((dialog: any) => dialog.id === dialogId);
-
-            if (dialogStillExists) {
-                closeFunc();
-            }
+            closeFunc();
         }}
     >
         {button.text}{seconds ? ` (${seconds})` : ""}

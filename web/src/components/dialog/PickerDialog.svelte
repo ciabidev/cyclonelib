@@ -5,7 +5,7 @@
 
 	import DialogContainer from '$components/dialog/DialogContainer.svelte';
 	import PickerItem from '$components/dialog/PickerItem.svelte';
-	import { dialogs } from '$lib/state/dialogs';
+	import { dialog } from '$lib/state/dialogs';
 	import DialogButtons from './DialogButtons.svelte';
 	export let id: string;
 	export let items: Optional<DialogPickerItem[]> = undefined;
@@ -15,11 +15,6 @@
 
 	let close: () => void = () => {};
 
-	// Track dialog count to detect if action created a new dialog
-	let currentDialogs: any[] = [];
-	dialogs.subscribe((dialogList: any[]) => {
-		currentDialogs = dialogList;
-	});
 </script>
 
 <DialogContainer {id} {dismissable} bind:close>
