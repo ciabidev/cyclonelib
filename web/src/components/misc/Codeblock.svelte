@@ -1,13 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
-
+	import { highlightCode } from '$lib/state/shiki';
 	let copyText = 'Copy';
-	let highlightedCode = '';
 
 	export let code = "";
 	export let language = "plaintext";
 	export let filename = "code";
-
+	let higlighted = '';
 	async function copyCode() {
 		try {
 			await navigator.clipboard.writeText(code);
@@ -18,29 +17,14 @@
 		}
 	}
 
-	// Set initial fallback
-	$: if (code && !highlightedCode) {
-		highlightedCode = `<pre><code>${code.replace(/</g, '<').replace(/>/g, '>')}</code></pre>`;
-	}
 
-	async function highlightCode() {
+	async function highlight() {
 		if (!code) return;
-		try {
-			const { createHighlighter } = await import('shiki/dist/bundle-web.mjs');
-			const highlighter = await createHighlighter({
-				themes: ['dark-plus'],
-				langs: ['python', 'javascript', 'html', 'css', 'json', 'plaintext', 'markdown', 'svelte', 'typescript'],
-			});
-			highlightedCode = highlighter.codeToHtml(code, { lang: language, theme: 'dark-plus' });
-		} catch (error) {
-			console.error('Failed to highlight code:', error);
-			highlightedCode = `<pre><code>${code.replace(/</g, '<').replace(/>/g, '>')}</code></pre>`;
-		}
+		higlighted = await highlightCode(code, language);
 	}
-
 	// Delay highlighting to avoid interfering with page loading animations
 	onMount(() => {
-		setTimeout(highlightCode, 500); // 500ms delay allows page animations to complete
+		highlight();
 	});
 </script>
 
@@ -52,7 +36,7 @@
 			{copyText}
 		</button>
 	</div>
-	{@html highlightedCode}
+	{@html higlighted}
 </div>
 
 <style>
