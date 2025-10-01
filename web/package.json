@@ -66,6 +66,9 @@
 	"keywords": [
 		"svelte"
 	],
+	"overrides": {
+		"esbuild": "0.25.4"
+	},
 	"dependencies": {
 		"@supabase/supabase-js": "^2.57.2",
 		"marked": "^16.2.1",
