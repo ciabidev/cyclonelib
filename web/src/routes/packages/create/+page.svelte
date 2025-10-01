@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import PageContainer from '$components/misc/PageContainer.svelte';
 	import FormField from '$components/misc/FormField.svelte';
@@ -11,6 +12,16 @@
 	let long_description = $state('');
 	let edit_code = $state('');
 	let loading = $state(false);
+
+// If the incoming URL contains edit_code or shortcut_url, prefill/remember them.
+let incomingShortcutUrl = '';
+
+$effect(() => { if ($page && $page.url) {
+	const paramEdit = $page.url.searchParams.get('edit_code');
+	const paramShortcut = $page.url.searchParams.get('shortcut_url');
+	if (paramEdit && !edit_code) edit_code = paramEdit;
+	if (paramShortcut) incomingShortcutUrl = paramShortcut;
+} })
 
 	// Format the package name for preview
 	let formattedName = $derived(
@@ -68,6 +79,9 @@
 							text: 'continue',
 							main: true,
 							action: () => {
+								// Capture forwarding params before we clear the form
+								const forwardEdit = edit_code;
+								const forwardShortcut = incomingShortcutUrl;
 								// Clear form
 								name = '';
 								short_description = '';
@@ -75,8 +89,12 @@
 								edit_code = '';
 								// Small delay to allow dialog to close properly before navigation
 								setTimeout(() => {
-									// Redirect to version creation for the new package
-									goto(`/packages/${packageName}/versions/create`);
+									// Redirect to version creation for the new package, forwarding edit_code and shortcut_url when present
+									const qs = new URLSearchParams();
+									if (forwardEdit) qs.set('edit_code', forwardEdit);
+									if (forwardShortcut) qs.set('shortcut_url', forwardShortcut);
+									const q = qs.toString();
+									goto(`/packages/${packageName}/versions/create${q ? `?${q}` : ''}`);
 								}, 200);
 							}
 						}

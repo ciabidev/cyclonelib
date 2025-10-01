@@ -15,6 +15,14 @@
 	// Get package name from URL
 	let packageName = $page.params.name;
 
+// Prefill fields from query params if present (edit_code, shortcut_url)
+$effect(() => { if ($page && $page.url) {
+	const paramEdit = $page.url.searchParams.get('edit_code');
+	const paramShortcut = $page.url.searchParams.get('shortcut_url');
+	if (paramEdit && !edit_code) edit_code = paramEdit;
+	if (paramShortcut && !download_url) download_url = paramShortcut;
+}})
+
 	async function submit() {
 		// Trim whitespace from inputs
 		const trimmedVersion = String(version_number || '').trim();
