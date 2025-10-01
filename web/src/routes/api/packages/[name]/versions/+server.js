@@ -57,14 +57,15 @@ export async function POST({ request, params }) {
 			.from('packages')
 			.select('name, edit_code')
 			.eq('name', name)
-			.single();
+			.maybeSingle();
 
 		if (packageError) {
-			if (packageError.code === 'PGRST116') { // Not found
-				throw error(404, { message: 'Package not found' });
-			}
 			console.error('Supabase error checking package:', packageError);
 			throw error(500, { message: 'Database query failed' });
+		}
+
+		if (!packageDoc) {
+			throw error(404, { message: 'Package not found' });
 		}
 
 		// Check for existing version number
@@ -73,9 +74,9 @@ export async function POST({ request, params }) {
 			.select('version_number')
 			.eq('package_name', name)
 			.eq('version_number', version_number)
-			.single();
+			.maybeSingle();
 
-		if (versionError && versionError.code !== 'PGRST116') {
+		if (versionError) {
 			console.error('Supabase error checking version:', versionError);
 			throw error(500, { message: 'Database query failed' });
 		}

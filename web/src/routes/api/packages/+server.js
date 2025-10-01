@@ -6,7 +6,7 @@ export async function POST({ request }) {
     const { name, short_description, long_description, edit_code } = await request.json();
 
     // Validate required fields
-    if (!name || !short_description || !edit_code) {
+    if (!name || !edit_code) {
       throw error(400, { message: 'Required fields are missing' });
     }
 

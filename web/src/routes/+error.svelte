@@ -8,7 +8,7 @@
     <div class="error">
         <Emotion emotion="confused" size="large" />
         <h1>where am i</h1>
-        <span class="giantahhparagraph">404 - page not found</span>
+        <span class="giantahhparagraph">{page.error?.message || '404 - page not found'}</span>
     </div>
 {:else}
     <div class="error">

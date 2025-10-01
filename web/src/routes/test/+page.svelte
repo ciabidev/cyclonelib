@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dialog } from './../../lib/state/dialogs.ts';
 	import Switcher from '$components/inputs-and-buttons/Switcher.svelte';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import ProjectCard from '$components/misc/ProjectCard.svelte';
@@ -25,6 +26,42 @@
 			image: '/flavor_icons/' + flavor + '.png'
 		};
 	});
+	
+	let inf_dialog_1 = () => {
+		createDialog({
+			id: 'inf-dialog',
+			type: 'small',
+			bodyText: 'this is an infinite dialog, it will never close!',
+			emoticon: 'sad',
+			buttons: [
+				{
+					text: 'Continue',
+					main: true,
+					action: () => {
+						inf_dialog_2();
+					}
+				}
+			]
+		});
+	}
+
+	let inf_dialog_2 = () => {
+		createDialog({
+			id: 'inf-dialog-2',
+			type: 'small',
+			bodyText: 'this is an infinite dialog, it will never close!',
+			emoticon: 'sad',
+			buttons: [
+				{
+					text: 'Continue',
+					main: true,
+					action: () => {
+						inf_dialog_1();
+					}
+				}
+			]
+		});
+	}
 </script>
 
 <!--bottom navbar-->
@@ -40,35 +77,7 @@
 	<section id="test-dialog">
 		<button
 			class="button"
-			onclick={() =>
-				createDialog({
-					id: 'small-dialog',
-					type: 'small',
-					title: 'How Insatiable',
-					bodyText: 'The more you take, the less you have. You will starve surrounded by gold.',
-					emoticon: 'happy',
-					buttons: [
-						{
-							text: 'continue',
-							main: true,
-							action: () =>
-								createDialog({
-									id: 'small-dialog-2',
-									type: 'small',
-									title: 'debug',
-									bodyText:'hi',
-									emoticon: 'happy',
-									buttons: [
-										{
-											text: 'conte',
-											main: true,
-											action: () => {}
-										}
-									]
-								})
-						}
-					]
-				})}>test small Dialog</button
+			onclick={inf_dialog_1}>test small dialog</button
 		>
 	</section>
 	<section id="test-picker-dialog">

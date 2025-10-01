@@ -32,14 +32,15 @@ export async function GET({ params }) {
       .from('packages')
       .select('*')
       .eq('name', name)
-      .single();
+      .maybeSingle();
 
     if (dbError) {
-      if (dbError.code === 'PGRST116') { // Not found
-        throw error(404, { message: 'Package not found' });
-      }
       console.error('Supabase error:', dbError);
       throw error(500, { message: 'Database query failed' });
+    }
+
+    if (!packageDoc) {
+      throw error(404, { message: 'Package not found' });
     }
 
     return json(serializeDoc(packageDoc, ['edit_code']), {
@@ -106,14 +107,15 @@ export async function PATCH({ request, params }) {
       .from('packages')
       .select('*')
       .eq('name', name)
-      .single();
+      .maybeSingle();
 
     if (findError) {
-      if (findError.code === 'PGRST116') { // Not found
-        throw error(404, { message: 'Package not found' });
-      }
       console.error('Supabase error:', findError);
       throw error(500, { message: 'Database query failed' });
+    }
+
+    if (!existingPackage) {
+      throw error(404, { message: 'Package not found' });
     }
 
     if (existingPackage.edit_code !== await hashEditCode(edit_code.trim())) {
@@ -136,14 +138,13 @@ export async function PATCH({ request, params }) {
         .select('name')
         .eq('name', newName)
         .neq('id', existingPackage.id)
-        .single();
+        .maybeSingle();
 
-      if (nameCheckError && nameCheckError.code !== 'PGRST116') {
+        if (nameCheckError) {
         console.error('Supabase error checking name:', nameCheckError);
         throw error(500, { message: 'Database query failed' });
       }
-
-      if (existingName) {
+        if (existingName) {
         throw error(409, { message: 'Package name is already taken' });
       }
       updateFields.name = newName;
@@ -240,14 +241,15 @@ export async function DELETE({ request, params }) {
       .from('packages')
       .select('*')
       .eq('name', name)
-      .single();
+      .maybeSingle();
 
     if (findError) {
-      if (findError.code === 'PGRST116') { // Not found
-        throw error(404, { message: 'Package not found' });
-      }
       console.error('Supabase error:', findError);
       throw error(500, { message: 'Database query failed' });
+    }
+
+    if (!existingPackage) {
+      throw error(404, { message: 'Package not found' });
     }
 
     if (existingPackage.edit_code !== await hashEditCode(edit_code.trim())) {
@@ -258,24 +260,24 @@ export async function DELETE({ request, params }) {
       .from('packages')
       .delete()
       .eq('id', existingPackage.id);
-
+    
     if (deleteError) {
       console.error('Supabase error deleting:', deleteError);
       throw error(500, { message: 'Failed to delete package' });
     }
-
+  } catch (err) {
+    if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
+    console.error('Database error in DELETE /api/packages/[name]:', err);
+    throw error(500, {
+      message: 'Failed to delete package'
+    });
+  } finally {
     return json({ message: 'Package deleted successfully' }, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'PATCH, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
-    });
-  } catch (err) {
-    if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
-    console.error('Database error in DELETE /api/packages/[name]:', err);
-    throw error(500, {
-      message: 'Failed to delete package'
     });
   }
 }

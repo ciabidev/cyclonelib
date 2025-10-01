@@ -404,7 +404,7 @@ button,
 	text-decoration: none;
 	border: none;
 	border-radius: var(--border-radius);
-	font-size: 14.5px;
+	font-size: 0.95rem;
 	text-align: center;
 	cursor: pointer;
 	font-weight: 500;
@@ -412,10 +412,6 @@ button,
 	border: var(--button-stroke) solid 1px;
 	background-color: var(--button-default);
 	color: var(--text-color);
-	-webkit-transition: all 0.2s ease, border-color 0.2s ease;
-	-moz-transition: all 0.2s ease, border-color 0.2s ease;
-	-ms-transition: all 0.2s ease, border-color 0.2s ease;
-	-o-transition: all 0.2s ease, border-color 0.2s ease;
 }
 /* dont mix up the :active and .active classes. they are different */
 /* :active - buttons that are currently pressed	*/

@@ -17,9 +17,16 @@
 let incomingShortcutUrl = '';
 
 $effect(() => { if ($page && $page.url) {
+	const paramName = $page.url.searchParams.get('name');
+	const paramShortDescription = $page.url.searchParams.get('short_description');
+	const paramLongDescription = $page.url.searchParams.get('long_description');
 	const paramEdit = $page.url.searchParams.get('edit_code');
 	const paramShortcut = $page.url.searchParams.get('shortcut_url');
-	if (paramEdit && !edit_code) edit_code = paramEdit;
+
+	if (paramName) name = paramName;
+	if (paramShortDescription) short_description = paramShortDescription;
+	if (paramLongDescription) long_description = paramLongDescription;
+	if (paramEdit) edit_code = paramEdit;
 	if (paramShortcut) incomingShortcutUrl = paramShortcut;
 } })
 
@@ -36,7 +43,6 @@ $effect(() => { if ($page && $page.url) {
 
 	async function submit() {
 		// Trim whitespace from inputs with null checks and string conversion
-		const trimmedName = String(name || '').trim();
 		const trimmedShortDesc = String(short_description || '').trim();
 		const trimmedLongDesc = String(long_description || '').trim();
 		const trimmedEditCode = String(edit_code || '').trim();
@@ -44,11 +50,22 @@ $effect(() => { if ($page && $page.url) {
 		// Check for empty fields
 		if (
 			!formattedName ||
-			!trimmedShortDesc ||
 			!trimmedEditCode
 		) {
-			// Validation will be shown via red "Required" text on fields
-			return;
+			createDialog({
+				id: 'create-package-validation-error',
+				type: 'small',
+				title: 'Validation Error',
+				icon: 'warn-red',
+				bodyText: 'Missing required fields',
+				buttons: [
+					{
+						text: 'continue',
+						main: true,
+						action: () => {}
+					}
+				]
+			});
 		}
 
 		loading = true;
@@ -66,8 +83,19 @@ $effect(() => { if ($page && $page.url) {
 			});
 
 			if (response.ok) {
-				// Store the formatted name before clearing form
 				const packageName = formattedName;
+				const forwardEdit = edit_code;
+				const forwardShortcut = incomingShortcutUrl;
+				const qs = new URLSearchParams();
+				if (forwardEdit) qs.set('edit_code', forwardEdit);
+				if (forwardShortcut) qs.set('shortcut_url', forwardShortcut);
+				qs.set('patch_notes', 'Initial version');
+				const q = qs.toString();
+				// Clear form
+				name = '';
+				short_description = '';
+				long_description = '';
+				edit_code = '';
 				createDialog({
 					id: 'create-package-success',
 					type: 'small',
@@ -80,26 +108,17 @@ $effect(() => { if ($page && $page.url) {
 							main: true,
 							action: () => {
 								// Capture forwarding params before we clear the form
-								const forwardEdit = edit_code;
-								const forwardShortcut = incomingShortcutUrl;
-								// Clear form
-								name = '';
-								short_description = '';
-								long_description = '';
-								edit_code = '';
 								// Small delay to allow dialog to close properly before navigation
-								setTimeout(() => {
-									// Redirect to version creation for the new package, forwarding edit_code and shortcut_url when present
-									const qs = new URLSearchParams();
-									if (forwardEdit) qs.set('edit_code', forwardEdit);
-									if (forwardShortcut) qs.set('shortcut_url', forwardShortcut);
-									const q = qs.toString();
+								setTimeout(() => {									
 									goto(`/packages/${packageName}/versions/create${q ? `?${q}` : ''}`);
 								}, 200);
 							}
 						}
 					]
 				});
+				setTimeout(() => {
+					goto(`/packages/${packageName}/versions/create${q ? `?${q}` : ''}`);
+				}, 200);
 			} else {
 				const data = await response.json();
 				createDialog({
@@ -143,7 +162,7 @@ $effect(() => { if ($page && $page.url) {
 		<h1>Create Package</h1>
 		<p>Fill in the details to create a new package.</p>
 	</section>
-	<a class="button " href="/packages">Back to Packages</a>
+	<a class="button" href="/packages">Back to Packages</a>
 
 	<div class="form">
 		<FormField label="Package Name" id="name" required={true} value={name}>
@@ -154,7 +173,12 @@ $effect(() => { if ($page && $page.url) {
 				</small>
 			{/if}
 		</FormField>
-		<FormField label="Short Description" id="short_description" required={true} value={short_description}>
+		<FormField
+			label="Short Description"
+			id="short_description"
+			required={true}
+			value={short_description}
+		>
 			<Input
 				id="short_description"
 				placeholder="Enter short description (brief summary)"
@@ -169,7 +193,13 @@ $effect(() => { if ($page && $page.url) {
 				long={true}
 			/>
 		</FormField>
-		<FormField label="Edit Code" id="edit_code" required={true} value={edit_code} hint="This is a secret code that is required to manage your package. Save it somewhere safe and don't share it!">
+		<FormField
+			label="Edit Code"
+			id="edit_code"
+			required={true}
+			value={edit_code}
+			hint="This is a secret code that is required to manage your package. Save it somewhere safe and don't share it!"
+		>
 			<Input
 				id="edit_code"
 				placeholder="Enter edit code for future modifications"

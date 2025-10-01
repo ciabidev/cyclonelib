@@ -19,8 +19,10 @@
 $effect(() => { if ($page && $page.url) {
 	const paramEdit = $page.url.searchParams.get('edit_code');
 	const paramShortcut = $page.url.searchParams.get('shortcut_url');
+	const paramPatchNotes = $page.url.searchParams.get('patch_notes');
 	if (paramEdit && !edit_code) edit_code = paramEdit;
 	if (paramShortcut && !download_url) download_url = paramShortcut;
+	if (paramPatchNotes && !patch_notes) patch_notes = paramPatchNotes;
 }})
 
 	async function submit() {
@@ -174,10 +176,10 @@ $effect(() => { if ($page && $page.url) {
 	<a class="button " href="/packages/{packageName}">Back to Package</a>
 
 	<div class="form">
-		<FormField label="Version Number" id="version_number">
+		<FormField label="Version Number" id="version_number" required={true} value={version_number}>
 			<Input id="version_number" placeholder="e.g., 1.0.0" bind:value={version_number} />
 		</FormField>
-		<FormField label="Patch Notes" id="patch_notes">
+	<FormField label="Patch Notes" id="patch_notes" required={true} value={patch_notes}>
 			<Input
 				id="patch_notes"
 				placeholder="Describe what's new in this version"
@@ -185,7 +187,7 @@ $effect(() => { if ($page && $page.url) {
 				long={true}
 			/>
 		</FormField>
-		<FormField label="Download URL" id="download_url" hint="Must include ?shortcut_name= query parameter (your exact Shortcut Name URL-Encoded). See Packages in the docs for more info.">
+	<FormField label="Download URL" required={true} id="download_url" value={download_url} hint="Must include ?shortcut_name= query parameter (your exact Shortcut Name URL-Encoded). See Packages in the docs for more info.">
 			<Input
 				id="download_url"
 				placeholder="Enter Download URL"
