@@ -1,5 +1,10 @@
 import { json } from '@sveltejs/kit';
 
+/**
+ * GET /api/links
+ * Retrieves a list of useful links for the Cyclone project.
+ * @returns {Promise<Response>} JSON response containing links object with CORS headers
+ */
 export async function GET() {
   const links = {
     "discord": "https://discord.gg/UYgGdEwGsK",

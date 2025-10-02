@@ -3,25 +3,8 @@ import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
 
 /**
  * GET /api/packages/[name]
- * Retrieve a package
- *
- * @param {Object} options - Request options
- * @param {Object} options.params - URL parameters
- * @param {string} options.params.name - Package name
- * @returns {Promise<Response>} JSON response with package data
- *
- * @example
- * GET /api/packages/my-package-name
- *
- * Response: {
- *   "_id": "507f1f77bcf86cd799439011",
- *   "name": "my-package-name",
- *   "description": "A useful package",
- *   "download_url": "https://routinehub.co/shortcut/12345?shortcut_name=Simple%20Base64"
- * }
- *
- * @throws {404} If package not found
- * @throws {500} If database connection fails
+ * Retrieves a specific package by name.
+ * @returns {Promise<Response>} JSON response with package data or error
  */
 export async function GET({ params }) {
   const { name } = params;
@@ -61,40 +44,9 @@ export async function GET({ params }) {
 
 /**
  * PATCH /api/packages/[name]
- * Update a package
- *
- * @param {Object} options - Request options
- * @param {Request} options.request - HTTP request with package data
- * @param {Object} options.params - URL parameters
- * @param {string} options.params.name - Package name
- * @returns {Promise<Response>} JSON response with updated package
- *
- * @body {Object} data - Update data
- * @body {string} data.edit_code - Edit code for verification
- * @body {string} [data.name] - New package name
- * @body {string} [data.short_description] - New short description
- * @body {string} [data.long_description] - New long description (supports markdown)
- * @body {string} [data.download_url] - New Download URL
- *
- * @example
- * PATCH /api/packages/my-package-name
- * Body: {
- *   "edit_code": "secret123",
- *   "name": "updated-package-name"
- * }
- *
- * Response: {
- *   "_id": "507f1f77bcf86cd799439011",
- *   "name": "updated-package-name",
- *   "description": "A useful package",
- *   "download_url": "https://routinehub.co/shortcut/12345?shortcut_name=Simple%20Base64"
- * }
- *
- * @throws {404} If package not found
- * @throws {403} If edit code does not match
- * @throws {409} If new name already exists
- * @throws {400} If download_url validation fails
- * @throws {500} If database connection fails
+ * Updates an existing package.
+ * Expects JSON body with edit_code and optional fields to update.
+ * @returns {Promise<Response>} JSON response with updated package data or error
  */
 export async function PATCH({ request, params }) {
   const { name } = params;
@@ -205,30 +157,9 @@ export async function PATCH({ request, params }) {
 
 /**
  * DELETE /api/packages/[name]
- * Delete a package
- *
- * @param {Object} options - Request options
- * @param {Request} options.request - HTTP request with edit_code
- * @param {Object} options.params - URL parameters
- * @param {string} options.params.name - Package name
- * @returns {Promise<Response>} JSON response confirming deletion
- *
- * @body {Object} data - Request data
- * @body {string} data.edit_code - Edit code for verification
- *
- * @example
- * DELETE /api/packages/my-package-name
- * Body: {
- *   "edit_code": "secret123"
- * }
- *
- * Response: {
- *   "message": "Package deleted successfully"
- * }
- *
- * @throws {404} If package not found
- * @throws {403} If edit code does not match
- * @throws {500} If database connection fails
+ * Deletes a package.
+ * Expects JSON body with edit_code for authentication.
+ * @returns {Promise<Response>} JSON response with success message or error
  */
 export async function DELETE({ request, params }) {
   const { name } = params;
@@ -282,6 +213,11 @@ export async function DELETE({ request, params }) {
   }
 }
 
+/**
+ * OPTIONS /api/packages/[name]
+ * Handles preflight CORS requests.
+ * @returns {Promise<Response>} Empty response with CORS headers
+ */
 export async function OPTIONS() {
   return new Response(null, {
     status: 200,

@@ -1,6 +1,10 @@
 import { json } from '@sveltejs/kit';
 
-
+/**
+ * GET /api/versions
+ * Retrieves available Cyclone versions with their commit hashes.
+ * @returns {Promise<Response>} JSON response with versions object and CORS headers
+ */
 export async function GET() {
   const versions = {
     "0.0.1": "50425",

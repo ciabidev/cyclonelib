@@ -1,5 +1,11 @@
 import { json, error } from '@sveltejs/kit';
 import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
+
+/**
+ * GET /api/packages/[name]/versions
+ * Retrieves all versions for a specific package.
+ * @returns {Promise<Response>} JSON response with array of version data
+ */
 export async function GET({ params }) {
 	const { name } = params;
 
@@ -31,6 +37,12 @@ export async function GET({ params }) {
 	}
 }
 
+/**
+ * POST /api/packages/[name]/versions
+ * Creates a new version for a package.
+ * Expects JSON body with version_number, patch_notes, download_url, edit_code.
+ * @returns {Promise<Response>} JSON response with created version data
+ */
 export async function POST({ request, params }) {
 	const { name } = params;
 
@@ -126,6 +138,11 @@ export async function POST({ request, params }) {
 	}
 }
 
+/**
+ * OPTIONS /api/packages/[name]/versions
+ * Handles preflight CORS requests.
+ * @returns {Promise<Response>} Empty response with CORS headers
+ */
 export async function OPTIONS() {
 	return new Response(null, {
 		status: 200,

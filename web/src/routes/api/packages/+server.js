@@ -1,6 +1,12 @@
 import { json, error } from '@sveltejs/kit';
 import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
 
+/**
+ * POST /api/packages
+ * Creates a new package in the database.
+ * Expects JSON body with name, short_description, long_description, edit_code.
+ * @returns {Promise<Response>} JSON response with success message or error
+ */
 export async function POST({ request }) {
   try {
     const { name, short_description, long_description, edit_code } = await request.json();
@@ -62,6 +68,11 @@ export async function POST({ request }) {
   }
 }
 
+/**
+ * OPTIONS /api/packages
+ * Handles preflight CORS requests.
+ * @returns {Promise<Response>} Empty response with CORS headers
+ */
 export async function OPTIONS() {
   return new Response(null, {
     status: 200,

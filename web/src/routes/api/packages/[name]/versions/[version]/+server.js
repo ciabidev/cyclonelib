@@ -1,6 +1,11 @@
 import { json, error } from '@sveltejs/kit';
 import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
 
+/**
+ * GET /api/packages/[name]/versions/[version]
+ * Retrieves a specific version of a package.
+ * @returns {Promise<Response>} JSON response with version data
+ */
 export async function GET({ params }) {
 	const { name, version } = params;
 
@@ -37,6 +42,12 @@ export async function GET({ params }) {
 	}
 }
 
+/**
+ * PATCH /api/packages/[name]/versions/[version]
+ * Updates a specific version of a package.
+ * Expects JSON body with edit_code and optional fields to update.
+ * @returns {Promise<Response>} JSON response with updated version data
+ */
 export async function PATCH({ request, params }) {
 	const { name, version } = params;
 
@@ -152,6 +163,11 @@ export async function PATCH({ request, params }) {
 	}
 }
 
+/**
+ * OPTIONS /api/packages/[name]/versions/[version]
+ * Handles preflight CORS requests.
+ * @returns {Promise<Response>} Empty response with CORS headers
+ */
 export async function OPTIONS() {
 	return new Response(null, {
 		status: 200,
