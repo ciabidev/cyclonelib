@@ -13,7 +13,10 @@ export async function GET() {
     },
     servers: [
       {
-        url: 'http://localhost:5173'
+        url: 'http://localhost:5173',
+      },
+      {
+        url: 'https://cyclonelib.pages.dev',
       }
     ],
     paths: {

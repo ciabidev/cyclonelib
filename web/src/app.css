@@ -475,30 +475,36 @@ select:focus-visible {
 	display: none !important;
 }
 
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    margin-block: 0;
+}
+
 h1 {
-    font-size: 1.5rem;
+    font-size: 24px;
     letter-spacing: -1px;
 }
 
 h2 {
-    font-size: 1.25rem;
+    font-size: 20px;
     letter-spacing: -1px;
 }
 
 h3 {
-    font-size: 1rem;
+    font-size: 16px;
 }
 
 h4 {
-    font-size: 0.9rem;
+    font-size: 14.5px;
 }
 
 h5 {
-    font-size: 0.75rem;
+    font-size: 12px;
 }
 
 h6 {
-    font-size: 0.7rem;
+    font-size: 11px;
 }
 
 .paragraph-text h3 {

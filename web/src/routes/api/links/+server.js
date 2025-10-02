@@ -10,9 +10,10 @@ export async function GET() {
     "discord": "https://discord.gg/UYgGdEwGsK",
     "docs": "https://cyclone.fibery.io/@public",
     "suggestions": "https://tally.so/r/mVXylJ",
-    "source": "https://github.com/cyclonelib/cyclonelib",
-    "web": "https://cyclonelib.vercel.app",
-    "api": "https://cyclonelib.vercel.app/api"
+    "support": "https://tally.so/r/mVXylJ",
+    "source": "https://github.com/ciabidev/cyclonelib",
+    "web": "https://cyclonelib.vercel.dev",
+    "api": "https://cyclonelib.pages.dev/api"
   };
 
   return json(links, {
