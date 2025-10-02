@@ -10,8 +10,9 @@ export async function GET() {
     const db = await connectDB();
     const { data: packages, error: dbError } = await db
       .from('packages')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .limit(5000);
     if (dbError) {
       console.error('Supabase error:', dbError);
       throw error(500, { message: 'Failed to retrieve packages' });

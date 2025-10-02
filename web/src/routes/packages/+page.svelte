@@ -2,12 +2,24 @@
 	import ProjectCard from '$components/misc/ProjectCard.svelte'; /* the Cyclone website is forked from Ciabi's website, and I run both the Ciabi and Cyclone website. Old names may still be used. */
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import PageContainer from '$components/misc/PageContainer.svelte';
+	import type { Package } from '$lib/types/api';
 	// @ts-ignore
 	import SearchIcon from '~icons/streamline-flex/magnifying-glass-remix';
 
-	let { data } = $props();
-	let packages = $derived(data.packages);
+	let packages = $state<Package[]>([]);
 	let searchQuery = $state('');
+
+	// Fetch packages from API
+	$effect(() => {
+		fetch('/api/packages')
+			.then(r => r.json())
+			.then(data => {
+				packages = data;
+			})
+			.catch(err => {
+				console.error('Failed to fetch packages:', err);
+			});
+	});
 
 	// Filter packages based on search query
 	let filteredPackages = $derived(
@@ -16,8 +28,8 @@
 			: packages.filter(
 					(pkg:any) =>
 						pkg.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-						pkg.short_description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-						pkg.long_description.toLowerCase().includes(searchQuery.toLowerCase())
+						(pkg.short_description && pkg.short_description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+						(pkg.long_description && pkg.long_description.toLowerCase().includes(searchQuery.toLowerCase()))
 				)
 	);
 </script>
