@@ -48,7 +48,7 @@
   }
 
 
-    @media screen and (max-width: 535px) {
+    @media screen and (max-width: 600px) {
       .navbar {
         height: var(--mobile-navbar-height);
       }

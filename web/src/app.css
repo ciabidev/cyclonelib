@@ -55,7 +55,6 @@
 		linear-gradient(to bottom, rgba(128, 128, 128, 0.05) 1px, transparent 1px);
 	--grid-bg-size: 15px 15px;
 	--border-radius: 11px;
-	font-size: 15px;
 	--readable-line-height: 1.8;
 }
 
@@ -196,12 +195,12 @@ pre {
 	font-weight: 400;
 	color: var(--gray);
 	line-height: 1.4;
-	padding: 0 var(--padding);
 	white-space: pre-line;
-	user-select: text;
-	-webkit-user-select: text;
 }
 
+.gray {
+	color: var(--gray);
+}
 
 .center-container {
 	/* i added this because it just works idk */
@@ -220,15 +219,6 @@ pre {
 	color: var(--gray);
 }
 
-.bullet-title {
-	font-size: 1.125rem;
-}
-
-.small-text {
-	color: var(--gray);
-	font-weight: 430;
-	font-size: 0.9rem;
-}
 
 .divider {
 	border-top: var(--gray);
@@ -249,7 +239,7 @@ pre {
 	justify-content: center;
 }
 
-.contact-container > .small-text {
+.contact-container > .subtext {
 	text-align: center;
 }
 
@@ -295,6 +285,7 @@ img {
 .paragraph-text *:not(h1, h2, h3, h4, h5, h6) {
 	line-height: var(--readable-line-height);
 	user-select: text;
+	font-size: 0.9063rem;
 	-webkit-user-select: text;
 }
 
@@ -314,8 +305,6 @@ img {
 .paragraph-text h1,
 .paragraph-text h2,
 .paragraph-text h3 {
-	user-select: text;
-	-webkit-user-select: text;
 	letter-spacing: 0;
 	margin-block-start: 1rem;
 	border-bottom: 1.5px solid ;
@@ -362,7 +351,7 @@ tr th:first-child {
 	padding-top: 0;
 }
 
-@media screen and (max-width: 535px) {
+@media screen and (max-width: 600px) {
 	.paragraph-text,
 	.paragraph-text *:not(h1, h2, h3, h4, h5, h6) {
 		font-size: 14px;
@@ -473,43 +462,6 @@ button:hover, .button:hover {
 	text-decoration: underline;
 }
 
-/* Old Button States */
-
-/* .button--primary:hover {
-	background: var(--dark-main-color);
-}
-
-.button--success:hover {
-	background: var(--dark-color-success);
-}
-
-.button--danger:hover {
-	background: var(--dark-color-error);
-}
-
-.button--elevated:hover {
-	background-color: var(--button-elevated-hover);
-} */
-
-/* .button--primary:active {
-	background: var(--dark-main-color);
-	filter: brightness(0.9);
-}
-
-.button--success:active {
-	background: var(--dark-color-success);
-	filter: brightness(0.9);
-}
-
-.button--danger:active {
-	background: var(--dark-color-error);
-	filter: brightness(0.9);
-}
-
-.button--elevated:active {
-	background-color: var(--button-elevated-press);
-} */
-
 a:not(:has(img)):not(.button):not(.url-button):not[role="tab"]:hover {
 	filter: brightness(1.25);
 	-webkit-filter: brightness(1.25);
@@ -526,4 +478,38 @@ select:focus-visible {
 
 .hidden {
 	display: none !important;
+}
+
+h1 {
+    font-size: 1.5rem;
+    letter-spacing: -1px;
+}
+
+h2 {
+    font-size: 1.25rem;
+    letter-spacing: -1px;
+}
+
+h3 {
+    font-size: 1rem;
+}
+
+h4 {
+    font-size: 0.9rem;
+}
+
+h5 {
+    font-size: 0.75rem;
+}
+
+h6 {
+    font-size: 0.7rem;
+}
+
+.paragraph-text h3 {
+    font-size: 1.0625rem;
+}
+
+.paragraph-text h2 {
+    font-size: 1.1875rem;
 }

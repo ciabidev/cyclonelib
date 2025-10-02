@@ -6,7 +6,7 @@
 	/** @type {string} */
 	export let pageId = '';
 	/** @type {string} */
-	export let maxWidth = '700px';
+	export let maxWidth = '900px';
 </script>
 
 <div id={containerId} class="page-container">
@@ -26,8 +26,8 @@
 	}
 
 	.page-main {
-		width: 100%;
-		max-width: var(--max-width);
+		width: var(--max-width);
+		max-width: 100%; /* super responsive, on smaller devices the page naturally expands to fill the screen */
 		gap: 20px;
 		display: flex;
 		flex-direction: column;

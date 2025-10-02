@@ -18,6 +18,7 @@
 	import CarouselContainer from '$components/inputs-and-buttons/CarouselContainer.svelte';
 	import { flavors } from '$lib/types/flavor';
 	import { flavor_descriptions } from '$lib/types/flavor';
+	import PopoverContainer from '$components/misc/PopoverContainer.svelte';
 
 	let flavor_items = flavors.map((flavor) => {
 		return {
@@ -62,6 +63,8 @@
 			]
 		});
 	}
+
+	let popovervisible = $state(false);
 </script>
 
 <!--bottom navbar-->
@@ -168,6 +171,16 @@
 	<section id="carousel">
 		<CarouselContainer id="flavor-picker-carousel" items={flavor_items}></CarouselContainer>
 	</section>
+	<section id="popover">
+		<button class="button" onclick={() => popovervisible = !popovervisible}>
+			{popovervisible ? 'hide' : 'show'}
+		</button>
+		<PopoverContainer id="test-popover" expanded={popovervisible}>
+			hey
+		</PopoverContainer>
+	</section>
+		
+
 </PageContainer>
 
 <style>

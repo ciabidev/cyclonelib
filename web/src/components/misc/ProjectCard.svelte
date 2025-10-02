@@ -24,8 +24,8 @@
 			{/if}
 			<div class="card-text">
 				<h2 class="project-name">{name}</h2>
-				<div class="small-text tiny">{tiny}</div>
-				<div class="small-text description paragraph-text">{description}</div>
+				<div class="subtext">{tiny}</div>
+				<div class="project-description">{description}</div>
 			</div>
 		</div>
 	</div>
@@ -39,6 +39,10 @@
 		display: flex;
 		flex-direction: column;
 		gap: 12px;
+	}
+	
+	.project-description {
+		font-size: 0.84rem;
 	}
 	.card {
 		border-radius: var(--border-radius);
@@ -88,9 +92,6 @@
 
 	.tiny {
 		font-size: 0.8rem;
-	}
-	.description {
-		font-size: 1rem;
 	}
 
 	/* @media only screen and (max-width: 600px) {

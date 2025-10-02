@@ -108,7 +108,7 @@
 		height: var(--picker-item-size);
 	}
 
-	@media screen and (max-width: 535px) {
+	@media screen and (max-width: 600px) {
 		.picker-body {
 			grid-template-columns: 1fr 1fr 1fr;
 		}

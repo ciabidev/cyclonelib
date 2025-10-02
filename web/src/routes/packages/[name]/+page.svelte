@@ -18,8 +18,13 @@
 <PageContainer containerId="package-details-page-container" pageId="package-details-page" maxWidth="800px">
 	{#if packageData}
 		<a class="button " href="/packages">Back to Packages</a>
-		<div class="package-header paragraph-text">
+		<div class="package-header">
 			<h1>{name}</h1>
+			{#if short_description}
+				<div class="short-description paragraph-text">
+					{short_description}
+				</div>
+			{/if}
 		</div>
 
 		<Switcher full={true}>
@@ -68,21 +73,14 @@
 				</div>
 			{:else if activeTab === 'main-info'}
 				<div class="main-info-tab">
-					<div class="package-content">
-						{#if short_description}
-							<div class="short-description paragraph-text">
-								<strong>Short Description:</strong> {short_description}
-							</div>
-						{/if}
-						{#if long_description}
-							<div class="long-description paragraph-text">
-								<h1>Detailed Description</h1>
-								<Markdown source={long_description} />
-							</div>
-						{/if}
-						<div class="actions">
-							<a class="button button--primary" href="/packages/{name}/edit">Edit Package</a>
+					{#if long_description}
+						<div class="long-description paragraph-text">
+							<h1>Detailed Description</h1>
+							<Markdown source={long_description} />
 						</div>
+					{/if}
+					<div class="actions">
+						<a class="button button--primary" href="/packages/{name}/edit">Edit Package</a>
 					</div>
 				</div>
 			{/if}
@@ -93,26 +91,11 @@
 </PageContainer>
 
 <style>
-	.package-header {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-	}
 
 	.package-header h1 {
 		margin: 0;
 		font-size: 2rem;
 		font-weight: 600;
-	}
-
-	.package-content {
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
-	}
-
-	.tab-content {
-		margin-top: 20px;
 	}
 
 	.versions-tab, .main-info-tab {

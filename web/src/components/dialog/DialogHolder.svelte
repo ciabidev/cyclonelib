@@ -147,7 +147,7 @@
         opacity: 0;
     }
 
-    @media screen and (max-width: 535px) {
+    @media screen and (max-width: 600px) {
         :global(dialog) {
             justify-content: flex-end;
         }

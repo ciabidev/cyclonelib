@@ -105,7 +105,7 @@
   }
 }
 
- @media only screen and (max-width: 535px) {
+ @media only screen and (max-width: 600px) {
    a[role="tab"] {
      height: 85%;
    }

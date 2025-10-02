@@ -4,6 +4,7 @@
 	import UrlButton from '$components/inputs-and-buttons/URLButton.svelte';
 
 	const badge_code = `[![This shortcut uses or supports Cyclone](https://i.imgur.com/6RCqPh6.jpeg)](https://routinehub.co/shortcut/19577)`
+	import PageContainer from '$components/misc/PageContainer.svelte';
 </script>
 
 <!--bottom navbar-->
@@ -19,8 +20,8 @@
 	<meta name="author" content="wheatwhole" />
 </svelte:head>
 
-<div class="page-wrapper">
-	<main class="paragraph-text">
+<PageContainer>
+	<section class="paragraph-text">
 		<a href="https://wheatwhole.github.io">????</a>
 		<URLButton url="https://routinehub.co/shortcut/19577" name="Get Cyclone" img="icons/cyclone.webp" urlshort="routinehub.co/shortcut/19577" />
 		<h2 id="-build-better-and-faster">⏩ build better and faster</h2>
@@ -92,35 +93,5 @@
 			>
 		</p>
 
-		</main>
-</div>
-
-<style>
-	.page-wrapper {
-		width: 100%;
-		display: flex;
-		flex-direction: row; /* has to be row so we can horizontally center */
-		flex-wrap: wrap;
-		justify-content: center;
-		min-height: 100%;
-		overscroll-behavior: none;
-		padding: calc(var(--padding) + 0.9375rem); 
-	}
-
-	main {
-		width: 100%;
-		max-width: 700px;
-		display: flex;
-		flex-direction: column;
-	}
-
-	@media only screen and (max-height: 25rem) {
-		.page-wrapper {
-			justify-content: center;
-			align-items: center;
-			flex-wrap: wrap;
-			height: max-content;
-		}
-	}
-</style>
-
+	</section>
+</PageContainer>

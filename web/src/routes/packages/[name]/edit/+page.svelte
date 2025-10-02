@@ -300,7 +300,7 @@
 			<FormField label="Package Name" id="name">
 				<Input id="name" placeholder="Enter package name" bind:value={name} />
 				{#if formattedName}
-					<small class="small-text" style="color: var(--main-color);">
+					<small class="subtext" style="color: var(--main-color);">
 						Name will be: <strong>{formattedName}</strong>
 					</small>
 				{/if}
