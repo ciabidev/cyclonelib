@@ -184,33 +184,5 @@
 </PageContainer>
 
 <style>
-	.page-wrapper {
-		width: 100%;
-		display: flex;
-		flex-direction: row;
-		/* has to be row so we can horizontally center */
-		justify-content: center;
-		flex-wrap: wrap;
-		min-height: max-content;
-		height: 100%;
-		overscroll-behavior: none;
-		padding: calc(var(--padding) + 0.9375rem);
-	}
-
-	.main {
-		width: 100%;
-		max-width: 700px;
-		display: flex;
-		gap: 2rem;
-		flex-direction: column;
-	}
-
-	@media only screen and (max-height: 25rem) {
-		.page-wrapper {
-			justify-content: center;
-			align-items: center;
-			flex-wrap: wrap;
-			height: max-content;
-		}
-	}
+	
 </style>

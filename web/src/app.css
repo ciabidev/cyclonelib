@@ -268,11 +268,7 @@ img {
 	}
 }
 
-@media only screen and (max-height: 400px) {
-	.h300::after {
-		content: ' (scroll)';
-	}
-
+@media only screen and (max-height: 500px) {
 	:root {
 		font-size: 14px;
 		--navbar-height: var(--mobile-navbar-height);
