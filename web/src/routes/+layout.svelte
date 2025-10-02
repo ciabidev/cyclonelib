@@ -37,10 +37,6 @@ import '../flavors.css';
 	<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
 	<meta name="apple-mobile-web-app-title" content="ciabi" />
 	<link rel="manifest" href="/favicon/site.webmanifest" />
-	<meta
-		name="viewport"
-		content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content"
-	/>
 </svelte:head>
 
 	<!-- acts as a "body" tag that we have more control over. Example: when a mobile user reaches end of scroll. then the page starts scrolling to make typing and scrolling easier -->
