@@ -36,18 +36,17 @@
 
 	/* Navbar */
 	--navbar-lift: 1rem;
-	--mobile-navbar-height: calc(64px + env(safe-area-inset-bottom));
+	--navbar-height: 80px;
+	--mobile-navbar-height: 64px;
 	--navbar-inner-padding: 4px;
 	--navbar-tab-padding: 10px;
+	--navbar-font-size: 11px;
+	--icon-size-mobile: 22px;
+	--icon-size-desktop: 25px;
 
 	--padding: 15px;
 
-	/* Mobile navbar */
-	--navbar-height: 80px;
-	--navbar-font-size: 11px;
-	--navbar-height-mobile: calc(50px + env(safe-area-inset-bottom));
-	--icon-size-mobile: 22px;
-	--icon-size-desktop: 25px;
+
 	--actions-and-stuff-ahh-transition: cubic-bezier(0.68, -0.6, 0.32, 1.6);
 	
 	--grid-bg: 
