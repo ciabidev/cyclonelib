@@ -1,12 +1,42 @@
 import { json, error } from '@sveltejs/kit';
 import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
 
+/**GET /api/packages
+ * Retrieves a list of all packages in the database.
+ * @returns {Promise<Response>} JSON response with array of package objects
+ */
+export async function GET() {
+  try {
+    const db = await connectDB();
+    const { data: packages, error: dbError } = await db
+      .from('packages')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (dbError) {
+      console.error('Supabase error:', dbError);
+      throw error(500, { message: 'Failed to retrieve packages' });
+    }
+    return json(packages.map(doc => serializeDoc(doc)), {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      }
+    });
+  } catch (err) {
+    console.error('Database error in GET /api/packages:', err);
+    throw error(500, {
+      message: 'Failed to retrieve packages'
+    });
+  }
+}
 /**
  * POST /api/packages
  * Creates a new package in the database.
  * Expects JSON body with name, short_description, long_description, edit_code.
  * @returns {Promise<Response>} JSON response with success message or error
  */
+
 export async function POST({ request }) {
   try {
     const { name, short_description, long_description, edit_code } = await request.json();
