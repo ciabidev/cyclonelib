@@ -1,5 +1,5 @@
 <script>
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
@@ -15,8 +15,8 @@
 	let updating = $state(false);
 
 	// Get parameters from URL
-	let packageName = $page.params.name;
-	let versionParam = decodeURIComponent($page.params.version);
+	let packageName = page.params.name;
+	let versionParam = decodeURIComponent(page.params.version);
 
 	onMount(async () => {
 		try {

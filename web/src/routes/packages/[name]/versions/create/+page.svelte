@@ -1,5 +1,5 @@
 <script>
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import PageContainer from '$components/misc/PageContainer.svelte';
@@ -13,13 +13,13 @@
 	let loading = $state(false);
 
 	// Get package name from URL
-	let packageName = $page.params.name;
+	let packageName = page.params.name;
 
 // Prefill fields from query params if present (edit_code, shortcut_url)
-$effect(() => { if ($page && $page.url) {
-	const paramEdit = $page.url.searchParams.get('edit_code');
-	const paramShortcut = $page.url.searchParams.get('shortcut_url');
-	const paramPatchNotes = $page.url.searchParams.get('patch_notes');
+$effect(() => { if (page && page.url) {
+	const paramEdit = page.url.searchParams.get('edit_code');
+	const paramShortcut = page.url.searchParams.get('shortcut_url');
+	const paramPatchNotes = page.url.searchParams.get('patch_notes');
 	if (paramEdit && !edit_code) edit_code = paramEdit;
 	if (paramShortcut && !download_url) download_url = paramShortcut;
 	if (paramPatchNotes && !patch_notes) patch_notes = paramPatchNotes;

@@ -1,5 +1,5 @@
 <script>
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
@@ -9,7 +9,7 @@
 
 	/** @type {{name: string, short_description?: string, long_description?: string, download_url: string} | null} */
 	let packageData = $state(null);
-	let packageName = $page.params.name;
+	let packageName = page.params.name;
 	let name = $state('');
 	let short_description = $state('');
 	let long_description = $state('');

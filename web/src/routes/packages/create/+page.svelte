@@ -1,6 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import Input from '$components/inputs-and-buttons/Input.svelte';
 	import PageContainer from '$components/misc/PageContainer.svelte';
 	import FormField from '$components/misc/FormField.svelte';
@@ -16,12 +16,12 @@
 // If the incoming URL contains edit_code or shortcut_url, prefill/remember them.
 let incomingShortcutUrl = '';
 
-$effect(() => { if ($page && $page.url) {
-	const paramName = $page.url.searchParams.get('name');
-	const paramShortDescription = $page.url.searchParams.get('short_description');
-	const paramLongDescription = $page.url.searchParams.get('long_description');
-	const paramEdit = $page.url.searchParams.get('edit_code');
-	const paramShortcut = $page.url.searchParams.get('shortcut_url');
+$effect(() => { if (page && page.url) {
+	const paramName = page.url.searchParams.get('name');
+	const paramShortDescription = page.url.searchParams.get('short_description');
+	const paramLongDescription = page.url.searchParams.get('long_description');
+	const paramEdit = page.url.searchParams.get('edit_code');
+	const paramShortcut = page.url.searchParams.get('shortcut_url');
 
 	if (paramName) name = paramName;
 	if (paramShortDescription) short_description = paramShortDescription;
