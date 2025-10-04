@@ -114,13 +114,9 @@ body {
 	word-wrap:break-word;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	opacity: 0;
-	animation: fadeIn 200ms forwards;
 	height: 100%;
 	width: 100%;
 	color: var(--text-color);
-	background: var(--nav-bg); /* for cozy navbar */;
-	-webkit-animation: fadeIn 200ms forwards;
 }
 
 html {
@@ -483,3 +479,7 @@ select:focus-visible {
 	display: none !important;
 }
 
+/* 
+* {
+	outline: 1px solid var(--main-color) !important;
+} */

@@ -1,36 +1,25 @@
 <script lang="ts">
-import '../app.css';
-import '../flavors.css';
-
+	import { browser } from '$app/environment';
+	import '../app.css';
+	import '../flavors.css';
 	import Navbar from '$components/navbar/Navbar.svelte';
 	import type { Snippet } from 'svelte';
 	import DialogHolder from '$components/dialog/DialogHolder.svelte';
-	let {  children }: { children: Snippet } = $props();
+	let { children }: { children: Snippet } = $props();
 	import NavTab from '$components/navbar/NavTab.svelte';
-	  import InfoIcon from "~icons/basil/info-rect-outline"; /* using Unplugin icons we can load icons at meowbalt speeds! */
-  // @ts-ignore (she aint even know it) (WHY DID I WRITE THIS WITHOUT KNOWING WHAT IT MEANT...)
-  import StarIcon from "~icons/basil/star-outline";
-  import BoxIcon from '~icons/basil/box-outline';
+	import InfoIcon from '~icons/basil/info-rect-outline'; /* using Unplugin icons we can load icons at meowbalt speeds! */
+	// @ts-ignore (she aint even know it) (WHY DID I WRITE THIS WITHOUT KNOWING WHAT IT MEANT...)
+	import StarIcon from '~icons/basil/star-outline';
+	import BoxIcon from '~icons/basil/box-outline';
 
-  import { flavor } from '$lib/state/flavors';
-  import type { Flavor } from '$lib/types/flavor';
-  import { dark_flavors } from '$lib/types/flavor';
-  import FlavorPicker from '$components/navbar/FlavorPicker.svelte';
+	import FlavorPicker from '$components/navbar/FlavorPicker.svelte';
 
-  flavor.subscribe((value) => {
-    if (typeof document !== 'undefined' && value) {
-		document.documentElement.setAttribute('data-flavor', value);
-		if (dark_flavors.includes(value as Flavor)) {
-			document.documentElement.setAttribute('data-flavor-type', 'dark');
-		} else {
-			document.documentElement.setAttribute('data-flavor-type', 'light');
-		}
-	}
-  });
-
+	
 </script>
 
 <svelte:head>
+	<script>
+	</script>
 	<link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
 	<link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
 	<link rel="shortcut icon" href="/favicon/favicon.ico" />
@@ -39,8 +28,8 @@ import '../flavors.css';
 	<link rel="manifest" href="/favicon/site.webmanifest" />
 </svelte:head>
 
-	<!-- acts as a "body" tag that we have more control over. Example: when a mobile user reaches end of scroll. then the page starts scrolling to make typing and scrolling easier -->
-<div id="basket">
+<!-- acts as a "body" tag that we have more control over. Example: when a mobile user reaches end of scroll. then the page starts scrolling to make typing and scrolling easier -->
+<div id="basket" class:loaded={browser}>
 	<FlavorPicker />
 	<DialogHolder />
 
@@ -50,11 +39,10 @@ import '../flavors.css';
 	</div>
 
 	<Navbar>
-	  <NavTab name={"about?"} Icon={InfoIcon} path={"/"} />
-      <NavTab name={"packages"} Icon={BoxIcon} path={"/packages"} />
-      <NavTab name={"test"} Icon={StarIcon} path={"/test"} />
+		<NavTab name={'about?'} Icon={InfoIcon} path={'/'} />
+		<NavTab name={'packages'} Icon={BoxIcon} path={'/packages'} />
+		<NavTab name={'test'} Icon={StarIcon} path={'/test'} />
 	</Navbar>
-	
 </div>
 
 <style>
@@ -78,5 +66,6 @@ import '../flavors.css';
 		overflow-y: hidden;
 		display: flex;
 		flex-direction: column;
+		background: var(--nav-bg);
 	}
 </style>
