@@ -83,7 +83,7 @@
 		const trimmedEditCode = String(edit_code || '').trim();
 
 		// Check for empty fields
-		if (!trimmedName || !trimmedShortDesc || !trimmedEditCode) {
+		if (!trimmedName || !trimmedEditCode) {
 			createDialog({
 				id: 'update-package-validation-error',
 				type: 'small',
