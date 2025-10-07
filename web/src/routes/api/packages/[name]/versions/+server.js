@@ -130,7 +130,6 @@ export async function POST({ request, params }) {
 			}
 		});
 	} catch (err) {
-		if (err && typeof err === 'object' && 'status' in err) throw err;
 		console.error('Database error in POST /api/packages/[name]/versions:', err);
 		throw error(500, {
 			message: 'Failed to create version'

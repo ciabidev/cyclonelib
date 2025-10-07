@@ -22,8 +22,8 @@ export async function GET({ params }) {
 			if (dbError.code === 'PGRST116') { // Not found
 				throw error(404, { message: 'Version not found' });
 			}
-			console.error('Supabase error:', dbError);
-			throw error(500, { message: 'Database query failed' });
+			console.error('Supabase error:', dbError.message);
+			throw error(500, { message: dbError.message });
 		}
 
 		return json(serializeDoc(versionDoc), {
@@ -34,10 +34,8 @@ export async function GET({ params }) {
 			}
 		});
 	} catch (err) {
-		if (err && typeof err === 'object' && 'status' in err) throw err;
-		console.error('Database error in GET /api/packages/[name]/versions/[version]:', err);
 		throw error(500, {
-			message: 'Failed to retrieve version'
+			message: err
 		});
 	}
 }
@@ -155,7 +153,6 @@ export async function PATCH({ request, params }) {
 			}
 		});
 	} catch (err) {
-		if (err && typeof err === 'object' && 'status' in err) throw err;
 		console.error('Database error in PATCH /api/packages/[name]/versions/[version]:', err);
 		throw error(500, {
 			message: 'Failed to update version'

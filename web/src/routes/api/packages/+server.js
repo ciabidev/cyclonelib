@@ -13,9 +13,10 @@ export async function GET() {
       .select('*', { count: 'exact' })
       .order('created_at', { ascending: false })
       .limit(5000);
+
     if (dbError) {
       console.error('Supabase error:', dbError);
-      throw error(500, { message: 'Failed to retrieve packages' });
+      throw error(500, { message: 'database error: ' + dbError.message });
     }
     return json(packages.map(doc => serializeDoc(doc)), {
       headers: {
@@ -25,9 +26,8 @@ export async function GET() {
       }
     });
   } catch (err) {
-    console.error('Database error in GET /api/packages:', err);
     throw error(500, {
-      message: 'Failed to retrieve packages'
+      message: 'error: ' + err.message
     });
   }
 }
@@ -78,7 +78,7 @@ export async function POST({ request }) {
 
     if (insertError) {
       console.error('Supabase error:', insertError);
-      throw error(500, { message: 'Failed to create package' });
+      throw error(500, { message: insertError.message });
     }
 
     return json({ message: 'Package created successfully' }, {
@@ -92,9 +92,8 @@ export async function POST({ request }) {
   } 
   
   catch (err) {
-    if (err.status) throw err;
     throw error(500, {
-      message: 'Failed to create package'
+      message: 'error: ' + err.message
     });
   }
 }
