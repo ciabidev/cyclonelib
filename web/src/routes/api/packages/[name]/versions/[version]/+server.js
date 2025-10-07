@@ -1,11 +1,42 @@
 import { json, error } from '@sveltejs/kit';
 import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
 
+
+
+/** get the latest version via created_at */
+async function get_latest_version(name) {
+	const db = await connectDB();
+	const { data: versionDoc, error: dbError } = await db
+		.from('versions')
+		.select('*')
+		.eq('package_name', name)
+		.order('created_at', { ascending: false })
+		.limit(1) /* .single() expects exactly one result */
+		.single();
+
+	if (dbError) {
+		if (dbError.code === 'PGRST116') { // Not found
+			throw error(404, { message: 'No versions found' });
+		}
+		console.error('Supabase error:', dbError);
+		throw error(500, { message: 'Database query failed' });
+	}
+
+	return json(serializeDoc(versionDoc), {
+		headers: {
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Methods': 'GET, PATCH, OPTIONS',
+			'Access-Control-Allow-Headers': 'Content-Type',
+		}
+	});
+}	
+
 /**
  * GET /api/packages/[name]/versions/[version]
- * Retrieves a specific version of a package.
+ * Retrieves a specific version of a package. Use /versions/latest to get the latest version.
  * @returns {Promise<Response>} JSON response with version data
  */
+
 export async function GET({ params }) {
 	const { name, version } = params;
 
@@ -17,6 +48,10 @@ export async function GET({ params }) {
 			.eq('package_name', name)
 			.eq('version_number', decodeURIComponent(version))
 			.single();
+		
+		if (version === "latest") {
+			return get_latest_version(name);
+		}
 
 		if (dbError) {
 			if (dbError.code === 'PGRST116') { // Not found

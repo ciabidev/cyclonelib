@@ -203,7 +203,7 @@ export async function GET() {
       '/api/packages/{name}/versions/{version}': {
         get: {
           summary: 'Get version',
-          description: 'Retrieves a specific version of a package.',
+          description: 'Retrieves a specific version of a package. Use /versions/latest to get the latest version.',
           parameters: [
             {
               name: 'name',
@@ -271,7 +271,7 @@ export async function GET() {
       '/api/versions': {
         get: {
           summary: 'Get Cyclone versions',
-          description: 'Retrieves available Cyclone versions with their commit hashes.',
+          description: 'Retrieves available Cyclone versions with their routinehub version ids.',
           responses: {
             200: { description: 'JSON response with versions object and CORS headers' }
           }
