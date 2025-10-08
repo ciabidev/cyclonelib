@@ -16,7 +16,7 @@ export async function GET() {
 
     if (dbError) {
       console.error('Supabase error:', dbError);
-      throw error(500, { message: 'database error: ' + dbError.message });
+      throw error(500, { message: dbError?.message || String(dbError) });
     }
     return json(packages.map(doc => serializeDoc(doc)), {
       headers: {
@@ -26,8 +26,9 @@ export async function GET() {
       }
     });
   } catch (err) {
+    console.error('Database error in GET /api/packages:', err);
     throw error(500, {
-      message: 'error: ' + err.message
+      message: err?.message || String(err)
     });
   }
 }
@@ -78,7 +79,7 @@ export async function POST({ request }) {
 
     if (insertError) {
       console.error('Supabase error:', insertError);
-      throw error(500, { message: insertError.message });
+      throw error(500, { message: insertError?.message || String(insertError) });
     }
 
     return json({ message: 'Package created successfully' }, {
@@ -89,11 +90,12 @@ export async function POST({ request }) {
         'Access-Control-Allow-Headers': 'Content-Type',
       }
     });
-  } 
+  }
   
   catch (err) {
+    console.error('Database error in POST /api/packages:', err);
     throw error(500, {
-      message: 'error: ' + err.message
+      message: err?.message || String(err)
     });
   }
 }

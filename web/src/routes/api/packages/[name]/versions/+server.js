@@ -19,7 +19,7 @@ export async function GET({ params }) {
 
 		if (dbError) {
 			console.error('Supabase error:', dbError);
-			throw error(500, { message: 'Database query failed' });
+			throw error(500, { message: dbError?.message || String(dbError) });
 		}
 
 		return json(versions.map(doc => serializeDoc(doc)), {
@@ -32,7 +32,7 @@ export async function GET({ params }) {
 	} catch (err) {
 		console.error('Database error in GET /api/packages/[name]/versions:', err);
 		throw error(500, {
-			message: 'Failed to fetch versions'
+			message: err.message
 		});
 	}
 }
@@ -73,7 +73,7 @@ export async function POST({ request, params }) {
 
 		if (packageError) {
 			console.error('Supabase error checking package:', packageError);
-			throw error(500, { message: 'Database query failed' });
+			throw error(500, { message: packageError?.message || String(packageError) });
 		}
 
 		if (!packageDoc) {
@@ -90,7 +90,7 @@ export async function POST({ request, params }) {
 
 		if (versionError) {
 			console.error('Supabase error checking version:', versionError);
-			throw error(500, { message: 'Database query failed' });
+			throw error(500, { message: versionError?.message || String(versionError) });
 		}
 
 		if (existingVersion) {
@@ -117,8 +117,8 @@ export async function POST({ request, params }) {
 			.single();
 
 		if (insertError) {
-			console.error('Supabase error inserting version:', insertError);
-			throw error(500, { message: 'Failed to create version' });
+			console.error('Supabase error inserting:', insertError);
+			throw error(500, { message: insertError?.message || String(insertError) });
 		}
 
 		return json(serializeDoc(created), {
@@ -130,9 +130,10 @@ export async function POST({ request, params }) {
 			}
 		});
 	} catch (err) {
-		console.error('Database error in POST /api/packages/[name]/versions:', err);
+		if (err && typeof err === 'object' && 'status' in err) throw err; // preserve HTTP errors
+		console.error('Database error in GET /api/packages/[name]/versions:', err);
 		throw error(500, {
-			message: 'Failed to create version'
+			message: err?.message || String(err)
 		});
 	}
 }

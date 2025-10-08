@@ -19,7 +19,7 @@ export async function GET({ params }) {
 
     if (dbError) {
       console.error('Supabase error:', dbError);
-      throw error(500, { message: 'Database query failed' });
+      throw error(500, { message: dbError?.message || String(dbError) });
     }
 
     if (!packageDoc) {
@@ -37,7 +37,7 @@ export async function GET({ params }) {
     if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
     console.error('Database error in GET /api/packages/[name]:', err);
     throw error(500, {
-      message: 'Failed to retrieve package'
+      message: err?.message || String(err)
     });
   }
 }
@@ -63,7 +63,7 @@ export async function PATCH({ request, params }) {
 
     if (findError) {
       console.error('Supabase error:', findError);
-      throw error(500, { message: 'Database query failed' });
+      throw error(500, { message: findError?.message || String(findError) });
     }
 
     if (!existingPackage) {
@@ -94,7 +94,7 @@ export async function PATCH({ request, params }) {
 
         if (nameCheckError) {
         console.error('Supabase error checking name:', nameCheckError);
-        throw error(500, { message: 'Database query failed' });
+        throw error(500, { message: nameCheckError.message });
       }
         if (existingName) {
         throw error(409, { message: 'Package name is already taken' });
@@ -136,7 +136,7 @@ export async function PATCH({ request, params }) {
 
     if (updateError) {
       console.error('Supabase error updating:', updateError);
-      throw error(500, { message: 'Failed to update package' });
+      throw error(500, { message: updateError.message });
     }
 
     return json(serializeDoc(updated, ['edit_code']), {
@@ -150,7 +150,7 @@ export async function PATCH({ request, params }) {
     if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
     console.error('Database error in PATCH /api/packages/[name]:', err);
     throw error(500, {
-      message: 'Failed to update package'
+      message: err?.message || String(err)
     });
   }
 }
@@ -176,7 +176,7 @@ export async function DELETE({ request, params }) {
 
     if (findError) {
       console.error('Supabase error:', findError);
-      throw error(500, { message: 'Database query failed' });
+      throw error(500, { message: findError.message });
     }
 
     if (!existingPackage) {
@@ -194,13 +194,13 @@ export async function DELETE({ request, params }) {
     
     if (deleteError) {
       console.error('Supabase error deleting:', deleteError);
-      throw error(500, { message: 'Failed to delete package' });
+      throw error(500, { message: deleteError.message });
     }
   } catch (err) {
     if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
     console.error('Database error in DELETE /api/packages/[name]:', err);
     throw error(500, {
-      message: 'Failed to delete package'
+      message: err?.message || String(err)
     });
   } finally {
     return json({ message: 'Package deleted successfully' }, {

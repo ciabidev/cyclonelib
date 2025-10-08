@@ -19,7 +19,7 @@ async function get_latest_version(name) {
 			throw error(404, { message: 'No versions found' });
 		}
 		console.error('Supabase error:', dbError);
-		throw error(500, { message: 'Database query failed' });
+		throw error(500, { message: dbError?.message || String(dbError) });
 	}
 
 	return json(serializeDoc(versionDoc), {
@@ -57,7 +57,7 @@ export async function GET({ params }) {
 			if (dbError.code === 'PGRST116') { // Not found
 				throw error(404, { message: 'Version not found' });
 			}
-			console.error('Supabase error:', dbError.message);
+			console.error(dbError.message);
 			throw error(500, { message: dbError.message });
 		}
 
@@ -70,7 +70,7 @@ export async function GET({ params }) {
 		});
 	} catch (err) {
 		throw error(500, {
-			message: err
+			message: err?.message || String(err)
 		});
 	}
 }
@@ -118,7 +118,7 @@ export async function PATCH({ request, params }) {
 				throw error(404, { message: 'Package not found' });
 			}
 			console.error('Supabase error checking package:', packageError);
-			throw error(500, { message: 'Database query failed' });
+			throw error(500, { message: packageError?.message || String(packageError) });
 		}
 
 		if (packageDoc.edit_code !== await hashEditCode(edit_code.trim())) {
@@ -138,7 +138,7 @@ export async function PATCH({ request, params }) {
 				throw error(404, { message: 'Version not found' });
 			}
 			console.error('Supabase error checking version:', versionError);
-			throw error(500, { message: 'Database query failed' });
+			throw error(500, { message: versionError?.message || String(versionError) });
 		}
 
 		// Check for version number conflict if changing version number
@@ -153,7 +153,7 @@ export async function PATCH({ request, params }) {
 
 			if (conflictError && conflictError.code !== 'PGRST116') {
 				console.error('Supabase error checking conflict:', conflictError);
-				throw error(500, { message: 'Database query failed' });
+				throw error(500, { message: conflictError?.message || String(conflictError) });
 			}
 
 			if (versionConflict) {
@@ -177,7 +177,7 @@ export async function PATCH({ request, params }) {
 
 		if (updateError) {
 			console.error('Supabase error updating:', updateError);
-			throw error(500, { message: 'Failed to update version' });
+			throw error(500, { message: updateError?.message || String(updateError) });
 		}
 
 		return json(serializeDoc(updated), {
@@ -190,7 +190,7 @@ export async function PATCH({ request, params }) {
 	} catch (err) {
 		console.error('Database error in PATCH /api/packages/[name]/versions/[version]:', err);
 		throw error(500, {
-			message: 'Failed to update version'
+			message: err?.message || String(err)
 		});
 	}
 }
