@@ -16,7 +16,10 @@ export async function GET() {
 
     if (dbError) {
       console.error('Supabase error:', dbError);
-      throw error(500, { message: dbError?.message || String(dbError) });
+      return new Response(JSON.stringify({ message: dbError?.message || String(dbError) }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
     return json(packages.map(doc => serializeDoc(doc)), {
       headers: {
@@ -27,8 +30,9 @@ export async function GET() {
     });
   } catch (err) {
     console.error('Database error in GET /api/packages:', err);
-    throw error(500, {
-      message: err?.message || String(err)
+    return new Response(JSON.stringify({ message: err?.message || String(err) }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 }
@@ -45,12 +49,18 @@ export async function POST({ request }) {
 
     // Validate required fields
     if (!name || !edit_code) {
-      throw error(400, { message: 'Required fields are missing' });
+      return new Response(JSON.stringify({ message: 'Required fields are missing' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     // Validate package name format
     if (!/^[a-z0-9-]+$/.test(name)) {
-      throw error(400, { message: 'Package name must contain only lowercase letters, numbers, and hyphens' });
+      return new Response(JSON.stringify({ message: 'Package name must contain only lowercase letters, numbers, and hyphens' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     const db = await connectDB();
@@ -62,7 +72,10 @@ export async function POST({ request }) {
       .single();
 
     if (existingPackage) {
-      throw error(409, { message: 'Package name is already taken' });
+      return new Response(JSON.stringify({ message: 'Package name is already taken' }), {
+        status: 409,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     const hashedEditCode = await hashEditCode(edit_code.trim());
@@ -79,7 +92,10 @@ export async function POST({ request }) {
 
     if (insertError) {
       console.error('Supabase error:', insertError);
-      throw error(500, { message: insertError?.message || String(insertError) });
+      return new Response(JSON.stringify({ message: insertError?.message || String(insertError) }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     return json({ message: 'Package created successfully' }, {
@@ -94,8 +110,9 @@ export async function POST({ request }) {
   
   catch (err) {
     console.error('Database error in POST /api/packages:', err);
-    throw error(500, {
-      message: err?.message || String(err)
+    return new Response(JSON.stringify({ message: err?.message || String(err) }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 }

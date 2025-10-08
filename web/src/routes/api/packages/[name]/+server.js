@@ -19,11 +19,17 @@ export async function GET({ params }) {
 
     if (dbError) {
       console.error('Supabase error:', dbError);
-      throw error(500, { message: dbError?.message || String(dbError) });
+      return new Response(JSON.stringify({ message: dbError?.message || String(dbError) }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     if (!packageDoc) {
-      throw error(404, { message: 'Package not found' });
+      return new Response(JSON.stringify({ message: 'Package not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     return json(serializeDoc(packageDoc, ['edit_code']), {
@@ -36,8 +42,9 @@ export async function GET({ params }) {
   } catch (err) {
     if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
     console.error('Database error in GET /api/packages/[name]:', err);
-    throw error(500, {
-      message: err?.message || String(err)
+    return new Response(JSON.stringify({ message: err?.message || String(err) }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 }
@@ -63,26 +70,41 @@ export async function PATCH({ request, params }) {
 
     if (findError) {
       console.error('Supabase error:', findError);
-      throw error(500, { message: findError?.message || String(findError) });
+      return new Response(JSON.stringify({ message: findError?.message || String(findError) }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     if (!existingPackage) {
-      throw error(404, { message: 'Package not found' });
+      return new Response(JSON.stringify({ message: 'Package not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     if (existingPackage.edit_code !== await hashEditCode(edit_code.trim())) {
-      throw error(403, { message: 'Edit code does not match' });
+      return new Response(JSON.stringify({ message: 'Edit code does not match' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     const updateFields = {};
     if (newName !== undefined && newName !== existingPackage.name) {
       // Validate package name format
       if (!/^[a-z0-9-]+$/.test(newName)) {
-        throw error(400, { message: 'Package name must contain only lowercase letters, numbers, and hyphens' });
+        return new Response(JSON.stringify({ message: 'Package name must contain only lowercase letters, numbers, and hyphens' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
       // Validate package name length
       if (newName.length > 214) {
-        throw error(400, { message: 'Package name must be 214 characters or less' });
+        return new Response(JSON.stringify({ message: 'Package name must be 214 characters or less' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
       const { data: existingName, error: nameCheckError } = await db
@@ -94,10 +116,16 @@ export async function PATCH({ request, params }) {
 
         if (nameCheckError) {
         console.error('Supabase error checking name:', nameCheckError);
-        throw error(500, { message: nameCheckError.message });
+        return new Response(JSON.stringify({ message: nameCheckError.message }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
         if (existingName) {
-        throw error(409, { message: 'Package name is already taken' });
+        return new Response(JSON.stringify({ message: 'Package name is already taken' }), {
+          status: 409,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
       updateFields.name = newName;
     }
@@ -109,10 +137,16 @@ export async function PATCH({ request, params }) {
         const url = new URL(download_url);
         const shortcutName = url.searchParams.get('shortcut_name');
         if (!shortcutName) {
-          throw error(400, { message: 'Download URL must include ?shortcut_name= query parameter' });
+          return new Response(JSON.stringify({ message: 'Download URL must include ?shortcut_name= query parameter' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
       } catch (urlError) {
-        throw error(400, { message: 'Invalid Download URL format' });
+        return new Response(JSON.stringify({ message: 'Invalid Download URL format' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
       updateFields.download_url = download_url;
     }
@@ -136,7 +170,10 @@ export async function PATCH({ request, params }) {
 
     if (updateError) {
       console.error('Supabase error updating:', updateError);
-      throw error(500, { message: updateError.message });
+      return new Response(JSON.stringify({ message: updateError.message }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     return json(serializeDoc(updated, ['edit_code']), {
@@ -149,8 +186,9 @@ export async function PATCH({ request, params }) {
   } catch (err) {
     if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
     console.error('Database error in PATCH /api/packages/[name]:', err);
-    throw error(500, {
-      message: err?.message || String(err)
+    return new Response(JSON.stringify({ message: err?.message || String(err) }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 }
@@ -176,15 +214,24 @@ export async function DELETE({ request, params }) {
 
     if (findError) {
       console.error('Supabase error:', findError);
-      throw error(500, { message: findError.message });
+      return new Response(JSON.stringify({ message: findError.message }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     if (!existingPackage) {
-      throw error(404, { message: 'Package not found' });
+      return new Response(JSON.stringify({ message: 'Package not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     if (existingPackage.edit_code !== await hashEditCode(edit_code.trim())) {
-      throw error(403, { message: 'Edit code does not match' });
+      return new Response(JSON.stringify({ message: 'Edit code does not match' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     const { error: deleteError } = await db
@@ -194,21 +241,26 @@ export async function DELETE({ request, params }) {
     
     if (deleteError) {
       console.error('Supabase error deleting:', deleteError);
-      throw error(500, { message: deleteError.message });
+      return new Response(JSON.stringify({ message: deleteError.message }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
-  } catch (err) {
-    if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
-    console.error('Database error in DELETE /api/packages/[name]:', err);
-    throw error(500, {
-      message: err?.message || String(err)
-    });
-  } finally {
+
+    // Successful delete - return success response here
     return json({ message: 'Package deleted successfully' }, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'PATCH, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
+    });
+  } catch (err) {
+    if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
+    console.error('Database error in DELETE /api/packages/[name]:', err);
+    return new Response(JSON.stringify({ message: err?.message || String(err) }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 }

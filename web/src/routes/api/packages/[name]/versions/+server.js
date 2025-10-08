@@ -19,7 +19,10 @@ export async function GET({ params }) {
 
 		if (dbError) {
 			console.error('Supabase error:', dbError);
-			throw error(500, { message: dbError?.message || String(dbError) });
+			return new Response(JSON.stringify({ message: dbError?.message || String(dbError) }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		return json(versions.map(doc => serializeDoc(doc)), {
@@ -54,12 +57,18 @@ export async function POST({ request, params }) {
 		try {
 			url = new URL(download_url);
 		} catch (urlError) {
-			throw error(400, { message: 'Invalid URL format. Please enter a valid URL.' });
+			return new Response(JSON.stringify({ message: 'Invalid URL format. Please enter a valid URL.' }), {
+				status: 400,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		const shortcutName = url.searchParams.get('shortcut_name');
 		if (!shortcutName) {
-			throw error(400, { message: 'Download URL must include ?shortcut_name= query parameter' });
+			return new Response(JSON.stringify({ message: 'Download URL must include ?shortcut_name= query parameter' }), {
+				status: 400,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		const db = await connectDB();
@@ -73,11 +82,17 @@ export async function POST({ request, params }) {
 
 		if (packageError) {
 			console.error('Supabase error checking package:', packageError);
-			throw error(500, { message: packageError?.message || String(packageError) });
+			return new Response(JSON.stringify({ message: packageError?.message || String(packageError) }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		if (!packageDoc) {
-			throw error(404, { message: 'Package not found' });
+			return new Response(JSON.stringify({ message: 'Package not found' }), {
+				status: 404,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		// Check for existing version number
@@ -90,15 +105,24 @@ export async function POST({ request, params }) {
 
 		if (versionError) {
 			console.error('Supabase error checking version:', versionError);
-			throw error(500, { message: versionError?.message || String(versionError) });
+			return new Response(JSON.stringify({ message: versionError?.message || String(versionError) }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		if (existingVersion) {
-			throw error(409, { message: 'Version number already exists for this package' });
+			return new Response(JSON.stringify({ message: 'Version number already exists for this package' }), {
+				status: 409,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		if (packageDoc.edit_code !== await hashEditCode(edit_code.trim())) {
-			throw error(403, { message: 'Edit code does not match' });
+			return new Response(JSON.stringify({ message: 'Edit code does not match' }), {
+				status: 403,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		const versionDoc = {
@@ -118,7 +142,10 @@ export async function POST({ request, params }) {
 
 		if (insertError) {
 			console.error('Supabase error inserting:', insertError);
-			throw error(500, { message: insertError?.message || String(insertError) });
+			return new Response(JSON.stringify({ message: insertError?.message || String(insertError) }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		return json(serializeDoc(created), {
@@ -132,8 +159,9 @@ export async function POST({ request, params }) {
 	} catch (err) {
 		if (err && typeof err === 'object' && 'status' in err) throw err; // preserve HTTP errors
 		console.error('Database error in GET /api/packages/[name]/versions:', err);
-		throw error(500, {
-			message: err?.message || String(err)
+		return new Response(JSON.stringify({ message: err?.message || String(err) }), {
+			status: 500,
+			headers: { 'Content-Type': 'application/json' }
 		});
 	}
 }

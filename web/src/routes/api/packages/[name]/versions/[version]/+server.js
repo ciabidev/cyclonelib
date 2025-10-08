@@ -16,10 +16,16 @@ async function get_latest_version(name) {
 
 	if (dbError) {
 		if (dbError.code === 'PGRST116') { // Not found
-			throw error(404, { message: 'No versions found' });
+			return new Response(JSON.stringify({ message: 'No versions found' }), {
+				status: 404,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 		console.error('Supabase error:', dbError);
-		throw error(500, { message: dbError?.message || String(dbError) });
+		return new Response(JSON.stringify({ message: dbError?.message || String(dbError) }), {
+			status: 500,
+			headers: { 'Content-Type': 'application/json' }
+		});
 	}
 
 	return json(serializeDoc(versionDoc), {
@@ -55,10 +61,16 @@ export async function GET({ params }) {
 
 		if (dbError) {
 			if (dbError.code === 'PGRST116') { // Not found
-				throw error(404, { message: 'Version not found' });
+				return new Response(JSON.stringify({ message: 'Version not found' }), {
+					status: 404,
+					headers: { 'Content-Type': 'application/json' }
+				});
 			}
 			console.error(dbError.message);
-			throw error(500, { message: dbError.message });
+			return new Response(JSON.stringify({ message: dbError.message }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		return json(serializeDoc(versionDoc), {
@@ -69,8 +81,9 @@ export async function GET({ params }) {
 			}
 		});
 	} catch (err) {
-		throw error(500, {
-			message: err?.message || String(err)
+		return new Response(JSON.stringify({ message: err?.message || String(err) }), {
+			status: 500,
+			headers: { 'Content-Type': 'application/json' }
 		});
 	}
 }
@@ -88,7 +101,10 @@ export async function PATCH({ request, params }) {
 		const { version_number, patch_notes, download_url, edit_code } = await request.json();
 
 		if (!edit_code || !edit_code.trim()) {
-			throw error(400, { message: 'Edit code is required to update version' });
+			return new Response(JSON.stringify({ message: 'Edit code is required to update version' }), {
+				status: 400,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		// Validate download_url contains shortcut_name query parameter
@@ -96,12 +112,18 @@ export async function PATCH({ request, params }) {
 		try {
 			url = new URL(download_url);
 		} catch (urlError) {
-			throw error(400, { message: 'Invalid URL format. Please enter a valid URL.' });
+			return new Response(JSON.stringify({ message: 'Invalid URL format. Please enter a valid URL.' }), {
+				status: 400,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		const shortcutName = url.searchParams.get('shortcut_name');
 		if (!shortcutName) {
-			throw error(400, { message: 'Download URL must include ?shortcut_name= query parameter' });
+			return new Response(JSON.stringify({ message: 'Download URL must include ?shortcut_name= query parameter' }), {
+				status: 400,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		const db = await connectDB();
@@ -115,14 +137,23 @@ export async function PATCH({ request, params }) {
 
 		if (packageError) {
 			if (packageError.code === 'PGRST116') { // Not found
-				throw error(404, { message: 'Package not found' });
+				return new Response(JSON.stringify({ message: 'Package not found' }), {
+					status: 404,
+					headers: { 'Content-Type': 'application/json' }
+				});
 			}
 			console.error('Supabase error checking package:', packageError);
-			throw error(500, { message: packageError?.message || String(packageError) });
+			return new Response(JSON.stringify({ message: packageError?.message || String(packageError) }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		if (packageDoc.edit_code !== await hashEditCode(edit_code.trim())) {
-			throw error(403, { message: 'Edit code does not match' });
+			return new Response(JSON.stringify({ message: 'Edit code does not match' }), {
+				status: 403,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		// Check if version exists
@@ -135,10 +166,16 @@ export async function PATCH({ request, params }) {
 
 		if (versionError) {
 			if (versionError.code === 'PGRST116') { // Not found
-				throw error(404, { message: 'Version not found' });
+				return new Response(JSON.stringify({ message: 'Version not found' }), {
+					status: 404,
+					headers: { 'Content-Type': 'application/json' }
+				});
 			}
 			console.error('Supabase error checking version:', versionError);
-			throw error(500, { message: versionError?.message || String(versionError) });
+			return new Response(JSON.stringify({ message: versionError?.message || String(versionError) }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		// Check for version number conflict if changing version number
@@ -153,11 +190,17 @@ export async function PATCH({ request, params }) {
 
 			if (conflictError && conflictError.code !== 'PGRST116') {
 				console.error('Supabase error checking conflict:', conflictError);
-				throw error(500, { message: conflictError?.message || String(conflictError) });
+				return new Response(JSON.stringify({ message: conflictError?.message || String(conflictError) }), {
+					status: 500,
+					headers: { 'Content-Type': 'application/json' }
+				});
 			}
 
 			if (versionConflict) {
-				throw error(409, { message: 'Version number already exists for this package' });
+				return new Response(JSON.stringify({ message: 'Version number already exists for this package' }), {
+					status: 409,
+					headers: { 'Content-Type': 'application/json' }
+				});
 			}
 		}
 
@@ -177,7 +220,10 @@ export async function PATCH({ request, params }) {
 
 		if (updateError) {
 			console.error('Supabase error updating:', updateError);
-			throw error(500, { message: updateError?.message || String(updateError) });
+			return new Response(JSON.stringify({ message: updateError?.message || String(updateError) }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 
 		return json(serializeDoc(updated), {
@@ -189,8 +235,9 @@ export async function PATCH({ request, params }) {
 		});
 	} catch (err) {
 		console.error('Database error in PATCH /api/packages/[name]/versions/[version]:', err);
-		throw error(500, {
-			message: err?.message || String(err)
+		return new Response(JSON.stringify({ message: err?.message || String(err) }), {
+			status: 500,
+			headers: { 'Content-Type': 'application/json' }
 		});
 	}
 }
