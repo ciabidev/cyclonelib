@@ -21,7 +21,7 @@ export async function GET() {
         headers: { 'Content-Type': 'application/json' }
       });
     }
-    return json(packages.map(doc => serializeDoc(doc)), {
+    return json(packages.map(doc => serializeDoc(doc, ['edit_code'])), {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
