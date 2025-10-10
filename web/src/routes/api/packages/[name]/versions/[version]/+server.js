@@ -107,7 +107,14 @@ export async function PATCH({ request, params }) {
 			});
 		}
 
-		// Validate download_url contains shortcut_name query parameter
+		// Validate download_url starts with allowed prefixes and contains shortcut_name query parameter
+		if (!download_url.startsWith('https://www.icloud.com/shortcuts') && !download_url.startsWith('https://routinehub.co/download')) {
+			return new Response(JSON.stringify({ message: 'Download URL must begin with https://www.icloud.com/shortcuts or https://routinehub.co/download' }), {
+				status: 400,
+				headers: { 'Content-Type': 'application/json' }
+			});
+		}
+
 		let url;
 		try {
 			url = new URL(download_url);

@@ -129,27 +129,6 @@ export async function PATCH({ request, params }) {
       }
       updateFields.name = newName;
     }
-    if (short_description !== undefined) updateFields.short_description = short_description;
-    if (long_description !== undefined) updateFields.long_description = long_description;
-    if (download_url !== undefined && download_url !== existingPackage.download_url) {
-      // Validate download_url contains shortcut_name query parameter
-      try {
-        const url = new URL(download_url);
-        const shortcutName = url.searchParams.get('shortcut_name');
-        if (!shortcutName) {
-          return new Response(JSON.stringify({ message: 'Download URL must include ?shortcut_name= query parameter' }), {
-            status: 400,
-            headers: { 'Content-Type': 'application/json' }
-          });
-        }
-      } catch (urlError) {
-        return new Response(JSON.stringify({ message: 'Invalid Download URL format' }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' }
-        });
-      }
-      updateFields.download_url = download_url;
-    }
 
     if (Object.keys(updateFields).length === 0) {
       return json(serializeDoc(existingPackage, ['edit_code']), {
