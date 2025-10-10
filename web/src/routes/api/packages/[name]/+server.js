@@ -238,7 +238,7 @@ export async function DELETE({ request, params }) {
       .from('packages')
       .delete()
       .eq('id', existingPackage.id);
-    
+
     if (deleteError) {
       console.error('Supabase error deleting:', deleteError);
       return new Response(JSON.stringify({ message: deleteError.message }), {
@@ -247,8 +247,8 @@ export async function DELETE({ request, params }) {
       });
     }
 
-    // Successful delete - return success response here
-    return json({ message: 'Package deleted successfully' }, {
+    // Successful delete - return the deleted package doc
+    return json(serializeDoc(existingPackage, ['edit_code']), {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'PATCH, DELETE, OPTIONS',

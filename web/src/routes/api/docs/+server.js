@@ -53,7 +53,7 @@ export async function GET() {
             }
           },
           responses: {
-            201: { description: 'Package created successfully' },
+            201: { description: 'Created package data' },
             400: { description: 'Validation error' },
             409: { description: 'Package name already taken' }
           }
@@ -108,7 +108,7 @@ export async function GET() {
             }
           },
           responses: {
-            200: { description: 'Package updated' },
+            200: { description: 'Updated package data' },
             403: { description: 'Invalid edit code' },
             404: { description: 'Package not found' }
           }
@@ -140,7 +140,7 @@ export async function GET() {
             }
           },
           responses: {
-            200: { description: 'Package deleted' },
+            200: { description: 'Deleted package data' },
             403: { description: 'Invalid edit code' },
             404: { description: 'Package not found' }
           }
@@ -193,7 +193,7 @@ export async function GET() {
             }
           },
           responses: {
-            201: { description: 'Version created' },
+            201: { description: 'Created version data' },
             403: { description: 'Invalid edit code' },
             404: { description: 'Package not found' },
             409: { description: 'Version already exists' }
@@ -262,7 +262,7 @@ export async function GET() {
             }
           },
           responses: {
-            200: { description: 'Version updated' },
+            200: { description: 'Updated version data' },
             403: { description: 'Invalid edit code' },
             404: { description: 'Version not found' }
           }

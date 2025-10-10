@@ -80,7 +80,7 @@ export async function POST({ request }) {
 
     const hashedEditCode = await hashEditCode(edit_code.trim());
 
-    const { error: insertError } = await db
+    const { data: created, error: insertError } = await db
       .from('packages')
       .insert({
         name,
@@ -88,7 +88,9 @@ export async function POST({ request }) {
         long_description,
         edit_code: hashedEditCode,
         created_at: new Date().toISOString()
-      });
+      })
+      .select()
+      .single();
 
     if (insertError) {
       console.error('Supabase error:', insertError);
@@ -98,7 +100,7 @@ export async function POST({ request }) {
       });
     }
 
-    return json({ message: 'Package created successfully' }, {
+    return json(serializeDoc(created, ['edit_code']), {
       status: 201,
       headers: {
         'Access-Control-Allow-Origin': '*',
