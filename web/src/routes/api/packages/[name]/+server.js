@@ -1,5 +1,5 @@
 import { json, error } from '@sveltejs/kit';
-import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
+import { connectDB, serializeDoc, hashEditCode, isValidUUID } from '$lib/server/db-utils.js';
 
 /**
  * GET /api/packages/[name]
@@ -11,11 +11,24 @@ export async function GET({ params }) {
 
   try {
     const db = await connectDB();
-    const { data: packageDoc, error: dbError } = await db
-      .from('packages')
-      .select('*')
-      .eq('name', name)
-      .maybeSingle();
+    let packageDoc, dbError;
+    if (isValidUUID(name)) {
+      const result = await db
+        .from('packages')
+        .select('*')
+        .or('id.eq.' + name + ',name.eq.' + name)
+        .maybeSingle();
+      packageDoc = result.data;
+      dbError = result.error;
+    } else {
+      const result = await db
+        .from('packages')
+        .select('*')
+        .eq('name', name)
+        .maybeSingle();
+      packageDoc = result.data;
+      dbError = result.error;
+    }
 
     if (dbError) {
       console.error('Supabase error:', dbError);
@@ -62,11 +75,24 @@ export async function PATCH({ request, params }) {
     const { edit_code, name: newName, short_description, long_description, download_url } = await request.json();
 
     const db = await connectDB();
-    const { data: existingPackage, error: findError } = await db
-      .from('packages')
-      .select('*')
-      .eq('name', name)
-      .maybeSingle();
+    let existingPackage, findError;
+    if (isValidUUID(name)) {
+      const result = await db
+        .from('packages')
+        .select('*')
+        .or('id.eq.' + name + ',name.eq.' + name)
+        .maybeSingle();
+      existingPackage = result.data;
+      findError = result.error;
+    } else {
+      const result = await db
+        .from('packages')
+        .select('*')
+        .eq('name', name)
+        .maybeSingle();
+      existingPackage = result.data;
+      findError = result.error;
+    }
 
     if (findError) {
       console.error('Supabase error:', findError);
@@ -185,11 +211,24 @@ export async function DELETE({ request, params }) {
     const { edit_code } = await request.json();
 
     const db = await connectDB();
-    const { data: existingPackage, error: findError } = await db
-      .from('packages')
-      .select('*')
-      .eq('name', name)
-      .maybeSingle();
+    let existingPackage, findError;
+    if (isValidUUID(name)) {
+      const result = await db
+        .from('packages')
+        .select('*')
+        .or('id.eq.' + name + ',name.eq.' + name)
+        .maybeSingle();
+      existingPackage = result.data;
+      findError = result.error;
+    } else {
+      const result = await db
+        .from('packages')
+        .select('*')
+        .eq('name', name)
+        .maybeSingle();
+      existingPackage = result.data;
+      findError = result.error;
+    }
 
     if (findError) {
       console.error('Supabase error:', findError);

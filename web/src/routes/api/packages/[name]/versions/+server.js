@@ -1,5 +1,5 @@
 import { json, error } from '@sveltejs/kit';
-import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
+import { connectDB, serializeDoc, hashEditCode, isValidUUID } from '$lib/server/db-utils.js';
 
 /**
  * GET /api/packages/[name]/versions
@@ -11,10 +11,40 @@ export async function GET({ params }) {
 
 	try {
 		const db = await connectDB();
+
+		// Resolve package name from ID or name
+		let packageDoc, packageError;
+		if (isValidUUID(name)) {
+			const result = await db
+				.from('packages')
+				.select('name')
+				.or('id.eq.' + name + ',name.eq.' + name)
+				.maybeSingle();
+			packageDoc = result.data;
+			packageError = result.error;
+		} else {
+			const result = await db
+				.from('packages')
+				.select('name')
+				.eq('name', name)
+				.maybeSingle();
+			packageDoc = result.data;
+			packageError = result.error;
+		}
+
+		if (packageError || !packageDoc) {
+			return new Response(JSON.stringify({ message: 'Package not found' }), {
+				status: 404,
+				headers: { 'Content-Type': 'application/json' }
+			});
+		}
+
+		const packageName = packageDoc.name;
+
 		const { data: versions, error: dbError } = await db
 			.from('versions')
 			.select('*')
-			.eq('package_name', name)
+			.eq('package_name', packageName)
 			.order('created_at', { ascending: false });
 
 		if (dbError) {
@@ -81,11 +111,24 @@ export async function POST({ request, params }) {
 		const db = await connectDB();
 
 		// Check if package exists
-		const { data: packageDoc, error: packageError } = await db
-			.from('packages')
-			.select('name, edit_code')
-			.eq('name', name)
-			.maybeSingle();
+		let packageDoc, packageError;
+		if (isValidUUID(name)) {
+			const result = await db
+				.from('packages')
+				.select('name, edit_code')
+				.or('id.eq.' + name + ',name.eq.' + name)
+				.maybeSingle();
+			packageDoc = result.data;
+			packageError = result.error;
+		} else {
+			const result = await db
+				.from('packages')
+				.select('name, edit_code')
+				.eq('name', name)
+				.maybeSingle();
+			packageDoc = result.data;
+			packageError = result.error;
+		}
 
 		if (packageError) {
 			console.error('Supabase error checking package:', packageError);
@@ -102,11 +145,13 @@ export async function POST({ request, params }) {
 			});
 		}
 
+		const packageName = packageDoc.name;
+
 		// Check for existing version number
 		const { data: existingVersion, error: versionError } = await db
 			.from('versions')
 			.select('version_number')
-			.eq('package_name', name)
+			.eq('package_name', packageName)
 			.eq('version_number', version_number)
 			.maybeSingle();
 
@@ -133,7 +178,7 @@ export async function POST({ request, params }) {
 		}
 
 		const versionDoc = {
-			package_name: name,
+			package_name: packageName,
 			version_number,
 			patch_notes,
 			download_url,

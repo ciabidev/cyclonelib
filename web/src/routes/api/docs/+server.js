@@ -42,7 +42,7 @@ export async function GET() {
                 schema: {
                   type: 'object',
                   properties: {
-                    name: { type: 'string', description: 'Package name' },
+                    name: { type: 'string', description: 'Package ID or name' },
                     short_description: { type: 'string', description: 'Short description' },
                     long_description: { type: 'string', description: 'Long description' },
                     edit_code: { type: 'string', description: 'Edit code for authentication' }
@@ -55,21 +55,21 @@ export async function GET() {
           responses: {
             201: { description: 'Created package data' },
             400: { description: 'Validation error' },
-            409: { description: 'Package name already taken' }
+            409: { description: 'Package ID or name already taken' }
           }
         }
       },
       '/api/packages/{name}': {
         get: {
           summary: 'Get package',
-          description: 'Retrieves a specific package by name.',
+          description: 'Retrieves a specific package by ID or name.',
           parameters: [
             {
               name: 'name',
               in: 'path',
               required: true,
               schema: { type: 'string' },
-              description: 'Package name'
+              description: 'Package ID or name'
             }
           ],
           responses: {
@@ -86,7 +86,7 @@ export async function GET() {
               in: 'path',
               required: true,
               schema: { type: 'string' },
-              description: 'Package name'
+              description: 'Package ID or name'
             }
           ],
           requestBody: {
@@ -97,7 +97,7 @@ export async function GET() {
                   type: 'object',
                   properties: {
                     edit_code: { type: 'string', description: 'Edit code for authentication' },
-                    name: { type: 'string', description: 'New package name' },
+                    name: { type: 'string', description: 'New Package ID or name' },
                     short_description: { type: 'string', description: 'Short description' },
                     long_description: { type: 'string', description: 'Long description' },
                     download_url: { type: 'string', description: 'Download URL' }
@@ -122,7 +122,7 @@ export async function GET() {
               in: 'path',
               required: true,
               schema: { type: 'string' },
-              description: 'Package name'
+              description: 'Package ID or name'
             }
           ],
           requestBody: {
@@ -156,7 +156,7 @@ export async function GET() {
               in: 'path',
               required: true,
               schema: { type: 'string' },
-              description: 'Package name'
+              description: 'Package ID or name'
             }
           ],
           responses: {
@@ -172,7 +172,7 @@ export async function GET() {
               in: 'path',
               required: true,
               schema: { type: 'string' },
-              description: 'Package name'
+              description: 'Package ID or name'
             }
           ],
           requestBody: {
@@ -210,7 +210,7 @@ export async function GET() {
               in: 'path',
               required: true,
               schema: { type: 'string' },
-              description: 'Package name'
+              description: 'Package ID or name'
             },
             {
               name: 'version',
@@ -234,7 +234,7 @@ export async function GET() {
               in: 'path',
               required: true,
               schema: { type: 'string' },
-              description: 'Package name'
+              description: 'Package ID or name'
             },
             {
               name: 'version',

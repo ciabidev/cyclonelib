@@ -1,5 +1,5 @@
 import { json, error } from '@sveltejs/kit';
-import { connectDB, serializeDoc, hashEditCode } from '$lib/server/db-utils.js';
+import { connectDB, serializeDoc, hashEditCode, isValidUUID } from '$lib/server/db-utils.js';
 
 
 
@@ -48,27 +48,73 @@ export async function GET({ params }) {
 
 	try {
 		const db = await connectDB();
-		const { data: versionDoc, error: dbError } = await db
-			.from('versions')
-			.select('*')
-			.eq('package_name', name)
-			.eq('version_number', decodeURIComponent(version))
-			.single();
-		
+
+		// Resolve package name from ID or name
+		let packageDoc, packageError;
+		if (isValidUUID(name)) {
+			const result = await db
+				.from('packages')
+				.select('name')
+				.or('id.eq.' + name + ',name.eq.' + name)
+				.maybeSingle();
+			packageDoc = result.data;
+			packageError = result.error;
+		} else {
+			const result = await db
+				.from('packages')
+				.select('name')
+				.eq('name', name)
+				.maybeSingle();
+			packageDoc = result.data;
+			packageError = result.error;
+		}
+
+		if (packageError || !packageDoc) {
+			return new Response(JSON.stringify({ message: 'Package not found' }), {
+				status: 404,
+				headers: { 'Content-Type': 'application/json' }
+			});
+		}
+
+		const packageName = packageDoc.name;
+
 		if (version === "latest") {
-			return get_latest_version(name);
+			return get_latest_version(packageName);
+		}
+
+		// Try to find version by ID or version_number
+		let versionDoc, dbError;
+		if (isValidUUID(version)) {
+			const result = await db
+				.from('versions')
+				.select('*')
+				.eq('package_name', packageName)
+				.or('id.eq.' + version + ',version_number.eq.' + decodeURIComponent(version))
+				.maybeSingle();
+			versionDoc = result.data;
+			dbError = result.error;
+		} else {
+			const result = await db
+				.from('versions')
+				.select('*')
+				.eq('package_name', packageName)
+				.eq('version_number', decodeURIComponent(version))
+				.maybeSingle();
+			versionDoc = result.data;
+			dbError = result.error;
 		}
 
 		if (dbError) {
-			if (dbError.code === 'PGRST116') { // Not found
-				return new Response(JSON.stringify({ message: 'Version not found' }), {
-					status: 404,
-					headers: { 'Content-Type': 'application/json' }
-				});
-			}
 			console.error(dbError.message);
 			return new Response(JSON.stringify({ message: dbError.message }), {
 				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
+		}
+
+		if (!versionDoc) {
+			return new Response(JSON.stringify({ message: 'Version not found' }), {
+				status: 404,
 				headers: { 'Content-Type': 'application/json' }
 			});
 		}
@@ -136,22 +182,36 @@ export async function PATCH({ request, params }) {
 		const db = await connectDB();
 
 		// Check if package exists and validate edit code
-		const { data: packageDoc, error: packageError } = await db
-			.from('packages')
-			.select('*')
-			.eq('name', name)
-			.single();
+		let packageDoc, packageError;
+		if (isValidUUID(name)) {
+			const result = await db
+				.from('packages')
+				.select('*')
+				.or('id.eq.' + name + ',name.eq.' + name)
+				.maybeSingle();
+			packageDoc = result.data;
+			packageError = result.error;
+		} else {
+			const result = await db
+				.from('packages')
+				.select('*')
+				.eq('name', name)
+				.maybeSingle();
+			packageDoc = result.data;
+			packageError = result.error;
+		}
 
 		if (packageError) {
-			if (packageError.code === 'PGRST116') { // Not found
-				return new Response(JSON.stringify({ message: 'Package not found' }), {
-					status: 404,
-					headers: { 'Content-Type': 'application/json' }
-				});
-			}
 			console.error('Supabase error checking package:', packageError);
 			return new Response(JSON.stringify({ message: packageError?.message || String(packageError) }), {
 				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
+		}
+
+		if (!packageDoc) {
+			return new Response(JSON.stringify({ message: 'Package not found' }), {
+				status: 404,
 				headers: { 'Content-Type': 'application/json' }
 			});
 		}
@@ -164,23 +224,38 @@ export async function PATCH({ request, params }) {
 		}
 
 		// Check if version exists
-		const { data: existingVersion, error: versionError } = await db
-			.from('versions')
-			.select('*')
-			.eq('package_name', name)
-			.eq('version_number', decodeURIComponent(version))
-			.single();
+		let existingVersion, versionError;
+		if (isValidUUID(version)) {
+			const result = await db
+				.from('versions')
+				.select('*')
+				.eq('package_name', packageDoc.name)
+				.or('id.eq.' + version + ',version_number.eq.' + decodeURIComponent(version))
+				.maybeSingle();
+			existingVersion = result.data;
+			versionError = result.error;
+		} else {
+			const result = await db
+				.from('versions')
+				.select('*')
+				.eq('package_name', packageDoc.name)
+				.eq('version_number', decodeURIComponent(version))
+				.maybeSingle();
+			existingVersion = result.data;
+			versionError = result.error;
+		}
 
 		if (versionError) {
-			if (versionError.code === 'PGRST116') { // Not found
-				return new Response(JSON.stringify({ message: 'Version not found' }), {
-					status: 404,
-					headers: { 'Content-Type': 'application/json' }
-				});
-			}
 			console.error('Supabase error checking version:', versionError);
 			return new Response(JSON.stringify({ message: versionError?.message || String(versionError) }), {
 				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
+		}
+
+		if (!existingVersion) {
+			return new Response(JSON.stringify({ message: 'Version not found' }), {
+				status: 404,
 				headers: { 'Content-Type': 'application/json' }
 			});
 		}
@@ -190,10 +265,10 @@ export async function PATCH({ request, params }) {
 			const { data: versionConflict, error: conflictError } = await db
 				.from('versions')
 				.select('version_number')
-				.eq('package_name', name)
+				.eq('package_name', packageDoc.name)
 				.eq('version_number', version_number)
 				.neq('id', existingVersion.id)
-				.single();
+				.maybeSingle();
 
 			if (conflictError && conflictError.code !== 'PGRST116') {
 				console.error('Supabase error checking conflict:', conflictError);
