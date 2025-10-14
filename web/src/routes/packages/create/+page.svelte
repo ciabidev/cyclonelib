@@ -176,7 +176,6 @@ $effect(() => { if (page && page.url) {
 		<FormField
 			label="Short Description"
 			id="short_description"
-			required={true}
 			value={short_description}
 		>
 			<Input

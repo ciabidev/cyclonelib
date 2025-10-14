@@ -18,10 +18,10 @@
 		<label for={id}>{label}</label>
 	{/if}
 	{#if required && !value.trim()}
-		<small class="required-text">Required</small>
+		<div class="required-text">Required</div>
 	{/if}
 	{#if hint}
-		<p class="hint">{hint}</p>
+		<div class="hint">{hint}</div>
 	{/if}
 	<div class="input-wrapper" class:long>
 		<slot />

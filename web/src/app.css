@@ -151,7 +151,6 @@ a {
 
 code {
 	font-family: Fira Mono;
-	font: 0.5rem;
 	color: white;
 	padding: 1px 10px;
 	border-radius: 6px;
@@ -165,7 +164,7 @@ pre {
 	overflow-x: auto;
 	max-width: 100%;
 	scrollbar-width: thin;
-	padding-bottom: 0.3rem;
+	padding-bottom: 4.8px;
 	scrollbar-color: var(--code-scrollbar) var(--code-bg);
 }
 
@@ -182,7 +181,7 @@ pre {
 }
 
 .giantahhparagraph {
-	font-size: 1.1875rem;
+	font-size: 19px;
 	color: var(--gray);
 }
 
@@ -195,12 +194,12 @@ pre {
 	display: block;
 	height: 1px;
 	width: 70%;
-	margin-top: 0.9375rem;
-	margin-bottom: 0.9375rem;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }
 
 .contact-container {
-	font-size: 0.8125rem;
+	font-size: 13px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -392,7 +391,7 @@ button,
 	text-decoration: none;
 	border: none;
 	border-radius: var(--border-radius);
-	font-size: 0.95rem;
+	font-size: 15.2px;
 	text-align: center;
 	cursor: pointer;
 	font-weight: 500;

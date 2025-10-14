@@ -42,7 +42,7 @@
 	}
 	
 	.project-description {
-		font-size: 0.84rem;
+		font-size: 15px;
 	}
 	.card {
 		border-radius: var(--border-radius);
@@ -91,7 +91,7 @@
 	}
 
 	.tiny {
-		font-size: 0.8rem;
+		font-size: 12px;
 	}
 
 	/* @media only screen and (max-width: 600px) {

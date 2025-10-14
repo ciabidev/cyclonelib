@@ -94,7 +94,7 @@
 
 	.package-header h1 {
 		margin: 0;
-		font-size: 2rem;
+		font-size: 32px;
 		font-weight: 600;
 	}
 
