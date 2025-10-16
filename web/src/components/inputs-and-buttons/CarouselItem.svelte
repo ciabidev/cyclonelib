@@ -46,15 +46,15 @@
 		gap: calc(var(--padding) / 2);
 		z-index: 10;
 		background: none;
-		max-width: 130px;
+		max-width: 8.125rem;
 		color: var(--text-color);
 	}
 
 	.carousel-item img {
 		width: 100%;
 		height: 100%;
-		max-width: 130px; /* force exact width */
-		max-height: 130px; /* force exact height */
+		max-width: 8.125rem; /* force exact width */
+		max-height: 8.125rem; /* force exact height */
 		flex-shrink: 0;
 		aspect-ratio: 1/1;
 		object-fit: cover;
@@ -66,7 +66,7 @@
 	}
 
 	.carousel-item.active img {
-		border: var(--button-stroke) solid 1px;
+		border: var(--button-stroke) solid 0.0625rem;
 		box-shadow: var(--button-box-shadow);
 	}
 </style>

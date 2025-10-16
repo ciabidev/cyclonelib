@@ -73,7 +73,7 @@
         display: flex;
         flex-direction: column;
         box-shadow: none;
-        border-radius: calc(var(--border-radius) / 2 + 2px);
+        border-radius: calc(var(--border-radius) / 2 + 0.125rem);
         overflow: hidden;
     }
 
@@ -81,8 +81,8 @@
         content: "";
         width: 100%;
         height: 100%;
-        outline: 2px solid var(--main-color);
-        outline-offset: 2px;
+        outline: 0.125rem solid var(--main-color);
+        outline-offset: 0.125rem;
         border-radius: inherit;
     }
 
@@ -130,8 +130,8 @@
         position: absolute;
         color: var(--white);
         background: rgba(0, 0, 0, 0.5);
-        width: 24px;
-        height: 24px;
+        width: 1.5rem;
+        height: 1.5rem;
         z-index: 3;
 
         display: flex;
@@ -139,13 +139,13 @@
         align-items: center;
         justify-content: center;
 
-        top: 6px;
-        left: 6px;
+        top: 0.375rem;
+        left: 0.375rem;
 
-        border-radius: 6px;
+        border-radius: 0.375rem;
 
         pointer-events: none;
-        font-size: 12px;
+        font-size: 0.75rem;
     }
 
     .picker-text {
@@ -155,8 +155,8 @@
         right: 0;
         background: rgba(0, 0, 0, 0.7);
         color: var(--white);
-        padding: 4px 6px;
-        font-size: 12px;
+        padding: 0.25rem 0.375rem;
+        font-size: 0.75rem;
         text-align: center;
         z-index: 2;
         overflow: hidden;

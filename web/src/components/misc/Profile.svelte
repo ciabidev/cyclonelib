@@ -9,20 +9,20 @@
 
 <style>
   .pfp {
-    min-width: 150px;
-    min-height: 150px;
-    max-width: 150px;
-    max-height: 150px;
-    border-radius: 360px;
+    min-width: 9.375rem;
+    min-height: 9.375rem;
+    max-width: 9.375rem;
+    max-height: 9.375rem;
+    border-radius: 22.5rem;
     overflow: hidden;
   }
 
   .pfp > img {
-    width: 150px;
+    width: 9.375rem;
      user-select: none;
   -webkit-user-select: none;  /* Safari / iOS */
   -ms-user-select: none; 
-    height: 150px;
+    height: 9.375rem;
   }
 
   .bio-title {
@@ -30,7 +30,7 @@
      user-select: none;
   -webkit-user-select: none;  /* Safari / iOS */
   -ms-user-select: none; 
-    font-size: 30px;
+    font-size: 1.875rem;
     font-weight: 430;
   }
 </style>

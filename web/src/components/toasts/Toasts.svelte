@@ -19,8 +19,8 @@
 
 <style>
     .toaster {
-        padding-top: 15px;
-        gap: 10px;
+        padding-top: 0.9375rem;
+        gap: 0.625rem;
         width: 100%;
         display: flex;
         flex-direction: column-reverse;

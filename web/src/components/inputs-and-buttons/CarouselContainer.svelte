@@ -115,7 +115,7 @@
 			/* this confused me so ill explain it */ to right,
 			transparent,
 			/* start fully invisible */ black 10%,
-			/* fade to fully visible by 10px in */ black 90%,
+			/* fade to fully visible by 0.625rem in */ black 90%,
 			/* stay visible until 90% across */ transparent /* fade back out toward the end */
 		);
 	}
@@ -151,7 +151,7 @@
         color: var(--text-color);
 		background: var(--bg-color);
 		border-radius: 50%;
-        padding: 12px;
+        padding: 0.75rem;
 		
         &.hidden {
             visibility: hidden;
@@ -159,10 +159,10 @@
     }
 
 	.carousel-arrow.left {
-		left: 10px;
+		left: 0.625rem;
 	}
 
 	.carousel-arrow.right {
-		right: 10px;
+		right: 0.625rem;
 	}
 </style>

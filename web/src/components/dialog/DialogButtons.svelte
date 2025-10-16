@@ -35,12 +35,12 @@
         gap: calc(var(--padding) / 2);
         overflow-x: auto;
         border-radius: var(--border-radius);
-        min-height: 40px;
+        min-height: 2.5rem;
         scrollbar-width: thin;
     }
 
     .button-group::-webkit-scrollbar {
-        height: 4px;
+        height: 0.25rem;
     }
 
     .button-group::-webkit-scrollbar-track {
@@ -49,6 +49,6 @@
 
     .button-group::-webkit-scrollbar-thumb {
         background: var(--sub-color);
-        border-radius: 2px;
+        border-radius: 0.125rem;
     }
 </style>

@@ -16,7 +16,7 @@
     .switcher-parent {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 0.5rem;
     }
 
     .switcher {
@@ -40,10 +40,10 @@
 
     .switcher {
         background: var(--button-default);
-        border: var(--button-stroke) solid 1px;
+        border: var(--button-stroke) solid 0.0625rem;
         box-shadow: var(--shadow-main);
         padding: var(--switcher-padding);
-        gap: calc(var(--switcher-padding) - 1.5px);
+        gap: calc(var(--switcher-padding) - 0.0938rem);
     }
 
     .switcher :global(.button.active) {
@@ -53,9 +53,9 @@
     .switcher :global(.button) {
         width: 100%;
         /* [base button height] - ([switcher padding] * [padding factor to accommodate for]) */
-        height: calc(40px - var(--switcher-padding) * 2);
+        height: calc(2.5rem - var(--switcher-padding) * 2);
         border-radius: calc(var(--border-radius) - var(--switcher-padding));
-        border: 1px solid transparent; /* without this the border will flash black when :active */
+        border: 0.0625rem solid transparent; /* without this the border will flash black when :active */
         box-shadow: none;
     }
 

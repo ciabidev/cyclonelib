@@ -113,7 +113,7 @@
 
     .dialog-inner-container {
         overflow-y: scroll;
-        gap: 8px;
+        gap: 0.5rem;
     }
 
     .emoticon-container {
@@ -123,7 +123,7 @@
 
     .small-dialog {
         text-align: center;
-        max-width: 340px;
+        max-width: 21.25rem;
         width: calc(100% - var(--padding) - var(--popup-padding) * 2);
         max-height: 85%;
         margin: calc(var(--padding) / 2);
@@ -131,7 +131,7 @@
 
     .popup-title {
         color: var(--text-color);
-        font-size: 19px;
+        font-size: 1.1875rem;
     }
 
     .popup-header,
@@ -147,7 +147,7 @@
     }
 
     .body-text {
-        font-size: 14.5px;
+        font-size: 0.9063rem;
         font-weight: 500;
         line-height: 1.7;
         color: var(--gray);
@@ -167,6 +167,6 @@
 
     .align-left .popup-header {
         align-items: start;
-        gap: 2px;
+        gap: 0.125rem;
     }
 </style>

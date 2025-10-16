@@ -87,7 +87,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 20px;
+        gap: 1.25rem;
         pointer-events: none;
     }
 
@@ -99,8 +99,8 @@
 
         background-color: var(--dialog-backdrop);
 
-        backdrop-filter: blur(7px);
-        -webkit-backdrop-filter: blur(7px);
+        backdrop-filter: blur(0.4375rem);
+        -webkit-backdrop-filter: blur(0.4375rem);
 
         opacity: 0;
 
@@ -118,17 +118,17 @@
     }
 
     :global(.dialog-body) {
-        --popup-padding: 18px;
+        --popup-padding: 1.125rem;
 
         display: flex;
         flex-direction: column;
         align-items: center;
 
         background: var(--popup-bg);
-        box-shadow: 0 0 0 2px var(--popup-stroke) inset;
-        border-radius: 29px;
+        box-shadow: 0 0 0 0.125rem var(--popup-stroke) inset;
+        border-radius: 1.8125rem;
 
-        filter: drop-shadow(0 0 40px var(--button));
+        filter: drop-shadow(0 0 2.5rem var(--button));
 
         padding: var(--popup-padding);
 
@@ -147,7 +147,7 @@
         opacity: 0;
     }
 
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 37.5rem) {
         :global(dialog) {
             justify-content: flex-end;
         }
@@ -159,12 +159,12 @@
         :global(dialog .dialog-body) {
             margin-bottom: calc(
                 var(--padding) + calc(
-                    env(safe-area-inset-bottom) - 15px * sign(
+                    env(safe-area-inset-bottom) - 0.9375rem * sign(
                         env(safe-area-inset-bottom)
                     )
                 )
             ) !important;
-            box-shadow: 0 0 0 2px var(--popup-stroke) inset;
+            box-shadow: 0 0 0 0.125rem var(--popup-stroke) inset;
         }
     }
 
@@ -201,16 +201,16 @@
             opacity: 0;
         }
         1% {
-            transform: translateY(200px);
+            transform: translateY(12.5rem);
         }
         35% {
             opacity: 1;
         }
         50% {
-            transform: translateY(-5px);
+            transform: translateY(-0.3125rem);
         }
         100% {
-            transform: translateY(0px);
+            transform: translateY(0rem);
         }
     }
 </style>

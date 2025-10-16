@@ -39,25 +39,25 @@
 	{/if}
 <style>
 	.input-wrapper {
-		border: var(--popup-stroke) 2px solid;
+		border: var(--popup-stroke) 0.125rem solid;
 		border-radius: var(--border-radius);
 		width: var(--width);
 		min-width: var(--min-width);
 		max-height: fit-content;
 		display: flex;
 		flex-direction: row;
-		gap: 5px;
-		padding: 13px 15px;
+		gap: 0.3125rem;
+		padding: 0.8125rem 0.9375rem;
 		align-items: center;
 		transition: all 300ms cubic-bezier(1, 0, 0, 1);
 	}
 
 	.input-wrapper.focused {
-		border: var(--text-color) 2px solid;
+		border: var(--text-color) 0.125rem solid;
 	}
 
 	.input {
-		font-size: 14px;
+		font-size: 0.875rem;
 		width: 100%;
 		border: none;
 		overflow: auto;
@@ -69,10 +69,10 @@
 
 	@media (pointer: none), (pointer: coarse) {
 		.input {
-			font-size: 16px;
+			font-size: 1rem;
 		}
 		input:focus {
-			font-size: 16px;
+			font-size: 1rem;
 		}
 	}
 

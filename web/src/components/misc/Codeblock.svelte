@@ -67,7 +67,7 @@
 		background-color: var(--code-bg);
 		color: #fff;
 		border: none;
-		border-radius: .25rem;
+		border-radius: var(--border-radius);
 		padding: .25rem .5rem;
 		border: 1px solid var(--code-stroke);
 		font-size: .9rem;

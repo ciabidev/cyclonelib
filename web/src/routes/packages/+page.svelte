@@ -73,22 +73,22 @@
 		justify-content: center;
 		align-items: center;
 		width: 100%;
-		gap: 20px;
+		gap: 1.25rem;
 	}
 
 	.packages {
 		justify-content: center;
 		flex-direction: column;
 		flex-wrap: wrap;
-		gap: 15px;
+		gap: 0.9375rem;
 		display: flex;
 		width: 100%;
 	}
 
-	@media only screen and (max-width: 600px) {
+	@media only screen and (max-width: 37.5rem) {
 		.packages {
 			flex-direction: column;
-			gap: 10px;
+			gap: 0.625rem;
 		}
 	}
 </style>

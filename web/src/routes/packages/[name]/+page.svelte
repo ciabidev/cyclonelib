@@ -15,7 +15,7 @@
 
 </script>
 
-<PageContainer containerId="package-details-page-container" pageId="package-details-page" maxWidth="800px">
+<PageContainer containerId="package-details-page-container" pageId="package-details-page" maxWidth="50rem">
 	{#if packageData}
 		<a class="button " href="/packages">Back to Packages</a>
 		<div class="package-header">
@@ -94,14 +94,14 @@
 
 	.package-header h1 {
 		margin: 0;
-		font-size: 32px;
+		font-size: 2rem;
 		font-weight: 600;
 	}
 
 	.versions-tab, .main-info-tab {
 		display: flex;
 		flex-direction: column;
-		gap: 20px;
+		gap: 1.25rem;
 	}
 
 	.versions-header {
@@ -109,12 +109,12 @@
 		justify-content: space-between;
 		align-items: center;
 		flex-wrap: wrap;
-		gap: 15px;
+		gap: .9375rem;
 	}
 
 	.versions-list {
 		display: flex;
 		flex-direction: column;
-		gap: 15px;
+		gap: .9375rem;
 	}
 </style>

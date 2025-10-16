@@ -90,12 +90,12 @@
 
     .dialog-inner-container {
         overflow-y: scroll;
-        gap: 8px;
+        gap: 0.5rem;
         width: 100%;
     }
 
     .popup-body {
-        max-width: 340px;
+        max-width: 21.25rem;
         width: calc(100% - var(--padding) - var(--popup-padding) * 2);
         max-height: 70%;
         margin: calc(var(--padding) / 2);
@@ -103,10 +103,10 @@
 
     .emoticon-container {
         position: absolute;
-        top: -126px;
+        top: -7.875rem;
         right: 0;
         /* simulate emoticon being behind the popup */
-        clip-path: inset(0px 0px 14px 0px);
+        clip-path: inset(0rem 0rem 0.875rem 0rem);
     }
 
     .popup-header {
@@ -119,7 +119,7 @@
 
     .popup-title {
         color: var(--text-color);
-        font-size: 19px;
+        font-size: 1.1875rem;
     }
 
     .action-buttons {
@@ -133,10 +133,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        padding: 12px 16px;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
         background: var(--button);
-        border: 1px solid var(--button-stroke);
+        border: 0.0625rem solid var(--button-stroke);
         border-radius: var(--border-radius);
         color: var(--text-color);
         text-decoration: none;
@@ -147,7 +147,7 @@
 
     .action-button:hover {
         background: var(--button-hover);
-        transform: translateY(-1px);
+        transform: translateY(-0.0625rem);
     }
 
     .action-button:active {
@@ -155,7 +155,7 @@
     }
 
     .body-text {
-        font-size: 13px;
+        font-size: 0.8125rem;
         font-weight: 500;
         line-height: 1.5;
         color: var(--gray);

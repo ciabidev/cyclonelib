@@ -38,11 +38,11 @@
 	.card-wrapper {
 		display: flex;
 		flex-direction: column;
-		gap: 12px;
+		gap: 0.75rem;
 	}
 	
 	.project-description {
-		font-size: 15px;
+		font-size: 0.9375rem;
 	}
 	.card {
 		border-radius: var(--border-radius);
@@ -53,23 +53,23 @@
 		align-items: flex-start;
 		min-width: fit-content;
 		transition: all 0.3s var(--actions-and-stuff-ahh-transition);
-		border: 1.5px inset var(--popup-stroke);
+		border: 0.0938rem inset var(--popup-stroke);
 		background: var(--bg-color);
 		box-shadow: var(--button-box-shadow);
 	}
 
 	.card-content {
-		padding-left: 12px;
-		padding-right: 22px; /* the right side should match the TOTAL of the left side */
-		padding-top: 12px;
-		padding-bottom: 12px;
+		padding-left: 0.75rem;
+		padding-right: 1.375rem; /* the right side should match the TOTAL of the left side */
+		padding-top: 0.75rem;
+		padding-bottom: 0.75rem;
 		display: flex;
 		flex-direction: column;
 		flex: 1;
 	}
 
 	.card-text {
-		padding-left: 10px; /* to align with the URL Button */
+		padding-left: 0.625rem; /* to align with the URL Button */
 		flex: 1;
 		display: flex;
 		flex-direction: column;
@@ -79,7 +79,7 @@
 
 	.banner-container {
 		width: 100%;
-		height: 150px;
+		height: 9.375rem;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -91,13 +91,13 @@
 	}
 
 	.tiny {
-		font-size: 12px;
+		font-size: 0.75rem;
 	}
 
-	/* @media only screen and (max-width: 600px) {
+	/* @media only screen and (max-width: 37.5rem) {
      .card {
       width: 100%;
-      padding: 14px 18px 18px 6px;
+      padding: 0.875rem 1.125rem 1.125rem 0.375rem;
   }
   } */
 </style>

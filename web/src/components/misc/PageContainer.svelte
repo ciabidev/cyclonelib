@@ -6,7 +6,7 @@
 	/** @type {string} */
 	export let pageId = '';
 	/** @type {string} */
-	export let maxWidth = '900px';
+	export let maxWidth = '56.25rem';
 </script>
 
 <div id={containerId} class="page-container">
@@ -28,12 +28,12 @@
 	.page-main {
 		width: var(--max-width);
 		max-width: 100%; /* super responsive, on smaller devices the page naturally expands to fill the screen */
-		gap: 20px;
+		gap: 1.25rem;
 		display: flex;
 		flex-direction: column;
 	}
 
-	@media only screen and (max-height: 400px) {
+	@media only screen and (max-height: 25rem) {
 		.page-container {
 			justify-content: center;
 			align-items: center;

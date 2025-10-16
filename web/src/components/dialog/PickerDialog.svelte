@@ -50,8 +50,8 @@
 
 <style>
 	.picker-dialog {
-		--picker-item-size: 120px;
-		--picker-item-gap: 4px;
+		--picker-item-size: 7.5rem;
+		--picker-item-gap: 0.25rem;
 		--picker-item-area: calc(var(--picker-item-size) + var(--picker-item-gap));
 
 		gap: var(--padding);
@@ -65,7 +65,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
-		gap: 3px;
+		gap: 0.1875rem;
 		width: 95%;
 	}
 
@@ -78,12 +78,12 @@
 	}
 
 	.popup-title {
-		font-size: 18px;
+		font-size: 1.125rem;
 		line-height: 1.1;
 	}
 
 	.popup-description {
-		font-size: 13px;
+		font-size: 0.8125rem;
 		padding: 0;
 	}
 
@@ -108,7 +108,7 @@
 		height: var(--picker-item-size);
 	}
 
-	@media screen and (max-width: 600px) {
+	@media screen and (max-width: 37.5rem) {
 		.picker-body {
 			grid-template-columns: 1fr 1fr 1fr;
 		}
@@ -118,51 +118,51 @@
 		}
 	}
 
-	@media screen and (max-width: 410px) {
+	@media screen and (max-width: 25.625rem) {
 		.picker-dialog {
-			--picker-item-size: 118px;
+			--picker-item-size: 7.375rem;
 		}
 	}
 
-	@media screen and (max-width: 405px) {
+	@media screen and (max-width: 25.3125rem) {
 		.picker-dialog {
-			--picker-item-size: 116px;
+			--picker-item-size: 7.25rem;
 		}
 	}
 
-	@media screen and (max-width: 398px) {
+	@media screen and (max-width: 24.875rem) {
 		.picker-dialog {
-			--picker-item-size: 115px;
+			--picker-item-size: 7.1875rem;
 		}
 	}
 
-	@media screen and (max-width: 388px) {
+	@media screen and (max-width: 24.25rem) {
 		.picker-dialog {
-			--picker-item-size: 110px;
+			--picker-item-size: 6.875rem;
 		}
 	}
 
-	@media screen and (max-width: 378px) {
+	@media screen and (max-width: 23.625rem) {
 		.picker-dialog {
-			--picker-item-size: 105px;
+			--picker-item-size: 6.5625rem;
 		}
 	}
 
-	@media screen and (max-width: 365px) {
+	@media screen and (max-width: 22.8125rem) {
 		.picker-dialog {
-			--picker-item-size: 100px;
+			--picker-item-size: 6.25rem;
 		}
 	}
 
-	@media screen and (max-width: 352px) {
+	@media screen and (max-width: 22rem) {
 		.picker-dialog {
-			--picker-item-size: 95px;
+			--picker-item-size: 5.9375rem;
 		}
 	}
 
-	@media screen and (max-width: 334px) {
+	@media screen and (max-width: 20.875rem) {
 		.picker-dialog {
-			--picker-item-size: 130px;
+			--picker-item-size: 8.125rem;
 		}
 
 		.picker-body,
@@ -171,21 +171,21 @@
 		}
 	}
 
-	@media screen and (max-width: 300px) {
+	@media screen and (max-width: 18.75rem) {
 		.picker-dialog {
-			--picker-item-size: 120px;
+			--picker-item-size: 7.5rem;
 		}
 	}
 
-	@media screen and (max-width: 280px) {
+	@media screen and (max-width: 17.5rem) {
 		.picker-dialog {
-			--picker-item-size: 110px;
+			--picker-item-size: 6.875rem;
 		}
 	}
 
-	@media screen and (max-width: 255px) {
+	@media screen and (max-width: 15.9375rem) {
 		.picker-dialog {
-			--picker-item-size: 140px;
+			--picker-item-size: 8.75rem;
 		}
 
 		.picker-body,

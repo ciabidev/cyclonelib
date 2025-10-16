@@ -29,15 +29,15 @@
         padding: var(--padding);
         background: var(--popover-bg);
         border-radius: calc(var(--border-radius) * 2);
-        border: var(--button-stroke) solid 1px;
+        border: var(--button-stroke) solid 0.0625rem;
         display: flex;
         flex-direction: column;
-        border-radius: 18px;
-        filter: drop-shadow(0 0 8px var(--popover-glow))
-            drop-shadow(0 0 10px var(--popover-glow));
+        border-radius: 1.125rem;
+        filter: drop-shadow(0 0 0.5rem var(--popover-glow))
+            drop-shadow(0 0 0.625rem var(--popover-glow));
         position: relative;
-        gap: 6px;
-        top: 6px;
+        gap: 0.375rem;
+        top: 0.375rem;
         z-index: 10;
         opacity: 0;
         transform: scale(0);

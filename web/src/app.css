@@ -11,16 +11,16 @@
 	--focus-ring: var(---main-color);
 
 	/* Button styles */	
-	--shadow-main: var(--button-stroke) 0px 0px 10px 0px;
+	--shadow-main: var(--button-stroke) 0rem 0rem 0.625rem 0rem;
 	--button-default: var(--sub-alt-color);
 	--button-hover-filter: brightness(90%);
 	--button-press-filter: brightness(80%);
-    --button-box-shadow: var(--shadow-main), 0px 0px 0px 1px var(--button-stroke); /* for elevated buttons */
-	/* old button-box-shadow: 0 0 0 1px var(--button-stroke) inset; */
-	--switcher-padding: 3.5px;
+    --button-box-shadow: var(--shadow-main), 0rem 0rem 0rem 0.0625rem var(--button-stroke); /* for elevated buttons */
+	/* old button-box-shadow: 0 0 0 0.0625rem var(--button-stroke) inset; */
+	--switcher-padding: 0.2188rem;
 	
 	/* Dialog styles */
-	--popup-padding: 18px;
+	--popup-padding: 1.125rem;
 	--red: var(--color-error);
 	--white: #ffffff;
 	--gray: #75757e;
@@ -32,28 +32,29 @@
 	--card: var(--button-default);
 	--card-box-shadow: var(--button-box-shadow);
 	/* Input styles */
-	--input-box-shadow: var(--button-stroke) 0 0 0 1.5px inset;
+	--input-box-shadow: var(--button-stroke) 0 0 0 0.0938rem inset;
 
 	/* Navbar */
+	/* we wont use rem since navbar dimensions are constant */
 	--navbar-lift: 1rem;
-	--navbar-height: 80px;
-	--mobile-navbar-height: 64px;
-	--navbar-inner-padding: 4px;
-	--navbar-tab-padding: 10px;
-	--navbar-font-size: 11px;
-	--icon-size-mobile: 22px;
-	--icon-size-desktop: 25px;
+	--navbar-height: 5rem;
+	--mobile-navbar-height: 4rem;
+	--navbar-inner-padding: 0.25rem;
+	--navbar-tab-padding: 0.625rem;
+	--navbar-font-size: 0.6875rem;
+	--icon-size-mobile: 1.375rem;
+	--icon-size-desktop: 1.5625rem; 
 
-	--padding: 15px;
+	--padding: 0.9375rem;
 
 
 	--actions-and-stuff-ahh-transition: cubic-bezier(0.68, -0.6, 0.32, 1.6);
 	
 	--grid-bg: 
-		linear-gradient(to right, rgba(128, 128, 128, 0.05) 1px, transparent 1px),
-		linear-gradient(to bottom, rgba(128, 128, 128, 0.05) 1px, transparent 1px);
-	--grid-bg-size: 15px 15px;
-	--border-radius: 11px;
+		linear-gradient(to right, rgba(128, 128, 128, 0.05) 0.0625rem, transparent 0.0625rem),
+		linear-gradient(to bottom, rgba(128, 128, 128, 0.05) 0.0625rem, transparent 0.0625rem);
+	--grid-bg-size: 0.9375rem 0.9375rem;
+	--border-radius: 0.6875rem;
 	--readable-line-height: 1.8;
 }
 
@@ -75,14 +76,11 @@
 
 
 
-
 @keyframes fadeIn {
 	to {
 		opacity: 1;
 	}
 }
-
-
 
 * {
 	user-select: none;
@@ -91,7 +89,6 @@
 	-webkit-user-drag: none;
 	-webkit-tap-highlight-color: transparent;
 	-webkit-font-smoothing: antialiased;
-	/* font-family: 'Poppins', sans-serif; */
 	font-family: 'Noto Sans Mono', monospace;
 }
 
@@ -123,6 +120,7 @@ html {
 	height: 100dvh;
 	width: 100dvw;
 	min-height: 100dvh;
+	font-size: 100%;
 	overscroll-behavior-y: none;
 }
 
@@ -133,7 +131,7 @@ html, body {
 
 
 a:not(:has(img)):not(.button) {
-	text-decoration-thickness: 5px;
+	text-decoration-thickness: 0.3125rem;
 	color: var(--sub-color);
 	transition: all 0.2s ease-in-out;
 	text-decoration-skip-ink: none;
@@ -152,8 +150,8 @@ a {
 code {
 	font-family: Fira Mono;
 	color: white;
-	padding: 1px 10px;
-	border-radius: 6px;
+	padding: 0.0625rem 0.625rem;
+	border-radius: 0.375rem;
 	overflow-x: auto;
 }
 
@@ -164,12 +162,12 @@ pre {
 	overflow-x: auto;
 	max-width: 100%;
 	scrollbar-width: thin;
-	padding-bottom: 4.8px;
+	padding-bottom: 0.3rem;
 	scrollbar-color: var(--code-scrollbar) var(--code-bg);
 }
 
 .subtext {
-	font-size: 12.5px;
+	font-size: 0.7813rem;
 	font-weight: 400;
 	color: var(--gray);
 	line-height: 1.4;
@@ -181,7 +179,7 @@ pre {
 }
 
 .giantahhparagraph {
-	font-size: 19px;
+	font-size: 1.1875rem;
 	color: var(--gray);
 }
 
@@ -190,16 +188,16 @@ pre {
 	border-top: var(--gray);
 	color: var(--gray);
 	background-color: var(--gray);
-	border: 1px;
+	border: 0.0625rem;
 	display: block;
-	height: 1px;
+	height: 0.0625rem;
 	width: 70%;
-	margin-top: 15px;
-	margin-bottom: 15px;
+	margin-top: 0.9375rem;
+	margin-bottom: 0.9375rem;
 }
 
 .contact-container {
-	font-size: 13px;
+	font-size: 0.8125rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -229,13 +227,13 @@ img {
 
 
 
-/* READABLE TEXT */ 
+/* TYPOGRAPHY */ 
 
 h1,
 h2 {
-	padding: 6px 0;
+	padding: 0.375rem 0;
 	line-height: 1.3;
-	letter-spacing: -1px;
+	letter-spacing: -0.0625rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -243,58 +241,47 @@ h1, h2, h3, h4, h5, h6 {
     margin-block: 0;
 }
 
-h1 {
-    font-size: 24px;
+/* h1 {
+    font-size: 1.5rem;
 }
 
 h2 {
-    font-size: 20px;
+    font-size: 1.25rem;
 }
 
 h3 {
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 h4 {
-    font-size: 14.5px;
+    font-size: 0.9063rem;
 }
 
 h5 {
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 h6 {
-    font-size: 11px;
-}
+    font-size: 0.6875rem;
+} */
 
-.paragraph-text h3 {
-    font-size: 17px;
-}
-
-.paragraph-text h2 {
-    font-size: 19px;
-}
-
-
-.paragraph-text,
-.paragraph-text *:not(h1, h2, h3, h4, h5, h6) {
+.paragraph-text {
 	line-height: var(--readable-line-height);
 	user-select: text;
-	font-size: 14.5px;
+	font-size: 1rem;
 	-webkit-user-select: text;
 }
 
-.paragraph-text,
-.paragraph-text *:not(h1, h2, h3, h4, h5, h6, strong, em, del) {
+.paragraph-text {
 	font-weight: 400;
 }
 
 .paragraph-text ul {
-	padding-inline-start: 30px;
+	padding-inline-start: 1.875rem;
 }
 
 .paragraph-text li {
-	padding-left: 3px;
+	padding-left: 0.1875rem;
 }
 
 .paragraph-text h1,
@@ -302,7 +289,7 @@ h6 {
 .paragraph-text h3 {
 	letter-spacing: 0;
 	margin-block-start: 1rem;
-	border-bottom: 1.5px solid ;
+	border-bottom: 0.0938rem solid ;
 	border-color: #0000003a;
 	margin-block-end: -0.3rem;
 }
@@ -312,7 +299,7 @@ h6 {
 }
 
 .paragraph-text img {
-	border-radius: 6px;
+	border-radius: 0.375rem;
 }
 
 
@@ -320,9 +307,9 @@ h6 {
 	:root {
 		--navbar-height: var(--mobile-navbar-height);
 	}
-	.paragraph-text,
-	.paragraph-text *:not(h1, h2, h3, h4, h5, h6) {
-		font-size: 14px;
+
+	html {
+		font-size: 95%;
 	}
 }
 
@@ -330,9 +317,9 @@ h6 {
 	:root {
 		--navbar-height: var(--mobile-navbar-height);
 	}
-	.paragraph-text,
-	.paragraph-text *:not(h1, h2, h3, h4, h5, h6) {
-		font-size: 14px;
+
+	html {
+		font-size: 0.9375rem;
 	}
 }
 
@@ -358,10 +345,10 @@ td,
 th {
 	border-spacing: 0;
 	border-style: solid;
-	border-width: 1px;
+	border-width: 0.0625rem;
 	border-collapse: collapse;
 	text-align: center;
-	padding: 3px 8px;
+	padding: 0.1875rem 0.5rem;
 }
 
 tr th:first-child {
@@ -372,13 +359,13 @@ tr th:first-child {
 
 .actions {
 	display: flex;
-	gap: 15px;
+	gap: 0.9375rem;
 	flex-direction: row;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 37.5rem) {
 	.actions {
 		flex-direction: column;
-		gap: 10px;
+		gap: 0.625rem;
 	}
 }
 button,
@@ -386,17 +373,17 @@ button,
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 9px 13px;
-	gap: 6px;
+	padding: 0.5625rem 0.8125rem;
+	font-weight: 500;
+	gap: 0.375rem;
 	text-decoration: none;
 	border: none;
 	border-radius: var(--border-radius);
-	font-size: 15.2px;
+	font-size: 0.95rem;
 	text-align: center;
 	cursor: pointer;
-	font-weight: 500;
 	transition: all 0.2s ease, border-color 0.2s ease;
-	border: var(--button-stroke) solid 1px;
+	border: var(--button-stroke) solid 0.0625rem;
 	background-color: var(--button-default);
 	color: var(--text-color);
 }
@@ -404,11 +391,11 @@ button,
 /* :active - buttons that are currently pressed	*/
 /* .active - buttons that are currently active (such as when a tab is active) */
 button > img, .button > img {
-	border-radius: calc(var(--border-radius) - 2px);
-	-webkit-border-radius: calc(var(--border-radius) - 2px);
-	-moz-border-radius: calc(var(--border-radius) - 2px);
-	-ms-border-radius: calc(var(--border-radius) - 2px);
-	-o-border-radius: calc(var(--border-radius) - 2px);
+	border-radius: calc(var(--border-radius) - 0.125rem);
+	-webkit-border-radius: calc(var(--border-radius) - 0.125rem);
+	-moz-border-radius: calc(var(--border-radius) - 0.125rem);
+	-ms-border-radius: calc(var(--border-radius) - 0.125rem);
+	-o-border-radius: calc(var(--border-radius) - 0.125rem);
 }
 
 .button.active, button.active {
@@ -469,9 +456,9 @@ button:focus-visible,
 a:focus-visible,
 select:focus-visible {
 	outline-color: var(--main-color);
-	outline-offset: 2px;
+	outline-offset: 0.125rem;
 	outline-style: solid;
-	outline-width: 2px;
+	outline-width: 0.125rem;
 }
 
 .hidden {
@@ -480,5 +467,5 @@ select:focus-visible {
 
 /* 
 * {
-	outline: 1px solid var(--main-color) !important;
+	outline: 0.0625rem solid var(--main-color) !important;
 } */
