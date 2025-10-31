@@ -74,7 +74,7 @@
 <PageContainer containerId="test-page-container" pageId="test-page">
 	<section id="test-hero" class="paragraph-text">
 		<h1>Loaf-web Test Page</h1>
-		<p class="paragraph-text">Test page for the Loaf-web layout</p>
+		<p class="paragraph-text">the web in a cozy bread basket</p>
 	</section>
 	<h1>Components</h1>
 	<section id="test-dialog">

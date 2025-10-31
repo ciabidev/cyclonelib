@@ -115,7 +115,7 @@
 				})
 			});
 
-			if (response.ok) {
+			if (response.status === 200) {
 				createDialog({
 					id: 'update-package-success',
 					type: 'small',

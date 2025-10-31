@@ -140,14 +140,14 @@ export async function PATCH({ request, params }) {
         .neq('id', existingPackage.id)
         .maybeSingle();
 
-        if (nameCheckError) {
+      if (nameCheckError) {
         console.error('Supabase error checking name:', nameCheckError);
         return new Response(JSON.stringify({ message: nameCheckError.message }), {
           status: 500,
           headers: { 'Content-Type': 'application/json' }
         });
       }
-        if (existingName) {
+      if (existingName) {
         return new Response(JSON.stringify({ message: 'Package name is already taken' }), {
           status: 409,
           headers: { 'Content-Type': 'application/json' }
@@ -156,7 +156,33 @@ export async function PATCH({ request, params }) {
       updateFields.name = newName;
     }
 
+    // Add other updatable fields so updateFields isn't empty when only descriptions or URL change
+    if (short_description !== undefined && short_description !== existingPackage.short_description) {
+      if (short_description.length > 200) {
+        return new Response(JSON.stringify({ message: 'Short description must be 200 characters or less' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } else {
+        updateFields.short_description = short_description;
+      } 
+    }
+    if (long_description !== undefined && long_description !== existingPackage.long_description) {
+      if (long_description.length > 10000) {
+        return new Response(JSON.stringify({ message: 'Long description must be 10,000 characters or less' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      } else {
+        updateFields.long_description = long_description;
+      } 
+    }
+    if (download_url !== undefined && download_url !== existingPackage.download_url) {
+      updateFields.download_url = download_url;
+    }
+
     if (Object.keys(updateFields).length === 0) {
+      console.log("no changes")
       return json(serializeDoc(existingPackage, ['edit_code']), {
         headers: {
           'Access-Control-Allow-Origin': '*',
@@ -179,15 +205,15 @@ export async function PATCH({ request, params }) {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
       });
-    }
-
-    return json(serializeDoc(updated, ['edit_code']), {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'PATCH, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      }
-    });
+    } else {
+      return json(serializeDoc(updated, ['edit_code']), {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'PATCH, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type',
+        }
+      })
+    };
   } catch (err) {
     if (err && typeof err === 'object' && 'status' in err) throw err; // Re-throw SvelteKit errors
     console.error('Database error in PATCH /api/packages/[name]:', err);
