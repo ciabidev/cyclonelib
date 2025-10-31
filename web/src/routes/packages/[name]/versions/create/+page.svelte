@@ -106,7 +106,7 @@ $effect(() => { if (page && page.url) {
 				})
 			});
 
-			if (response.ok) {
+			if (response.status === 200) {
 				createDialog({
 					id: 'create-version-success',
 					type: 'small',

@@ -31,7 +31,7 @@
 	onMount(async () => {
 		try {
 			const response = await fetch(`/api/packages/${packageName}`);
-			if (response.ok) {
+			if (response.status === 200) {
 				packageData = await response.json();
 				if (packageData) {
 					name = packageData.name;
@@ -183,7 +183,7 @@
 				   })
 			   });
 
-			   if (response.ok) {
+			   if (response.status === 200) {
 				   createDialog({
 					   id: 'delete-package-success',
 					   type: 'small',

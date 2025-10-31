@@ -21,7 +21,7 @@
 	onMount(async () => {
 		try {
 			const response = await fetch(`/api/packages/${packageName}/versions/${encodeURIComponent(versionParam)}`);
-			if (response.ok) {
+			if (response.status === 200) {
 				const versionData = await response.json();
 				version_number = versionData.version_number;
 				patch_notes = versionData.patch_notes;
@@ -141,7 +141,7 @@
 				})
 			});
 
-			if (response.ok) {
+			if (response.status === 200) {
 				createDialog({
 					id: 'update-version-success',
 					type: 'small',
