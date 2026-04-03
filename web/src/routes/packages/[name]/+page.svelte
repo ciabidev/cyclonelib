@@ -75,7 +75,6 @@
 				<div class="main-info-tab">
 					{#if long_description}
 						<div class="long-description paragraph-text">
-							<h1>Detailed Description</h1>
 							<Markdown source={long_description} />
 						</div>
 					{/if}

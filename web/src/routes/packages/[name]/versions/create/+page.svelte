@@ -51,7 +51,7 @@ $effect(() => { if (page && page.url) {
 			return;
 		}
 
-		// Validate download_url contains shortcut_name query parameter
+		// Validate download_url format
 		let url;
 		try {
 			url = new URL(trimmedUrl);
@@ -73,14 +73,14 @@ $effect(() => { if (page && page.url) {
 			return;
 		}
 
-		const shortcutName = url.searchParams.get('shortcut_name');
-		if (!shortcutName) {
+		// Validate that URL is from an allowed source
+		if (!trimmedUrl.startsWith('https://www.icloud.com/shortcuts') && !trimmedUrl.startsWith('https://routinehub.co/download')) {
 			createDialog({
 				id: 'create-version-validation-error',
 				type: 'small',
 				title: 'Validation Error',
 				icon: 'warn-red',
-				bodyText: 'Download URL must include ?shortcut_name= query parameter',
+				bodyText: 'Download URL must be from https://www.icloud.com/shortcuts or https://routinehub.co/download',
 				buttons: [
 					{
 						text: 'continue',
@@ -106,7 +106,7 @@ $effect(() => { if (page && page.url) {
 				})
 			});
 
-			if (response.status === 200) {
+			if (response.ok) {
 				createDialog({
 					id: 'create-version-success',
 					type: 'small',
@@ -187,7 +187,7 @@ $effect(() => { if (page && page.url) {
 				long={true}
 			/>
 		</FormField>
-	<FormField label="Download URL" required={true} id="download_url" value={download_url} hint="Must include ?shortcut_name= query parameter (your exact Shortcut Name URL-Encoded). See Packages in the docs for more info.">
+	<FormField label="Download URL" required={true} id="download_url" value={download_url} hint="iCloud Shortcuts URL to your shortcut. The shortcut name will be retrieved automatically. Example: https://www.icloud.com/shortcuts/32751811e2f04de99abff36399fa2bd7">
 			<Input
 				id="download_url"
 				placeholder="Enter Download URL"

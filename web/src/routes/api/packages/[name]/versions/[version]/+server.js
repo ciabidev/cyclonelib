@@ -1,5 +1,5 @@
 import { json, error } from '@sveltejs/kit';
-import { connectDB, serializeDoc, hashEditCode, isValidUUID } from '$lib/server/db-utils.js';
+import { connectDB, serializeDoc, hashEditCode, isValidUUID, getShortcutName } from '$lib/server/db-utils.js';
 
 
 
@@ -153,7 +153,7 @@ export async function PATCH({ request, params }) {
 			});
 		}
 
-		// Validate download_url starts with allowed prefixes and contains shortcut_name query parameter
+		// Validate download_url starts with allowed prefixes
 		if (!download_url.startsWith('https://www.icloud.com/shortcuts') && !download_url.startsWith('https://routinehub.co/download')) {
 			return new Response(JSON.stringify({ message: 'Download URL must begin with https://www.icloud.com/shortcuts or https://routinehub.co/download' }), {
 				status: 400,
@@ -171,9 +171,12 @@ export async function PATCH({ request, params }) {
 			});
 		}
 
-		const shortcutName = url.searchParams.get('shortcut_name');
-		if (!shortcutName) {
-			return new Response(JSON.stringify({ message: 'Download URL must include ?shortcut_name= query parameter' }), {
+		// Fetch shortcut name from the iCloud API
+		let shortcutName;
+		try {
+			shortcutName = await getShortcutName(download_url);
+		} catch (shortcutError) {
+			return new Response(JSON.stringify({ message: `Failed to retrieve shortcut name: ${shortcutError.message}` }), {
 				status: 400,
 				headers: { 'Content-Type': 'application/json' }
 			});

@@ -82,7 +82,7 @@ $effect(() => { if (page && page.url) {
 				})
 			});
 
-			if (response.status === 200) {
+			if (response.ok) {
 				const packageName = formattedName;
 				const forwardEdit = edit_code;
 				const forwardShortcut = incomingShortcutUrl;
