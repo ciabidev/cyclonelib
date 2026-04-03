@@ -57,15 +57,12 @@
 			<li>
 				⚡ <strong>Fast Performance</strong> – loads in under 2 seconds and only runs what’s needed
 			</li>
+			<li>📦 <strong>Build Packages</strong> – turn repetitive steps into reusable functions. basically, create your own actions</li>
+			<li>🌸 <strong>AI Actions</strong> – free, private AI tools in the <a href="/packages/ai-package">AI Package</a></li>
 		</ul>
 		<h2 id="-coming-soon">🔮 coming soon</h2>
 		<ul>
-			<li>
-				🌸 <strong>AI Actions</strong> – free, private AI tools via
-				<a href="https://pollinations.ai">Pollinations.ai</a>
-			</li>
 			<li>🌧️ <strong>CyCloud Hosting</strong> – store text online and use it anywhere</li>
-			<li>📦 <strong>Build Packages</strong> – turn repetitive steps into reusable blocks</li>
 		</ul>
 		<h2>How to start:</h2>
 		<ol>
