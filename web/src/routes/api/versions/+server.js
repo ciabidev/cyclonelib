@@ -20,7 +20,8 @@ export async function GET() {
     "3.0.0": "57957",
     "3.0.1": "57995",
     "3.0.2": "58026",
-    "latest": "58026",
+    "3.0.3": "58241"
+    "latest": "58241",
   };
 
   return json(versions, {
