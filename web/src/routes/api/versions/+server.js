@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 
 /**
  * GET /api/versions
- * Retrieves available Cyclone versions with their commit hashes.
+ * Retrieves available Cyclone versions with their routinehub ids
  * @returns {Promise<Response>} JSON response with versions object and CORS headers
  */
 export async function GET() {
