@@ -7,12 +7,12 @@ import { json } from '@sveltejs/kit';
  */
 export async function GET() {
   const links = {
-    "discord": "https://discord.gg/UYgGdEwGsK",
+    "discord": "https://discord.gg/C4UDJWXhnK",
     "docs": "https://cyclone.fibery.io/@public",
-    "suggestions": "https://tally.so/r/mVXylJ",
-    "support": "https://tally.so/r/mVXylJ",
+    "suggestions": "https://discord.gg/C4UDJWXhnK",
+    "support": "https://discord.gg/C4UDJWXhnK",
     "source": "https://github.com/ciabidev/cyclonelib",
-    "web": "https://cyclonelib.vercel.dev",
+    "web": "https://cyclonelib.pages.dev",
     "api": "https://cyclonelib.pages.dev/api"
   };
 
