@@ -276,6 +276,15 @@ export async function GET() {
             200: { description: 'JSON response with versions object and CORS headers' }
           }
         }
+      },
+      '/api/versions/v2': {
+        get: {
+          summary: 'Get versions by service and provider',
+          description: 'Retrieves versions grouped by service and provider. For example, cyclone.routinehub["latest"] contains the RoutineHub version id for Cyclone.',
+          responses: {
+            200: { description: 'JSON response grouped by service, provider, and version' }
+          }
+        }
       }
     }
   };

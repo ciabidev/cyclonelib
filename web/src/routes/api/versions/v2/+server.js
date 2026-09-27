@@ -2,12 +2,12 @@ import { json } from '@sveltejs/kit';
 import versions from '$lib/server/versions.json';
 
 /**
- * GET /api/versions
- * Retrieves available Cyclone versions with their routinehub ids
- * @returns {Promise<Response>} JSON response with versions object and CORS headers
+ * GET /api/versions/v2
+ * Retrieves versions grouped by service and provider.
+ * @returns {Promise<Response>} JSON response with CORS headers
  */
 export async function GET() {
-  return json(versions.cyclone.routinehub, {
+  return json(versions, {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',

@@ -60,10 +60,6 @@
 			<li>📦 <strong>Build Packages</strong> – turn repetitive steps into reusable functions. basically, create your own actions</li>
 			<li>🌸 <strong>AI Actions</strong> – free, private AI tools in the <a href="/packages/ai-package">AI Package</a></li>
 		</ul>
-		<h2 id="-coming-soon">🔮 coming soon</h2>
-		<ul>
-			<li>🌧️ <strong>CyCloud Hosting</strong> – store text online and use it anywhere</li>
-		</ul>
 		<h2>How to start:</h2>
 		<ol>
 			<li><a href="https://routinehub.co/shortcut/19577">Install Cyclone</a></li>

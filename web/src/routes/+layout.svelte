@@ -41,7 +41,6 @@
 	<Navbar>
 		<NavTab name={'about?'} Icon={InfoIcon} path={'/'} />
 		<NavTab name={'packages'} Icon={BoxIcon} path={'/packages'} />
-		<NavTab name={'test'} Icon={StarIcon} path={'/test'} />
 	</Navbar>
 </div>
 
