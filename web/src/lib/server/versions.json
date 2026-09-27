@@ -27,5 +27,10 @@
 		"routinehub": {
 			"9.2": "59100"
 		}
-	}
+	},
+  "loader-lite": {
+    "routinehub": {
+      "L9.2": "59105"
+    }
+  }
 }
